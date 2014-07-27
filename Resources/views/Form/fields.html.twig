@@ -1,0 +1,14 @@
+{% block tetranz_select2entity_widget %}
+    {% set attr = attr|merge({
+        'data-multiple':multiple ? 1:0,
+        'data-rpath':remote_path,
+        'data-value':value,
+        'data-min-length':minimum_input_length,
+        'data-page-limit':page_limit,
+        'data-data-type':data_type
+    }) %}
+
+    {% set value = ' ' %}
+    {% set type = type|default('hidden') %}
+    {{ block('form_widget_simple') }}
+{% endblock %}

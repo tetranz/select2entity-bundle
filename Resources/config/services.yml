@@ -1,0 +1,8 @@
+parameters:
+    tetranz_select2entity.select2entity_type.class: Tetranz\Select2EntityBundle\Form\Type\Select2EntityType
+
+services:
+    tetranz_select2entity.select2entity_type:
+        class: %tetranz_select2entity.select2entity_type.class%
+        arguments: [@doctrine.orm.entity_manager, @router, %tetranz_select2_entity.minimum_input_length%, %tetranz_select2_entity.page_limit%, , %tetranz_select2_entity.data_type%]
+        tags: [{ name: form.type, alias: tetranz_select2entity }]
