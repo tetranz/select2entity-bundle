@@ -13,12 +13,6 @@
     "require": {
         "symfony/symfony": ">=2.2"
     },
-    "repositories": [
-      {
-        "type": "vcs",
-        "url": "https://github.com/tetranz/select2entity-bundle.git"
-      }
-    ],
     "autoload": {
         "psr-0": { "Tetranz\\Select2EntityBundle": "" }
     },
