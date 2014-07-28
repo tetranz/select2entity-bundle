@@ -84,6 +84,7 @@ You must include `'attr' => ['class' => 'select2entity']` to give it the require
 ##Options##
 * `class` is your entity class. Required
 * `text_property` This is the entity property used to retrieve the text for existing data. A getter method is created by prepending this with `get` so it probably needs to be proper case. e.g., `Name`.
+If text_property is omitted then the entity is cast to a string. This requires it to have a __toString() method.
 * `multiple` True for multiple select (many to many). False for single (many to one) select.
 * `minimum_input_length` is the number of keys you need to hit before the search will happen.
 * `page_limit` This is passed as a query parameter to the remote call. It is intended to be used to limit size of the list returned.
