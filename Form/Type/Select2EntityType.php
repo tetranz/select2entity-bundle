@@ -39,8 +39,8 @@ class Select2EntityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $transformer = $options['multiple']
-                ? new EntitiesToPropertyTransformer($this->em, $options['class'])
-                : new EntityToPropertyTransformer($this->em, $options['class']);
+                ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'])
+                : new EntityToPropertyTransformer($this->em, $options['class'], $options['text_property']);
 
         $builder->addViewTransformer($transformer, true);
     }
@@ -70,7 +70,8 @@ class Select2EntityType extends AbstractType
                 'compound' => false,
                 'minimum_input_length' => $this->minimumInputLength,
                 'page_limit' => $this->pageLimit,
-                'data_type' => $this->dataType
+                'data_type' => $this->dataType,
+                'text_property' => null
             ));
     }
 

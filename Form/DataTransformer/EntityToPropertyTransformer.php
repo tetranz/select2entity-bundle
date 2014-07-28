@@ -15,13 +15,13 @@ class EntityToPropertyTransformer implements DataTransformerInterface
 {
     protected $em;
     protected $className;
-    protected $property;
+    protected $textProperty;
 
-    public function __construct(EntityManager $em, $class, $property = 'id')
+    public function __construct(EntityManager $em, $class, $textProperty)
     {
         $this->em = $em;
         $this->className = $class;
-        $this->property = $property;
+        $this->textProperty = $textProperty;
     }
 
     public function transform($entity)
@@ -30,7 +30,11 @@ class EntityToPropertyTransformer implements DataTransformerInterface
             return '';
         }
 
-        return $entity->getId() . '|' . $entity->getName();
+        $text = is_null($this->textProperty)
+            ? (string) $entity
+            : $entity->{'get' . $this->textProperty}();
+
+        return $entity->getId() . '|' . $text;
     }
 
     public function reverseTransform($value)

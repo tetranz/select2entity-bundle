@@ -73,6 +73,7 @@ $builder
             'attr' => ['class' => 'select2entity'],
             'remote_route' => 'tetranz_test_default_countryquery',
             'class' => '\Tetranz\TestBundle\Entity\Country',
+            'text_property' => 'Name',
             'minimum_input_length' => 2,
             'page_limit' => 10
         ])
@@ -80,16 +81,14 @@ $builder
 
 You must include `'attr' => ['class' => 'select2entity']` to give it the required class for jQuery to find it. (That will probably be changed soon so it gets added automatically).
 
-
 ##Options##
 * `class` is your entity class. Required
+* `text_property` This is the entity property used to retrieve the text for existing data. A getter method is created by prepending this with `get` so it probably needs to be proper case. e.g., `Name`.
 * `multiple` True for multiple select (many to many). False for single (many to one) select.
 * `minimum_input_length` is the number of keys you need to hit before the search will happen.
 * `page_limit` This is passed as a query parameter to the remote call. It is intended to be used to limit size of the list returned.
 
 The url of the remote query can be given by either of two ways: `remote_route` is the Symfony route. `remote_params` are can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify the url directly.
-
-Currently, the entity must have a property called `name`. This is used to display current values. This will be changed very soon to be configurable.
 
 ##AJAX Response##
 The controller should return a `JSON` array in the following format. The properties must be `id` and `text`.
