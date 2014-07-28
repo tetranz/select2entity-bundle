@@ -5,7 +5,7 @@ $(document).ready(function () {
     var multiple = $(this).data('multiple');
 
     var options = {
-      placeholder: 'Search a country',
+      placeholder: $(this).data('placeholder'),
       allowClear: true,
       multiple: multiple,
       minimumInputLength: $(this).data('min-length'),
