@@ -83,9 +83,9 @@ You must include `'attr' => ['class' => 'select2entity']` to give it the require
 
 ##Options##
 * `class` is your entity class. Required
-* `multiple`. True for multiple select (many to many). False for single (many to one) select.
+* `multiple` True for multiple select (many to many). False for single (many to one) select.
 * `minimum_input_length` is the number of keys you need to hit before the search will happen.
-* `page_limit`. This is passed as a query parameter to the remote call. It is intended to be used to limit size of the list returned.
+* `page_limit` This is passed as a query parameter to the remote call. It is intended to be used to limit size of the list returned.
 
 The url of the remote query can be given by either of two ways: `remote_route` is the Symfony route. `remote_params` are can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify the url directly.
 
