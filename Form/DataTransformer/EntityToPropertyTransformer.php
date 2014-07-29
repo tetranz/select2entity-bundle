@@ -34,7 +34,12 @@ class EntityToPropertyTransformer implements DataTransformerInterface
             ? (string) $entity
             : $entity->{'get' . $this->textProperty}();
 
-        return $entity->getId() . '|' . $text;
+        $data = array(
+            'id' => $entity->getId(),
+            'text' => $text
+        );
+
+        return htmlspecialchars(json_encode($data));
     }
 
     public function reverseTransform($value)

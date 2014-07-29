@@ -30,7 +30,7 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
             return '';
         }
 
-        $items = array();
+        $data = array();
 
         foreach($entities as $entity) {
 
@@ -38,16 +38,19 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
                     ? (string) $entity
                     : $entity->{'get' . $this->textProperty}();
 
-            $items[] = $entity->getId() . '|' . $text;
+            $data[] = array(
+                'id' => $entity->getId(),
+                'text' => $text
+            );
         }
 
-        return implode('|', $items);
+        return htmlspecialchars(json_encode($data));
     }
 
     public function reverseTransform($values)
     {
         // $values has a leading comma
-        $values = ltrim($values, ',');
+        $values = ltrim($values, 'x,');
 
         if (null === $values || '' === $values) {
             return array();
