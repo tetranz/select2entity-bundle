@@ -98,8 +98,23 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `minimum_input_length` is the number of keys you need to hit before the search will happen.
 * `page_limit` This is passed as a query parameter to the remote call. It is intended to be used to limit size of the list returned.
 * `placeholder` Placeholder text.
+* `data_type` is the type of remote data. It has only been tested for json but jsonp and xml are supported by select2.
 
 The url of the remote query can be given by either of two ways: `remote_route` is the Symfony route. `remote_params` are can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify the url directly.
+
+#Defaults#
+If not specified then these defaults will be used:
+* `minimum_input_length` 2
+* `page_limit` 10
+* `data_type` json
+
+These defaults can be changed in your app/config.yml file with the following format.
+
+```yaml
+tetranz_select2_entity:
+    minimum_input_length: 2
+    page_limit: 8
+    data_type: xml
 
 ##AJAX Response##
 The controller should return a `JSON` array in the following format. The properties must be `id` and `text`.
