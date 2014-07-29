@@ -102,7 +102,7 @@ If text_property is omitted then the entity is cast to a string. This requires i
 
 The url of the remote query can be given by either of two ways: `remote_route` is the Symfony route. `remote_params` are can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify the url directly.
 
-#Defaults#
+###Defaults###
 If not specified then these defaults will be used:
 * `minimum_input_length` 2
 * `page_limit` 10
