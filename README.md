@@ -1,8 +1,6 @@
 select2entity-bundle
 ====================
 
-(Just created tonight, 7/27/2014.  I should be able to tidy up a few rough edges in the next few days)
-
 ##Introduction##
 
 This is a Symfony2 bundle which enables the popular [Select2](http://ivaynberg.github.io/select2) component to be used as a drop-in replacement for a standard entity field on a Symfony form.
@@ -11,7 +9,7 @@ The main feature that this bundle provides compared with the standard Symfony en
 
 It works with both single and multiple selections. If the form is editing a Symfony entity then these modes correspond with many to one and many to many relationships. In multiple mode, most people find the Select2 user interface easier to use than a standard select tag with multiple=true with involves awkward use of the ctrl key etc.
 
-The project was inspired by [lifo/typeahead-bundle](https://github.com/lifo101/typeahead-bundle) which uses the Typeahead component in Bootstrap 2 to provide similar functionality. Select2Entity can be used whereever Select2 can be installed, including Bootstrap 3.
+The project was inspired by [lifo/typeahead-bundle](https://github.com/lifo101/typeahead-bundle) which uses the Typeahead component in Bootstrap 2 to provide similar functionality. Select2Entity can be used anywhere Select2 can be installed, including Bootstrap 3.
 
 ##Screenshots##
 
