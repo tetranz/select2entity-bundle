@@ -13,6 +13,16 @@ It works with both single and multiple selections. If the form is editing a Symf
 
 The project was inspired by [lifo/typeahead-bundle](https://github.com/lifo101/typeahead-bundle) which uses the Typeahead component in Bootstrap 2 to provide similar functionality. Select2Entity can be used whereever Select2 can be installed, including Bootstrap 3.
 
+##Screenshots##
+
+This is a form with a single selection field list expanded.
+
+![Single select example](Resources/doc/img/single.png)
+
+This is a form with a multiple selection field list expanded.
+
+![Multiple select example](Resources/doc/img/multi.png)
+
 ##Installation##
 
 Select2 must be installed and working first. I hope to setup a demo site but my setup is basically [BraincraftedBootstrapBundle](http://bootstrap.braincrafted.com) with Select2 installed for Bootstrap 3. Once the Braincrafted bundle is working, the only files I've needed to install are:
