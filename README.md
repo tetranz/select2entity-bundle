@@ -78,7 +78,6 @@ Here's an example:
 $builder
    ->add('country', 'tetranz_select2entity', [
             'multiple' => true,
-            'attr' => ['class' => 'select2entity'],
             'remote_route' => 'tetranz_test_default_countryquery',
             'class' => '\Tetranz\TestBundle\Entity\Country',
             'text_property' => 'Name',
@@ -87,8 +86,6 @@ $builder
             'placeholder' => 'Select a country',
         ])
 ```
-
-You must include `'attr' => ['class' => 'select2entity']` to give it the required class for jQuery to find it. (That will probably be changed soon so it gets added automatically).
 
 ##Options##
 * `class` is your entity class. Required

@@ -8,6 +8,7 @@
 
 namespace Tetranz\Select2EntityBundle\Form\DataTransformer;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;
 
@@ -30,6 +31,7 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
             return '';
         }
 
+        // return an array of initial values as html encoded json
         $data = array();
 
         foreach($entities as $entity) {
@@ -49,11 +51,11 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
 
     public function reverseTransform($values)
     {
-        // $values has a leading comma
+        // remove the 'magic' non-blank value added in fields.html.twig
         $values = ltrim($values, 'x,');
 
         if (null === $values || '' === $values) {
-            return array();
+            return new ArrayCollection();
         }
 
         $ids = explode(',', $values);

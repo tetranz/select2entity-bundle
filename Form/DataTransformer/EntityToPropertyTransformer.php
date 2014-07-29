@@ -30,6 +30,8 @@ class EntityToPropertyTransformer implements DataTransformerInterface
             return '';
         }
 
+        // return the initial values as html encoded json
+
         $text = is_null($this->textProperty)
             ? (string) $entity
             : $entity->{'get' . $this->textProperty}();
