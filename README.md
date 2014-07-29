@@ -116,6 +116,7 @@ tetranz_select2_entity:
     page_limit: 8
     data_type: xml
 
+
 ##AJAX Response##
 The controller should return a `JSON` array in the following format. The properties must be `id` and `text`.
 
