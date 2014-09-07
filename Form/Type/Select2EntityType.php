@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ross
- * Date: 7/17/14
- * Time: 9:40 PM
- */
 
 namespace Tetranz\Select2EntityBundle\Form\Type;
 
@@ -19,6 +13,12 @@ use Symfony\Component\Routing\Router;
 use Tetranz\Select2EntityBundle\Form\DataTransformer\EntitiesToPropertyTransformer;
 use Tetranz\Select2EntityBundle\Form\DataTransformer\EntityToPropertyTransformer;
 
+/**
+ *
+ *
+ * Class Select2EntityType
+ * @package Tetranz\Select2EntityBundle\Form\Type
+ */
 class Select2EntityType extends AbstractType
 {
     protected $em;
@@ -38,6 +38,7 @@ class Select2EntityType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        // add the appropriate data transformer
         $transformer = $options['multiple']
                 ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'])
                 : new EntityToPropertyTransformer($this->em, $options['class'], $options['text_property']);
@@ -49,6 +50,7 @@ class Select2EntityType extends AbstractType
     {
         parent::finishView($view, $form, $options);
 
+        // make variables available to the view
         $view->vars['remote_path'] = $options['remote_path']
                 ?: $this->router->generate($options['remote_route'], $options['remote_params']);
 

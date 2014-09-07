@@ -22,13 +22,14 @@ class TetranzSelect2EntityExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        // set parameters with these settings so they'll be available in the service definition xml
         $varNames = ['minimum_input_length', 'page_limit', 'data_type'];
 
         foreach($varNames as $varName) {
             $container->setParameter("tetranz_select2_entity.$varName", $config[$varName]);
         }
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.xml');
     }
 }

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ross
- * Date: 7/19/14
- * Time: 8:11 AM
- */
 
 namespace Tetranz\Select2EntityBundle\Form\DataTransformer;
 
@@ -12,6 +6,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;
 
+/**
+ * Data transformer for multiple mode (i.e., multiple = true)
+ *
+ * Class EntitiesToPropertyTransformer
+ * @package Tetranz\Select2EntityBundle\Form\DataTransformer
+ */
 class EntitiesToPropertyTransformer implements DataTransformerInterface
 {
     protected $em;
@@ -25,6 +25,12 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
         $this->textProperty = $textProperty;
     }
 
+    /**
+     * Transform initial entities as json with id and text
+     *
+     * @param mixed $entities
+     * @return string
+     */
     public function transform($entities)
     {
         if (count($entities) == 0) {
@@ -49,6 +55,12 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
         return htmlspecialchars(json_encode($data));
     }
 
+    /**
+     * Transform csv list of ids to a collection of entities
+     *
+     * @param string $values as a CSV list
+     * @return array|ArrayCollection|mixed
+     */
     public function reverseTransform($values)
     {
         // remove the 'magic' non-blank value added in fields.html.twig

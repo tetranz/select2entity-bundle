@@ -12,7 +12,7 @@
     {# Add class for jQuery for find it #}
     {% set attr = attr|merge({ 'class': (attr.class|default('') ~ ' select2entity')|trim }) %}
 
-    {# A bit of a kludge here.
+    {# A bit of a hack here.
     It seems to work more smoothly if we put the initial value into data-value rather than the value attribute.
     But ... value needs to be non-blank for initSelection in the js to fire.
     We need to remove this value in EntitiesToPropertyTransformer #}
