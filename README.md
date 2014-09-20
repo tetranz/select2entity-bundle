@@ -38,7 +38,7 @@ These files live in the Resources/public/js and Resources/public/css folders of 
     // ...
     "require": {
         // ...
-        "tetranz/select2entity-bundle": "dev-master"
+        "tetranz/select2entity-bundle": "1.*"
     }
 }
 ```
