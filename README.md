@@ -3,7 +3,7 @@ select2entity-bundle
 
 ##Introduction##
 
-This is a Symfony2 bundle which enables the popular [Select2](http://ivaynberg.github.io/select2) component to be used as a drop-in replacement for a standard entity field on a Symfony form.
+This is a Symfony2 bundle which enables the popular [Select2](https://select2.github.io) component to be used as a drop-in replacement for a standard entity field on a Symfony form.
 
 The main feature that this bundle provides compared with the standard Symfony entity field (rendered with a html select) is that the list is retrieved via a remote ajax call. This means that the list can be of almost unlimited size. The only limitation is the performance of the database query or whatever that retrieves the data in the remote web service.
 
@@ -23,11 +23,13 @@ This is a form with a multiple selection field list expanded.
 
 ##Installation##
 
+Note that this only works with Select2 version 3.5, not the new version 4.
+
 Select2 must be installed and working first. I hope to setup a demo site but my setup is basically [BraincraftedBootstrapBundle](http://bootstrap.braincrafted.com) with Select2 installed for Bootstrap 3. Once the Braincrafted bundle is working, the only files I've needed to install are:
 
-select2.js and select2.css from https://github.com/ivaynberg/select2
+select2.js, select2.css, select2.png and select2-spinner.gif from https://github.com/select2/select2/tree/stable/3.5
 
-select2-bootstrap.css, select2.png and select2-spinner.gif from https://github.com/t0m/select2-bootstrap-css/tree/bootstrap3. That gets it working for Bootstrap 3.
+select2-bootstrap.css from https://github.com/t0m/select2-bootstrap-css/tree/bootstrap3. That gets it working for Bootstrap 3.
 
 These files live in the Resources/public/js and Resources/public/css folders of one of my bundles and then included in my main layout.html.twig file.
 
