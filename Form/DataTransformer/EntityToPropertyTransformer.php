@@ -4,6 +4,7 @@ namespace Tetranz\Select2EntityBundle\Form\DataTransformer;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * Data transformer for single mode (i.e., multiple = false)
@@ -36,14 +37,16 @@ class EntityToPropertyTransformer implements DataTransformerInterface
             return '';
         }
 
+        $accessor = PropertyAccess::createPropertyAccessor();
+
         // return the initial values as html encoded json
 
         $text = is_null($this->textProperty)
-            ? (string) $entity
-            : $entity->{'get' . $this->textProperty}();
+            ? (string)$entity
+            : $accessor->getValue($entity, $this->textProperty);
 
         $data = array(
-            'id' => $entity->getId(),
+            'id' => $accessor->getValue($entity, 'id'),
             'text' => $text
         );
 
@@ -63,6 +66,7 @@ class EntityToPropertyTransformer implements DataTransformerInterface
         }
 
         $repo = $this->em->getRepository($this->className);
+
         return $repo->find($value);
     }
 }
