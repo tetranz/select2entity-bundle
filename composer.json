@@ -11,7 +11,8 @@
         }
     ],
     "require": {
-        "symfony/symfony": ">=2.2"
+        "symfony/symfony": ">=2.2",
+        "doctrine/orm": ">=2.2"
     },
     "autoload": {
         "psr-0": { "Tetranz\\Select2EntityBundle": "" }
