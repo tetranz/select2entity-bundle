@@ -23,11 +23,9 @@ This is a form with a multiple selection field list expanded.
 
 ##Installation##
 
-Note that this only works with Select2 version 3.5, not the new version 4.
-
 Select2 must be installed and working first. I hope to setup a demo site but my setup is basically [BraincraftedBootstrapBundle](http://bootstrap.braincrafted.com) with Select2 installed for Bootstrap 3. Once the Braincrafted bundle is working, the only files I've needed to install are:
 
-select2.js, select2.css, select2.png and select2-spinner.gif from https://github.com/select2/select2/tree/stable/3.5
+select2.js, select2.css, select2.png and select2-spinner.gif from https://github.com/select2/select2/tree/4.0.0
 
 select2-bootstrap.css from https://github.com/t0m/select2-bootstrap-css/tree/bootstrap3. That gets it working for Bootstrap 3.
 
@@ -40,10 +38,11 @@ These files live in the Resources/public/js and Resources/public/css folders of 
     // ...
     "require": {
         // ...
-        "tetranz/select2entity-bundle": "1.*"
+        "tetranz/select2entity-bundle": "2.*"
     }
 }
 ```
+Note that this only works with Select2 version 4. If you are using Select2 version 3.X please use `"tetranz/select2entity-bundle": "1.*"` in `composer.json`
 
 * Run `php composer.phar update tetranz/select2entity-bundle` in your project root.
 * Update your project `app/AppKernel.php` file and add this bundle to the $bundles array:
@@ -82,7 +81,7 @@ $builder
             'multiple' => true,
             'remote_route' => 'tetranz_test_default_countryquery',
             'class' => '\Tetranz\TestBundle\Entity\Country',
-            'text_property' => 'Name',
+            'text_property' => 'name',
             'minimum_input_length' => 2,
             'page_limit' => 10,
             'placeholder' => 'Select a country',
@@ -91,13 +90,12 @@ $builder
 
 ##Options##
 * `class` is your entity class. Required
-* `text_property` This is the entity property used to retrieve the text for existing data. A getter method is created by prepending this with `get` so it probably needs to be proper case. e.g., `Name`.
+* `text_property` This is the entity property used to retrieve the text for existing data. 
 If text_property is omitted then the entity is cast to a string. This requires it to have a __toString() method.
 * `multiple` True for multiple select (many to many). False for single (many to one) select.
 * `minimum_input_length` is the number of keys you need to hit before the search will happen.
 * `page_limit` This is passed as a query parameter to the remote call. It is intended to be used to limit size of the list returned.
 * `placeholder` Placeholder text.
-* `data_type` is the type of remote data. It has only been tested for json but jsonp and xml are supported by select2.
 
 The url of the remote query can be given by either of two ways: `remote_route` is the Symfony route. `remote_params` are can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify the url directly.
 
@@ -105,7 +103,6 @@ The url of the remote query can be given by either of two ways: `remote_route` i
 If not specified then these defaults will be used:
 * `minimum_input_length` 2
 * `page_limit` 10
-* `data_type` json
 
 These defaults can be changed in your app/config.yml file with the following format.
 
@@ -113,7 +110,6 @@ These defaults can be changed in your app/config.yml file with the following for
 tetranz_select2_entity:
     minimum_input_length: 2
     page_limit: 8
-    data_type: xml
 ```
 
 ##AJAX Response##

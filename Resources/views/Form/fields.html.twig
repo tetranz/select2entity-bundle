@@ -1,23 +1,25 @@
 {% block tetranz_select2entity_widget %}
     {% set attr = attr|merge({
-        'data-multiple':multiple ? 1:0,
-        'data-rpath':remote_path,
-        'data-value':value,
-        'data-min-length':minimum_input_length,
-        'data-page-limit':page_limit,
-        'data-data-type':data_type,
-        'data-placeholder':placeholder
+    'data-ajax--url':remote_path,
+    'data-ajax--cache':"true",
+    'data-ajax--delay':"250",
+    'data-ajax--data-type':"json",
+    'data-minimum-input-length':minimum_input_length,
+    'data-placeholder':placeholder|trans({}, translation_domain),
+    'class' : (attr.class|default('') ~ ' select2entity form-control')|trim
     }) %}
+    {% if multiple %}
+        {% set attr = attr|merge({'multiple':'multiple'}) %}
+    {% endif %}
+    {% spaceless %}
 
-    {# Add class for jQuery for find it #}
-    {% set attr = attr|merge({ 'class': (attr.class|default('') ~ ' select2entity')|trim }) %}
+        <select {{ block('widget_attributes') }}>
+            {% if value is iterable %}
+                {% for id, label in value %}
+                    <option value="{{ id }}" selected="selected">{{ label }}</option>
+                {% endfor %}
+            {% endif %}
 
-    {# A bit of a hack here.
-    It seems to work more smoothly if we put the initial value into data-value rather than the value attribute.
-    But ... value needs to be non-blank for initSelection in the js to fire.
-    We need to remove this value in EntitiesToPropertyTransformer #}
-    {% set value = 'x' %}
-
-    {% set type = type|default('hidden') %}
-    {{ block('form_widget_simple') }}
+        </select>
+    {% endspaceless %}
 {% endblock %}

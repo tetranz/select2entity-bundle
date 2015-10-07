@@ -11,7 +11,6 @@
             <argument type="service" id="router" />
             <argument>%tetranz_select2_entity.minimum_input_length%</argument>
             <argument>%tetranz_select2_entity.page_limit%</argument>
-            <argument>%tetranz_select2_entity.data_type%</argument>
         </service>
     </services>
 

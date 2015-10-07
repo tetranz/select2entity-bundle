@@ -14,11 +14,19 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  */
 class EntityToPropertyTransformer implements DataTransformerInterface
 {
+    /** @var EntityManager */
     protected $em;
+    /** @var  string */
     protected $className;
+    /** @var  string */
     protected $textProperty;
 
-    public function __construct(EntityManager $em, $class, $textProperty)
+    /**
+     * @param EntityManager $em
+     * @param string $class
+     * @param string|null $textProperty
+     */
+    public function __construct(EntityManager $em, $class, $textProperty = null)
     {
         $this->em = $em;
         $this->className = $class;
@@ -26,31 +34,26 @@ class EntityToPropertyTransformer implements DataTransformerInterface
     }
 
     /**
-     * Transform entity to json with id and text
+     * Transform entity to array
      *
      * @param mixed $entity
-     * @return string
+     * @return array
      */
     public function transform($entity)
     {
-        if (null === $entity || '' === $entity) {
-            return '';
+        $data = array();
+        if (null === $entity) {
+            return $data;
         }
-
         $accessor = PropertyAccess::createPropertyAccessor();
-
-        // return the initial values as html encoded json
 
         $text = is_null($this->textProperty)
             ? (string)$entity
             : $accessor->getValue($entity, $this->textProperty);
 
-        $data = array(
-            'id' => $accessor->getValue($entity, 'id'),
-            'text' => $text
-        );
+        $data[$accessor->getValue($entity, 'id')] = $text;
 
-        return htmlspecialchars(json_encode($data));
+        return $data;
     }
 
     /**
@@ -61,12 +64,15 @@ class EntityToPropertyTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value)
     {
-        if (null === $value || '' === $value) {
+        if (null === $value) {
+            return null;
+        }
+        $repo = $this->em->getRepository($this->className);
+        $entity = $repo->find($value);
+        if (!$entity) {
             return null;
         }
 
-        $repo = $this->em->getRepository($this->className);
-
-        return $repo->find($value);
+        return $entity;
     }
 }

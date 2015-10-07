@@ -24,7 +24,6 @@ class Configuration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('minimum_input_length')->defaultValue(1)->end()
                     ->scalarNode('page_limit')->defaultValue(10)->end()
-                    ->scalarNode('data_type')->defaultValue('json')->end()
                 ->end();
 
         // Here you should define the parameters that are allowed to
