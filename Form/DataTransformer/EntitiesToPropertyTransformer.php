@@ -15,11 +15,19 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  */
 class EntitiesToPropertyTransformer implements DataTransformerInterface
 {
+    /** @var EntityManager */
     protected $em;
+    /** @var  string */
     protected $className;
+    /** @var  string */
     protected $textProperty;
 
-    public function __construct(EntityManager $em, $class, $textProperty)
+    /**
+     * @param EntityManager $em
+     * @param string $class
+     * @param string|null $textProperty
+     */
+    public function __construct(EntityManager $em, $class, $textProperty = null)
     {
         $this->em = $em;
         $this->className = $class;
@@ -27,62 +35,52 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
     }
 
     /**
-     * Transform initial entities as json with id and text
+     * Transform initial entities to array
      *
      * @param mixed $entities
-     * @return string
+     * @return array
      */
     public function transform($entities)
     {
-        if (count($entities) == 0) {
-            return '';
+        if (is_null($entities) || count($entities) === 0) {
+            return array();
         }
 
-        // return an array of initial values as html encoded json
         $data = array();
 
         $accessor = PropertyAccess::createPropertyAccessor();
 
-        foreach($entities as $entity) {
-
+        foreach ($entities as $entity) {
             $text = is_null($this->textProperty)
-                    ? (string) $entity
-                    : $accessor->getValue($entity, $this->textProperty);
+                ? (string)$entity
+                : $accessor->getValue($entity, $this->textProperty);
 
-            $data[] = array(
-                'id' => $accessor->getValue($entity, 'id'),
-                'text' => $text
-            );
+            $data[$accessor->getValue($entity, 'id')] = $text;
         }
 
-        return htmlspecialchars(json_encode($data));
+        return $data;
     }
 
     /**
-     * Transform csv list of ids to a collection of entities
+     * Transform array to a collection of entities
      *
-     * @param string $values as a CSV list
-     * @return array|ArrayCollection|mixed
+     * @param array $values
+     * @return ArrayCollection
      */
     public function reverseTransform($values)
     {
-        // remove the 'magic' non-blank value added in fields.html.twig
-        $values = ltrim($values, 'x,');
-
-        if (null === $values || '' === $values) {
+        if (!is_array($values) || count($values) === 0) {
             return new ArrayCollection();
         }
 
-        $ids = explode(',', $values);
-
         // get multiple entities with one query
         $entities = $this->em->createQueryBuilder()
-                ->select('entity')
-                ->from($this->className, 'entity')
-                ->where('entity.id IN (:ids)')
-                ->setParameter('ids', $ids)
-                ->getQuery()
-                ->getResult();
+            ->select('entity')
+            ->from($this->className, 'entity')
+            ->where('entity.id IN (:ids)')
+            ->setParameter('ids', $values)
+            ->getQuery()
+            ->getResult();
 
         return $entities;
     }
