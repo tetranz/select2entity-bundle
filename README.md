@@ -11,6 +11,8 @@ It works with both single and multiple selections. If the form is editing a Symf
 
 The project was inspired by [lifo/typeahead-bundle](https://github.com/lifo101/typeahead-bundle) which uses the Typeahead component in Bootstrap 2 to provide similar functionality. Select2Entity can be used anywhere Select2 can be installed, including Bootstrap 3.
 
+Thanks to @ismailbaskin we now have Select2 version 4 compatibility.
+
 ##Screenshots##
 
 This is a form with a single selection field list expanded.
@@ -25,11 +27,13 @@ This is a form with a multiple selection field list expanded.
 
 Select2 must be installed and working first. I hope to setup a demo site but my setup is basically [BraincraftedBootstrapBundle](http://bootstrap.braincrafted.com) with Select2 installed for Bootstrap 3. Once the Braincrafted bundle is working, the only files I've needed to install are:
 
-select2.js, select2.css, select2.png and select2-spinner.gif from https://github.com/select2/select2/tree/4.0.0
+select2.js, select2.css from https://github.com/select2/select2/tree/4.0.0
 
 select2-bootstrap.css from https://github.com/t0m/select2-bootstrap-css/tree/bootstrap3. That gets it working for Bootstrap 3.
 
 These files live in the Resources/public/js and Resources/public/css folders of one of my bundles and then included in my main layout.html.twig file.
+
+Alternatively, minified versions of select2.js and select2.css can be loaded from the CloudFlare CDN using the two lines of code given here: [https://select2.github.io](https://select2.github.io). Make sure the script tag comes after where jQuery is loaded. That might be in the page footer.
 
 * Add `tetranz/select2entity-bundle` to your projects `composer.json` "requires" section:
 
