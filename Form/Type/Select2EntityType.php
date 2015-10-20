@@ -61,7 +61,7 @@ class Select2EntityType extends AbstractType
             ?: $this->router->generate($options['remote_route'], $options['remote_params']).
             '?page_limit='.$options['page_limit'];
 
-        $varNames = array('multiple', 'minimum_input_length', 'placeholder');
+        $varNames = array('multiple', 'minimum_input_length', 'placeholder', 'language');
         foreach ($varNames as $varName) {
             $view->vars[$varName] = $options[$varName];
         }
@@ -98,6 +98,7 @@ class Select2EntityType extends AbstractType
                 'page_limit' => $this->pageLimit,
                 'text_property' => null,
                 'placeholder' => '',
+                'language' => 'en',
                 'required' => false,
             )
         );
