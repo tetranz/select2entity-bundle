@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 use Tetranz\Select2EntityBundle\Form\DataTransformer\EntitiesToPropertyTransformer;
 use Tetranz\Select2EntityBundle\Form\DataTransformer\EntityToPropertyTransformer;
 
@@ -35,7 +35,7 @@ class Select2EntityType extends AbstractType
      * @param integer $minimumInputLength
      * @param integer $pageLimit
      */
-    public function __construct(EntityManager $em, Router $router, $minimumInputLength, $pageLimit)
+    public function __construct(EntityManager $em, RouterInterface $router, $minimumInputLength, $pageLimit)
     {
         $this->em = $em;
         $this->router = $router;
@@ -58,8 +58,7 @@ class Select2EntityType extends AbstractType
         parent::finishView($view, $form, $options);
         // make variables available to the view
         $view->vars['remote_path'] = $options['remote_path']
-            ?: $this->router->generate($options['remote_route'], $options['remote_params']).
-            '?page_limit='.$options['page_limit'];
+            ?: $this->router->generate($options['remote_route'], array_merge($options['remote_params'], [ 'page_limit' => $options['page_limit'] ]));
 
         $varNames = array('multiple', 'minimum_input_length', 'placeholder', 'language');
         foreach ($varNames as $varName) {
