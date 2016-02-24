@@ -103,7 +103,22 @@ class Select2EntityType extends AbstractType
         );
     }
 
+    /**
+     * pre Symfony 3 compatibility
+     *
+     * @return string
+     */
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * Symfony 2.8+
+     *
+     * @return string
+     */
+    public function getBlockPrefix()
     {
         return 'tetranz_select2entity';
     }
