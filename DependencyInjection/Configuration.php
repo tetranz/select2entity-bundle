@@ -24,6 +24,10 @@ class Configuration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('minimum_input_length')->defaultValue(1)->end()
                     ->scalarNode('page_limit')->defaultValue(10)->end()
+                    ->scalarNode('allow_clear')->defaultFalse()->end()
+                    ->scalarNode('delay')->defaultValue(250)->end()
+                    ->scalarNode('language')->defaultValue('en')->end()
+                    ->scalarNode('cache')->defaultTrue()->end()
                 ->end();
 
         // Here you should define the parameters that are allowed to

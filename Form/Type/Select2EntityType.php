@@ -28,19 +28,35 @@ class Select2EntityType extends AbstractType
     protected $pageLimit;
     /** @var  integer */
     protected $minimumInputLength;
+    /** @var  boolean */
+    protected $allowClear;
+    /** @var  integer */
+    protected $delay;
+    /** @var  string */
+    protected $language;
+    /** @var  boolean */
+    protected $cache;
 
     /**
      * @param EntityManager $em
      * @param Router $router
      * @param integer $minimumInputLength
      * @param integer $pageLimit
+     * @param boolean $allowClear
+     * @param integer $delay
+     * @param string $language
+     * @param boolean $cache
      */
-    public function __construct(EntityManager $em, RouterInterface $router, $minimumInputLength, $pageLimit)
+    public function __construct(EntityManager $em, RouterInterface $router, $minimumInputLength, $pageLimit, $allowClear, $delay, $language, $cache)
     {
         $this->em = $em;
         $this->router = $router;
         $this->minimumInputLength = $minimumInputLength;
         $this->pageLimit = $pageLimit;
+        $this->allowClear = $allowClear;
+        $this->delay = $delay;
+        $this->language = $language;
+        $this->cache = $cache;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -60,7 +76,7 @@ class Select2EntityType extends AbstractType
         $view->vars['remote_path'] = $options['remote_path']
             ?: $this->router->generate($options['remote_route'], array_merge($options['remote_params'], [ 'page_limit' => $options['page_limit'] ]));
 
-        $varNames = array('multiple', 'minimum_input_length', 'placeholder', 'language');
+        $varNames = array('multiple', 'minimum_input_length', 'placeholder', 'language', 'allow_clear', 'delay', 'language', 'cache');
         foreach ($varNames as $varName) {
             $view->vars[$varName] = $options[$varName];
         }
@@ -95,10 +111,13 @@ class Select2EntityType extends AbstractType
                 'compound' => false,
                 'minimum_input_length' => $this->minimumInputLength,
                 'page_limit' => $this->pageLimit,
+                'allow_clear' => $this->allowClear,
+                'delay' => $this->delay,
                 'text_property' => null,
                 'placeholder' => '',
-                'language' => 'en',
+                'language' => $this->language,
                 'required' => false,
+                'cache' => $this->cache
             )
         );
     }

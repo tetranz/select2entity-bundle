@@ -1,26 +1,30 @@
 {% block tetranz_select2entity_widget %}
     {% set attr = attr|merge({
     'data-ajax--url':remote_path,
-    'data-ajax--cache':"true",
-    'data-ajax--delay':"250",
+    'data-ajax--cache': cache ? 'true' : 'false',
+    'data-ajax--delay':delay,
     'data-ajax--data-type':"json",
     'data-language':language,
     'data-minimum-input-length':minimum_input_length,
     'data-placeholder':placeholder|trans({}, translation_domain),
     'class' : (attr.class|default('') ~ ' select2entity form-control')|trim
     }) %}
+
     {% if multiple %}
         {% set attr = attr|merge({'multiple':'multiple'}) %}
     {% endif %}
-    {% spaceless %}
 
+    {% if allow_clear %}
+        {% set attr = attr|merge({'data-allow-clear': 'true'}) %}
+    {% endif %}
+
+    {% spaceless %}
         <select {{ block('widget_attributes') }}>
             {% if value is iterable %}
                 {% for id, label in value %}
                     <option value="{{ id }}" selected="selected">{{ label }}</option>
                 {% endfor %}
             {% endif %}
-
         </select>
     {% endspaceless %}
 {% endblock %}
