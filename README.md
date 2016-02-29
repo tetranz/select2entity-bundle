@@ -62,59 +62,70 @@ $bundles = array(
 
 ```yaml
 twig:
-    form:
-        resources:
-            - 'TetranzSelect2EntityBundle:Form:fields.html.twig'
+    form_themes:
+        - 'TetranzSelect2EntityBundle:Form:fields.html.twig'
         
 ```
-* Add this to the {% javascripts %} section of your layout file:
-
+* Load the Javascript on the page. The simplest way is to add the following to your layout file. Don't forget to run console assets:install. Alternatively, do something more sophisticated with Assetic.
 ```
-'@TetranzSelect2EntityBundle/Resources/public/js/select2entity.js'
+<script src="{{ asset('bundles/tetranzselect2entity/js/select2entity.js') }}"></script>
 ```
 
 ##How to use##
 
-Select2Entity is simple to use. In the buildForm method of a form type class, specify `tetranz_select2entity` as the type where you would otherwise use `entity`.
+The following is for Symfony 3. The latest version works on both Symfony 2 and Symfony 2 but see https://github.com/tetranz/select2entity-bundle/tree/v2.1 for Symfony 2 configuration and use.
+
+Select2Entity is simple to use. In the buildForm method of a form type class, specify `Select2EntityType::class` as the type where you would otherwise use `entity:class`.
 
 Here's an example:
 
 ```php
 $builder
-   ->add('country', 'tetranz_select2entity', [
+   ->add('country', Select2EntityType::class, [
             'multiple' => true,
             'remote_route' => 'tetranz_test_default_countryquery',
             'class' => '\Tetranz\TestBundle\Entity\Country',
             'text_property' => 'name',
             'minimum_input_length' => 2,
             'page_limit' => 10,
+            'allow_clear' => true,
+            'delay' => 250,
+            'cache' => true,
+            'language' => 'en',
             'placeholder' => 'Select a country',
         ])
 ```
+Put this at the top of the file with the form type class:
+```php
+use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
+```
 
 ##Options##
+Defaults will be used for some if not set.
 * `class` is your entity class. Required
 * `text_property` This is the entity property used to retrieve the text for existing data. 
 If text_property is omitted then the entity is cast to a string. This requires it to have a __toString() method.
 * `multiple` True for multiple select (many to many). False for single (many to one) select.
-* `minimum_input_length` is the number of keys you need to hit before the search will happen.
-* `page_limit` This is passed as a query parameter to the remote call. It is intended to be used to limit size of the list returned.
+* `minimum_input_length` is the number of keys you need to hit before the search will happen. Defaults to 2.
+* `page_limit` This is passed as a query parameter to the remote call. It is intended to be used to limit size of the list returned. Defaults to 10.
+* `allow_clear` True will cause Select2 to display a small x for clearing the value. Defaults to false.
+* `delay` The delay in milliseconds after a keystroke before trigging another AJAX request. Defaults to 250 ms.
 * `placeholder` Placeholder text.
 * `language` i18n language code. Defaults to en.
+* `cache` Enable AJAX cache. The use of this is a little unclear at Select2. Defaults to true as per Select2 examples.
 
-The url of the remote query can be given by either of two ways: `remote_route` is the Symfony route. `remote_params` are can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify the url directly.
+The url of the remote query can be given by either of two ways: `remote_route` is the Symfony route. `remote_params` can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify the url directly.
 
-###Defaults###
-If not specified then these defaults will be used:
-* `minimum_input_length` 2
-* `page_limit` 10
-
-These defaults can be changed in your app/config.yml file with the following format.
+The defaults can be changed in your app/config.yml file with the following format.
 
 ```yaml
 tetranz_select2_entity:
     minimum_input_length: 2
     page_limit: 8
+    allow_clear: true
+    delay: 500
+    language: fr
+    cache: false
 ```
 
 ##AJAX Response##
