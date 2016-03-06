@@ -15,8 +15,7 @@ $(document).ready(function () {
           return {
             results: data
           };
-        },
-        cache: true
+        }
       }
     });
     return this;
