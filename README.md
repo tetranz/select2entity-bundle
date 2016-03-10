@@ -140,7 +140,7 @@ The controller should return a `JSON` array in the following format. The propert
 ```
 
 ##Custom template##
-If you need custom view that is a combination between few fields in the entity, you need a custom transformer. For that, extend EntityToPropertyTransformer or EntitiesToPropertyTransformer, redefine function transform and set the custom content.
+If you need custom view that is a combination between more than one field in the entity, you need a custom transformer. For that, extend EntityToPropertyTransformer or EntitiesToPropertyTransformer, redefine function transform and set the custom content.
 
 Here's an example, that shows country name and continent (two different properties in Country entity):
 ```php

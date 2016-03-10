@@ -76,7 +76,7 @@ class Select2EntityType extends AbstractType
                 ? ($transformer instanceof EntitiesToPropertyTransformer)
                 : ($transformer instanceof EntityToPropertyTransformer);
             if (!$isValidType) {
-                throw new Exception(sprintf('The custom transformer %s must extend %s', get_class($transformer), $options['multiple'] ? EntitiesToPropertyTransformer::class : EntityToPropertyTransformer::class);
+                throw new \Exception(sprintf('The custom transformer %s must extend %s', get_class($transformer), $options['multiple'] ? EntitiesToPropertyTransformer::class : EntityToPropertyTransformer::class));
             }
 
         // add the default data transformer
