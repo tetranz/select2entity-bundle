@@ -61,10 +61,22 @@ class Select2EntityType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // add the appropriate data transformer
-        $transformer = $options['multiple']
-            ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'])
-            : new EntityToPropertyTransformer($this->em, $options['class'], $options['text_property']);
+        // add custom data transformer
+        if (!is_null($options['transformer'])) {
+            if (!is_string($options['transformer'])) {
+                throw new Exception('The option transformer must be a string');
+            }
+            if (!class_exists($options['transformer'])) {
+                throw new Exception('Unable to load class: '.$options['transformer']);
+            }
+            $transformer = new $options['transformer']($this->em, $options['class']);
+
+        // add the default data transformer
+        } else {
+            $transformer = $options['multiple']
+                ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'])
+                : new EntityToPropertyTransformer($this->em, $options['class'], $options['text_property']);
+        }
 
         $builder->addViewTransformer($transformer, true);
     }
@@ -117,7 +129,8 @@ class Select2EntityType extends AbstractType
                 'placeholder' => '',
                 'language' => $this->language,
                 'required' => false,
-                'cache' => $this->cache
+                'cache' => $this->cache,
+                'transformer' => null,
             )
         );
     }

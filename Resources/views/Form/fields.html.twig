@@ -20,11 +20,13 @@
 
     {% spaceless %}
         <select {{ block('widget_attributes') }}>
-            {% if value is iterable %}
-                {% for id, label in value %}
-                    <option value="{{ id }}" selected="selected">{{ label }}</option>
-                {% endfor %}
-            {% endif %}
+            {% block tetranz_select2entity_widget_select_options %}
+                {% if value is iterable %}
+                    {% for id, label in value %}
+                        <option value="{{ id }}" selected="selected">{{ label }}</option>
+                    {% endfor %}
+                {% endif %}
+            {% endblock %}
         </select>
     {% endspaceless %}
 {% endblock %}
