@@ -62,14 +62,22 @@ class Select2EntityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // add custom data transformer
-        if (!is_null($options['transformer'])) {
+        if ($options['transformer']) {
             if (!is_string($options['transformer'])) {
-                throw new Exception('The option transformer must be a string');
+                throw new \Exception('The option transformer must be a string');
             }
             if (!class_exists($options['transformer'])) {
-                throw new Exception('Unable to load class: '.$options['transformer']);
+                throw new \Exception('Unable to load class: '.$options['transformer']);
             }
+
             $transformer = new $options['transformer']($this->em, $options['class']);
+
+            $isValidType = $options['multiple']
+                ? ($transformer instanceof EntitiesToPropertyTransformer)
+                : ($transformer instanceof EntityToPropertyTransformer);
+            if (!$isValidType) {
+                throw new Exception(sprintf('The custom transformer %s must extend %s', get_class($transformer), $options['multiple'] ? EntitiesToPropertyTransformer::class : EntityToPropertyTransformer::class);
+            }
 
         // add the default data transformer
         } else {

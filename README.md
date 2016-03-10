@@ -100,68 +100,6 @@ Put this at the top of the file with the form type class:
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 ```
 
-If you need custom view that is a combination between few fields in the entity, you need custom transformer. For that, extend EntityToPropertyTransformer or EntitiesToPropertyTransformer, redefine function transform and set the custom content.
-
-Here's an example:
-```php
-$builder
-    ->add('country', Select2EntityType::class, [
-        'multiple' => false,
-        'remote_route' => 'tetranz_test_default_countryquery',
-        'class' => '\Tetranz\TestBundle\Entity\Country',
-        'transformer' => '\Tetranz\TestBundle\Form\DataTransformer\CountryEntityToPropertyTransformer',
-    ]);
-```
-And you could display data like this:
-```javascript
-[
-    { id: 1, text: 'United Kingdom (Europe)' },
-    { id: 2, text: 'China (Asia)' }
-]
-```
-
-You could display images, if your custom transformer returns data like this:
-```javascript
-[
-    { id: 1, text: 'United Kingdom (Europe)', img: 'vendor/images/flags/en.png' },
-    { id: 2, text: 'China (Asia)', img: 'vendor/images/flags/ch.png' }
-]
-```
-You will need this additional JavaScript to display images:
-```javascript
-$.fn.select2entityAjax = function(action) {
-    var action = action || {};
-    var template = function (item) {
-        var img = item.img || null;
-        if (!img) {
-            if (item.element && item.element.dataset.img) {
-                img = item.element.dataset.img;
-            } else {
-                return item.text;
-            }
-        }
-        return $(
-            '<span><img src="' + img + '" class="img-circle img-sm"> ' + item.text + '</span>'
-        );
-    };
-    this.select2entity($.extend(action, {
-        templateResult: template,
-        templateSelection: template
-    }));
-    return this;
-};
-$('.select2entity').select2entityAjax();
-```
-The script will add the functionality globally for all '.select2entity' elements.
-You also will need to override following block in your template:
-```twig
-{% block tetranz_select2entity_widget_select_options %}
-    {% if value and value is iterable %}
-        <option value="{{ value.id }}" data-img="{{ value.img }}" selected="selected">{{ value.text }}</option>
-    {% endif %}
-{% endblock %}
-```
-
 ##Options##
 Defaults will be used for some if not set.
 * `class` is your entity class. Required
@@ -199,6 +137,65 @@ The controller should return a `JSON` array in the following format. The propert
   { id: 1, text: 'Displayed Text 1' },
   { id: 2, text: 'Displayed Text 2' }
 ]
+```
+
+##Custom template##
+If you need custom view that is a combination between few fields in the entity, you need a custom transformer. For that, extend EntityToPropertyTransformer or EntitiesToPropertyTransformer, redefine function transform and set the custom content.
+
+Here's an example, that shows country name and continent (two different properties in Country entity):
+```php
+$builder
+    ->add('country', Select2EntityType::class, [
+        'multiple' => false,
+        'remote_route' => 'tetranz_test_default_countryquery',
+        'class' => '\Tetranz\TestBundle\Entity\Country',
+        'transformer' => '\Tetranz\TestBundle\Form\DataTransformer\CountryEntityToPropertyTransformer',
+    ]);
+```
+Your custom transformer and respectively your Ajax controller should return a array in the following format:
+```javascript
+[ id: 1, text: 'United Kingdom (Europe)' ]
+```
+
+If you need [Templating](https://select2.github.io/examples.html#templating) in Select2, you could consider following example.
+Your custom transformer could return data like this:
+```javascript
+[ id: 1, text: 'United Kingdom (Europe)', img: 'vendor/images/flags/en.png' ]
+```
+You will need this additional JavaScript to display images:
+```javascript
+$.fn.select2entityAjax = function(action) {
+    var action = action || {};
+    var template = function (item) {
+        var img = item.img || null;
+        if (!img) {
+            if (item.element && item.element.dataset.img) {
+                img = item.element.dataset.img;
+            } else {
+                return item.text;
+            }
+        }
+        return $(
+            '<span><img src="' + img + '" class="img-circle img-sm"> ' + item.text + '</span>'
+        );
+    };
+    this.select2entity($.extend(action, {
+        templateResult: template,
+        templateSelection: template
+    }));
+    return this;
+};
+$('.select2entity').select2entityAjax();
+```
+This script will add the functionality globally for all '.select2entity' elements!
+
+You also will need to override following block in your template:
+```twig
+{% block tetranz_select2entity_widget_select_options %}
+    {% if value and value is iterable %}
+        <option value="{{ value.id }}" data-img="{{ value.img }}" selected="selected">{{ value.text }}</option>
+    {% endif %}
+{% endblock %}
 ```
 
 ##How to use it with Embed Collection Forms##
