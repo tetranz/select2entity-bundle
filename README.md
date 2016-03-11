@@ -193,16 +193,8 @@ This script will add the functionality globally for all '.select2entity' element
 
 You also will need to override following block in your template:
 ```twig
-{% block tetranz_select2entity_widget_select_options %}
-    {% if value and value is iterable %}
-        {% if multiple %}
-            {% for label in value %}
-                <option value="{{ label.id }}" data-img="{{ label.img }}" selected="selected">{{ label.text }}</option>
-            {% endfor %}
-        {% else %}
-            <option value="{{ value.id }}" data-img="{{ value.img }}" selected="selected">{{ value.text }}</option>
-        {% endif %}
-    {% endif %}
+{% block tetranz_select2entity_widget_select_option %}
+    <option value="{{ label.id }}" data-img="{{ label.img }}" selected="selected">{{ label.text }}</option>
 {% endblock %}
 ```
 
