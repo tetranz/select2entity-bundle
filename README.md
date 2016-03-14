@@ -139,8 +139,8 @@ The controller should return a `JSON` array in the following format. The propert
 ]
 ```
 
-##Custom text##
-If you need to display more than one field from the entity, you need to define your own custom transformer. For that, extend EntityToPropertyTransformer or EntitiesToPropertyTransformer and redefine the transform method. This way you can return as `text` anything you want, not just one entity property.
+##Custom option text##
+If you need more flexibility in what you display as the text for each option, such as displaying the values of several fields from your entity or showing an image inside, you may define your own custom transformer. For that, extend EntityToPropertyTransformer or EntitiesToPropertyTransformer and redefine the transform() method. This way you can return as `text` anything you want, not just one entity property.
 
 Here's an example that returns the country name and continent (two different properties in the Country entity):
 ```php
@@ -167,20 +167,9 @@ Your custom transformer and respectively your Ajax controller should return an a
 ]
 ```
 
-##Templating##
+###Templating###
 
-If you need [Templating](https://select2.github.io/examples.html#templating) in Select2, you could consider the following example, that shows the contry flag in the beging.
-
-Again you'll need custom transformer as in the example above: 
-```php
-$builder
-    ->add('country', Select2EntityType::class, [
-        'multiple' => true,
-        'remote_route' => 'tetranz_test_default_countryquery',
-        'class' => '\Tetranz\TestBundle\Entity\Country',
-        'transformer' => '\Tetranz\TestBundle\Form\DataTransformer\CountryEntitiesToPropertyTransformer',
-    ]);
-```
+If you need [Templating](https://select2.github.io/examples.html#templating) in Select2, you could consider the following example that shows the country flag next to each option.
 
 Your custom transformer should return data like this:
 ```javascript
@@ -216,7 +205,7 @@ $('.select2entity').select2entityAjax();
 ```
 This script will add the functionality globally for all elements with class `select2entity`, but if the `img` is not passed it will work as the original `select2entity`.
 
-You also will need to override following block in your template:
+You also will need to override the following block in your template:
 ```twig
 {% block tetranz_select2entity_widget_select_option %}
     <option value="{{ label.id }}" data-img="{{ label.img }}" selected="selected">{{ label.text }}</option>
@@ -225,7 +214,7 @@ You also will need to override following block in your template:
 This block adds all additional data needed to the JavaScript function `select2entityAjax`, like data attribute. In this case we are passing `data-img`.
 
 ##Embed Collection Forms##
-If you use [Embed Collection Forms](http://symfony.com/doc/current/cookbook/form/form_collections.html) and [data-prototype](http://symfony.com/doc/current/cookbook/form/form_collections.html#allowing-new-tags-with-the-prototype) to add new elements in the form. You will need the following JavaScript that will listen for adding an element `.select2entity`:
+If you use [Embedded Collection Forms](http://symfony.com/doc/current/cookbook/form/form_collections.html) and [data-prototype](http://symfony.com/doc/current/cookbook/form/form_collections.html#allowing-new-tags-with-the-prototype) to add new elements in your form, you will need the following JavaScript that will listen for adding an element `.select2entity`:
 ```javascript
 $('body').on('click', '[data-prototype]', function(e) {
     $(this).prev().find('.select2entity').last().select2entity();
