@@ -146,16 +146,24 @@ Here's an example that returns the country name and continent (two different pro
 ```php
 $builder
     ->add('country', Select2EntityType::class, [
-        'multiple' => false,
+        'multiple' => true,
         'remote_route' => 'tetranz_test_default_countryquery',
         'class' => '\Tetranz\TestBundle\Entity\Country',
-        'transformer' => '\Tetranz\TestBundle\Form\DataTransformer\CountryEntityToPropertyTransformer',
+        'transformer' => '\Tetranz\TestBundle\Form\DataTransformer\CountryEntitiesToPropertyTransformer',
     ]);
+```
+In transform sets data array like this:
+```php
+$data[] = array(
+    'id' => $country->getId(),
+    'text' => $country->getName().' ('.$country->getContinent()->getName().')',
+);
 ```
 Your custom transformer and respectively your Ajax controller should return an array in the following format:
 ```javascript
 [ 
-    { id: 1, text: 'United Kingdom (Europe)' }
+    { id: 1, text: 'United Kingdom (Europe)' },
+    { id: 1, text: 'China (Asia)' }
 ]
 ```
 
@@ -167,20 +175,21 @@ Again you'll need custom transformer as in the example above:
 ```php
 $builder
     ->add('country', Select2EntityType::class, [
-        'multiple' => false,
+        'multiple' => true,
         'remote_route' => 'tetranz_test_default_countryquery',
         'class' => '\Tetranz\TestBundle\Entity\Country',
-        'transformer' => '\Tetranz\TestBundle\Form\DataTransformer\CountryEntityToPropertyTransformer',
+        'transformer' => '\Tetranz\TestBundle\Form\DataTransformer\CountryEntitiesToPropertyTransformer',
     ]);
 ```
 
 Your custom transformer should return data like this:
 ```javascript
 [ 
-    { id: 1, text: 'United Kingdom (Europe)', img: 'vendor/images/flags/en.png' }
+    { id: 1, text: 'United Kingdom (Europe)', img: 'images/flags/en.png' },
+    { id: 2, text: 'China (Asia)', img: 'images/flags/ch.png' }
 ]
 ```
-You will need this additional JavaScript. You need to define your own fuction `select2entityAjax` which calls the original one and display dustom template with image:
+You need to define your own JavaScript fuction `select2entityAjax` which extends the original one `select2entity` and display custom template with image:
 ```javascript
 $.fn.select2entityAjax = function(action) {
     var action = action || {};
@@ -205,20 +214,18 @@ $.fn.select2entityAjax = function(action) {
 };
 $('.select2entity').select2entityAjax();
 ```
-This script will add the functionality globally for all '.select2entity' elements, but if the `img` is not passed will work as the origina one - `select2entity`.
+This script will add the functionality globally for all elements with class `select2entity`, but if the `img` is not passed it will work as the original `select2entity`.
 
 You also will need to override following block in your template:
 ```twig
 {% block tetranz_select2entity_widget_select_option %}
     <option value="{{ label.id }}" data-img="{{ label.img }}" selected="selected">{{ label.text }}</option>
 {% endblock %}
-Here you need to add all additional data needed to the JavaScript function `select2entityAjax`, like data attribute
 ```
+This block adds all additional data needed to the JavaScript function `select2entityAjax`, like data attribute. In this case we are passing `data-img`.
 
 ##Embed Collection Forms##
-If you use [Embed Collection Forms](http://symfony.com/doc/current/cookbook/form/form_collections.html) and [data-prototype](http://symfony.com/doc/current/cookbook/form/form_collections.html#allowing-new-tags-with-the-prototype) to add new elements in the form.
-
-You will need the following JavaScript:
+If you use [Embed Collection Forms](http://symfony.com/doc/current/cookbook/form/form_collections.html) and [data-prototype](http://symfony.com/doc/current/cookbook/form/form_collections.html#allowing-new-tags-with-the-prototype) to add new elements in the form. You will need the following JavaScript that will listen for adding an element `.select2entity`:
 ```javascript
 $('body').on('click', '[data-prototype]', function(e) {
     $(this).prev().find('.select2entity').last().select2entity();
