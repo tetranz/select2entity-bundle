@@ -208,7 +208,12 @@ This script will add the functionality globally for all elements with class `sel
 You also will need to override the following block in your template:
 ```twig
 {% block tetranz_select2entity_widget_select_option %}
-    <option value="{{ label.id }}" data-img="{{ label.img }}" selected="selected">{{ label.text }}</option>
+    <option value="{{ label.id }}" selected="selected"
+            {% for key, data in label %}
+                {% if key not in ['id', 'text'] %} data-{{ key }}="{{ data }}"{% endif %}
+            {% endfor %}>
+        {{ label.text }}
+    </option>
 {% endblock %}
 ```
 This block adds all additional data needed to the JavaScript function `select2entityAjax`, like data attribute. In this case we are passing `data-img`.
