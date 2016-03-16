@@ -63,8 +63,8 @@ class Select2EntityType extends AbstractType
     {
         // add the appropriate data transformer
         $transformer = $options['multiple']
-            ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'])
-            : new EntityToPropertyTransformer($this->em, $options['class'], $options['text_property']);
+            ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key'])
+            : new EntityToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key']);
 
         $builder->addViewTransformer($transformer, true);
     }
@@ -76,7 +76,7 @@ class Select2EntityType extends AbstractType
         $view->vars['remote_path'] = $options['remote_path']
             ?: $this->router->generate($options['remote_route'], array_merge($options['remote_params'], [ 'page_limit' => $options['page_limit'] ]));
 
-        $varNames = array('multiple', 'minimum_input_length', 'placeholder', 'language', 'allow_clear', 'delay', 'language', 'cache');
+        $varNames = array('multiple', 'minimum_input_length', 'placeholder', 'language', 'allow_clear', 'delay', 'language', 'cache', 'primary_key');
         foreach ($varNames as $varName) {
             $view->vars[$varName] = $options[$varName];
         }
@@ -104,6 +104,7 @@ class Select2EntityType extends AbstractType
         $resolver->setDefaults(
             array(
                 'class' => null,
+                'primary_key' => 'id',
                 'remote_path' => null,
                 'remote_route' => null,
                 'remote_params' => array(),
