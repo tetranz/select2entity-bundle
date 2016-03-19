@@ -61,10 +61,30 @@ class Select2EntityType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // add the appropriate data transformer
-        $transformer = $options['multiple']
-            ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key'])
-            : new EntityToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key']);
+        // add custom data transformer
+        if ($options['transformer']) {
+            if (!is_string($options['transformer'])) {
+                throw new \Exception('The option transformer must be a string');
+            }
+            if (!class_exists($options['transformer'])) {
+                throw new \Exception('Unable to load class: '.$options['transformer']);
+            }
+
+            $transformer = new $options['transformer']($this->em, $options['class']);
+
+            $isValidType = $options['multiple']
+                ? ($transformer instanceof EntitiesToPropertyTransformer)
+                : ($transformer instanceof EntityToPropertyTransformer);
+            if (!$isValidType) {
+                throw new \Exception(sprintf('The custom transformer %s must extend %s', get_class($transformer), $options['multiple'] ? EntitiesToPropertyTransformer::class : EntityToPropertyTransformer::class));
+            }
+
+        // add the default data transformer
+        } else {
+            $transformer = $options['multiple']
+                ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key'])
+                : new EntityToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key']);
+        }
 
         $builder->addViewTransformer($transformer, true);
     }
@@ -118,7 +138,8 @@ class Select2EntityType extends AbstractType
                 'placeholder' => '',
                 'language' => $this->language,
                 'required' => false,
-                'cache' => $this->cache
+                'cache' => $this->cache,
+                'transformer' => null,
             )
         );
     }
