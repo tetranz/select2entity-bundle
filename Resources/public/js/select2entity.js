@@ -1,10 +1,7 @@
 $(document).ready(function () {
   $.fn.select2entity = function(action) {
-    if(action){
-      this.select2(action);
-      return this;
-    }
-    this.select2({
+    var action = action || {};
+    this.select2($.extend(action, {
       ajax: {
         data: function (params) {
           return {
@@ -17,7 +14,7 @@ $(document).ready(function () {
           };
         }
       }
-    });
+    }));
     return this;
   };
 

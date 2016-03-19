@@ -22,7 +22,9 @@
         <select {{ block('widget_attributes') }}>
             {% if value is iterable %}
                 {% for id, label in value %}
-                    <option value="{{ id }}" selected="selected">{{ label }}</option>
+                    {% block tetranz_select2entity_widget_select_option %}
+                        <option value="{{ id }}" selected="selected">{{ label }}</option>
+                    {% endblock %}
                 {% endfor %}
             {% endif %}
         </select>
