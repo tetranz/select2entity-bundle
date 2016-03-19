@@ -85,6 +85,7 @@ $builder
             'multiple' => true,
             'remote_route' => 'tetranz_test_default_countryquery',
             'class' => '\Tetranz\TestBundle\Entity\Country',
+            'primary_key' => 'id',
             'text_property' => 'name',
             'minimum_input_length' => 2,
             'page_limit' => 10,
@@ -103,6 +104,7 @@ use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 ##Options##
 Defaults will be used for some if not set.
 * `class` is your entity class. Required
+* `primary_key` is the name of the property used to uniquely identify entities. Defaults to 'id'
 * `text_property` This is the entity property used to retrieve the text for existing data. 
 If text_property is omitted then the entity is cast to a string. This requires it to have a __toString() method.
 * `multiple` True for multiple select (many to many). False for single (many to one) select.
