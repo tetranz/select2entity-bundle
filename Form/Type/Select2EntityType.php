@@ -4,6 +4,7 @@ namespace Tetranz\Select2EntityBundle\Form\Type;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -72,11 +73,8 @@ class Select2EntityType extends AbstractType
 
             $transformer = new $options['transformer']($this->em, $options['class']);
 
-            $isValidType = $options['multiple']
-                ? ($transformer instanceof EntitiesToPropertyTransformer)
-                : ($transformer instanceof EntityToPropertyTransformer);
-            if (!$isValidType) {
-                throw new \Exception(sprintf('The custom transformer %s must extend %s', get_class($transformer), $options['multiple'] ? EntitiesToPropertyTransformer::class : EntityToPropertyTransformer::class));
+            if (!$transformer instanceof DataTransformerInterface) {
+                throw new \Exception(sprintf('The custom transformer %s must implement %s', get_class($transformer), DataTransformerInterface::class));
             }
 
         // add the default data transformer
