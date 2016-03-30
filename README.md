@@ -115,7 +115,7 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `placeholder` Placeholder text.
 * `language` i18n language code. Defaults to en.
 * `cache` Enable AJAX cache. The use of this is a little unclear at Select2. Defaults to true as per Select2 examples.
-* `transformer` The path to the custom transformer class, if you need custom view.
+* `transformer` The fully qualified class name of a custom transformer if you need that flexibility as described below.
 
 The url of the remote query can be given by either of two ways: `remote_route` is the Symfony route. `remote_params` can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify the url directly.
 
@@ -181,7 +181,7 @@ Your custom transformer should return data like this:
     { id: 2, text: 'China (Asia)', img: 'images/flags/ch.png' }
 ]
 ```
-You need to define your own JavaScript fuction `select2entityAjax` which extends the original one `select2entity` and display custom template with image:
+You need to define your own JavaScript function `select2entityAjax` which extends the original one `select2entity` and display custom template with image:
 ```javascript
 $.fn.select2entityAjax = function(action) {
     var action = action || {};
