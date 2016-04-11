@@ -11,6 +11,7 @@
         }
     ],
     "require": {
+        "php": ">=5.5.0",
         "symfony/symfony": ">=2.2",
         "doctrine/orm": ">=2.2"
     },
