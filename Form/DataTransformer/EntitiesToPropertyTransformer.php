@@ -3,8 +3,10 @@
 namespace Tetranz\Select2EntityBundle\Form\DataTransformer;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
@@ -77,14 +79,20 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
             return new ArrayCollection();
         }
 
-        // get multiple entities with one query
-        $entities = $this->em->createQueryBuilder()
-            ->select('entity')
-            ->from($this->className, 'entity')
-            ->where('entity.'.$this->primaryKey.' IN (:ids)')
-            ->setParameter('ids', $values)
-            ->getQuery()
-            ->getResult();
+        try {
+          // get multiple entities with one query
+          $entities = $this->em->createQueryBuilder()
+              ->select('entity')
+              ->from($this->className, 'entity')
+              ->where('entity.'.$this->primaryKey.' IN (:ids)')
+              ->setParameter('ids', $values)
+              ->getQuery()
+              ->getResult();
+        }
+        catch (DriverException $ex) {
+          // this will happen if the form submits invalid data
+          throw new TransformationFailedException('One or more id values are invalid');
+        }
 
         return $entities;
     }
