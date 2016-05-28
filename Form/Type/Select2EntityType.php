@@ -2,7 +2,7 @@
 
 namespace Tetranz\Select2EntityBundle\Form\Type;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,7 +21,7 @@ use Tetranz\Select2EntityBundle\Form\DataTransformer\EntityToPropertyTransformer
  */
 class Select2EntityType extends AbstractType
 {
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     protected $em;
     /** @var Router */
     protected $router;
@@ -39,8 +39,8 @@ class Select2EntityType extends AbstractType
     protected $cache;
 
     /**
-     * @param EntityManager $em
-     * @param Router $router
+     * @param EntityManagerInterface $em
+     * @param RouterInterface $router
      * @param integer $minimumInputLength
      * @param integer $pageLimit
      * @param boolean $allowClear
@@ -48,7 +48,7 @@ class Select2EntityType extends AbstractType
      * @param string $language
      * @param boolean $cache
      */
-    public function __construct(EntityManager $em, RouterInterface $router, $minimumInputLength, $pageLimit, $allowClear, $delay, $language, $cache)
+    public function __construct(EntityManagerInterface $em, RouterInterface $router, $minimumInputLength, $pageLimit, $allowClear, $delay, $language, $cache)
     {
         $this->em = $em;
         $this->router = $router;
