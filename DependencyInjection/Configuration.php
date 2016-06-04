@@ -28,6 +28,10 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('delay')->defaultValue(250)->end()
                     ->scalarNode('language')->defaultValue('en')->end()
                     ->scalarNode('cache')->defaultTrue()->end()
+                    // default to 1ms for backwards compatibility for older versions where 'cache' is true but the
+                    // user is not aware of the updated caching feature. This way the cache will, by default, not
+                    // be very effective. Realistically this should be like 60000ms (60 seconds).
+                    ->scalarNode('cache_timeout')->defaultValue(1)->end()
                 ->end();
 
         // Here you should define the parameters that are allowed to

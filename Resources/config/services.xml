@@ -9,12 +9,7 @@
             <tag name="form.type" alias="tetranz_select2entity" />
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="router" />
-            <argument>%tetranz_select2_entity.minimum_input_length%</argument>
-            <argument>%tetranz_select2_entity.page_limit%</argument>
-            <argument>%tetranz_select2_entity.allow_clear%</argument>
-            <argument>%tetranz_select2_entity.delay%</argument>
-            <argument>%tetranz_select2_entity.language%</argument>
-            <argument>%tetranz_select2_entity.cache%</argument>
+            <argument>%tetranz_select2_entity.config%</argument>
         </service>
     </services>
 

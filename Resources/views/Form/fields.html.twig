@@ -2,6 +2,7 @@
     {% set attr = attr|merge({
     'data-ajax--url':remote_path,
     'data-ajax--cache': cache ? 'true' : 'false',
+    'data-ajax--cache-timeout': cache_timeout|default(0),
     'data-ajax--delay':delay,
     'data-ajax--data-type':"json",
     'data-language':language,
