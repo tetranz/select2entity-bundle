@@ -48,7 +48,7 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
      */
     public function transform($entities)
     {
-        if (is_null($entities) || count($entities) === 0) {
+        if (empty($entities)) {
             return array();
         }
 
@@ -75,7 +75,7 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
      */
     public function reverseTransform($values)
     {
-        if (!is_array($values) || count($values) === 0) {
+        if (!is_array($values) || empty($values)) {
             return new ArrayCollection();
         }
 
