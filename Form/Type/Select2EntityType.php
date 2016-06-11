@@ -23,41 +23,21 @@ class Select2EntityType extends AbstractType
 {
     /** @var EntityManagerInterface */
     protected $em;
-    /** @var Router */
+    /** @var RouterInterface */
     protected $router;
-    /** @var  integer */
-    protected $pageLimit;
-    /** @var  integer */
-    protected $minimumInputLength;
-    /** @var  boolean */
-    protected $allowClear;
-    /** @var  integer */
-    protected $delay;
-    /** @var  string */
-    protected $language;
-    /** @var  boolean */
-    protected $cache;
+    /** @var  array */
+    protected $config;
 
     /**
      * @param EntityManagerInterface $em
-     * @param RouterInterface $router
-     * @param integer $minimumInputLength
-     * @param integer $pageLimit
-     * @param boolean $allowClear
-     * @param integer $delay
-     * @param string $language
-     * @param boolean $cache
+     * @param RouterInterface        $router
+     * @param array                  $config
      */
-    public function __construct(EntityManagerInterface $em, RouterInterface $router, $minimumInputLength, $pageLimit, $allowClear, $delay, $language, $cache)
+    public function __construct(EntityManagerInterface $em, RouterInterface $router, $config)
     {
         $this->em = $em;
         $this->router = $router;
-        $this->minimumInputLength = $minimumInputLength;
-        $this->pageLimit = $pageLimit;
-        $this->allowClear = $allowClear;
-        $this->delay = $delay;
-        $this->language = $language;
-        $this->cache = $cache;
+        $this->config = $config;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -94,7 +74,7 @@ class Select2EntityType extends AbstractType
         $view->vars['remote_path'] = $options['remote_path']
             ?: $this->router->generate($options['remote_route'], array_merge($options['remote_params'], [ 'page_limit' => $options['page_limit'] ]));
 
-        $varNames = array('multiple', 'minimum_input_length', 'placeholder', 'language', 'allow_clear', 'delay', 'language', 'cache', 'primary_key');
+        $varNames = array_merge(array('multiple', 'placeholder', 'primary_key'), array_keys($this->config));
         foreach ($varNames as $varName) {
             $view->vars[$varName] = $options[$varName];
         }
@@ -128,15 +108,16 @@ class Select2EntityType extends AbstractType
                 'remote_params' => array(),
                 'multiple' => false,
                 'compound' => false,
-                'minimum_input_length' => $this->minimumInputLength,
-                'page_limit' => $this->pageLimit,
-                'allow_clear' => $this->allowClear,
-                'delay' => $this->delay,
+                'minimum_input_length' => $this->config['minimum_input_length'],
+                'page_limit' => $this->config['page_limit'],
+                'allow_clear' => $this->config['allow_clear'],
+                'delay' => $this->config['delay'],
                 'text_property' => null,
                 'placeholder' => '',
-                'language' => $this->language,
+                'language' => $this->config['language'],
                 'required' => false,
-                'cache' => $this->cache,
+                'cache' => $this->config['cache'],
+                'cache_timeout' => $this->config['cache_timeout'],
                 'transformer' => null,
             )
         );

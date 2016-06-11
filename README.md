@@ -92,6 +92,7 @@ $builder
             'allow_clear' => true,
             'delay' => 250,
             'cache' => true,
+            'cache_timeout' => 60000, // if 'cache' is true
             'language' => 'en',
             'placeholder' => 'Select a country',
         ])
@@ -114,7 +115,8 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `delay` The delay in milliseconds after a keystroke before trigging another AJAX request. Defaults to 250 ms.
 * `placeholder` Placeholder text.
 * `language` i18n language code. Defaults to en.
-* `cache` Enable AJAX cache. The use of this is a little unclear at Select2. Defaults to true as per Select2 examples.
+* `cache` Enable AJAX cache. Results will be cached for each 'term' queried.
+* `cache_timeout` How long to cache a query in milliseconds. Setting to `0` will cause the cache to never timeout _(60000 = 60 seconds)_
 * `transformer` The fully qualified class name of a custom transformer if you need that flexibility as described below.
 
 The url of the remote query can be given by either of two ways: `remote_route` is the Symfony route. `remote_params` can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify the url directly.
@@ -129,6 +131,7 @@ tetranz_select2_entity:
     delay: 500
     language: fr
     cache: false
+    cache_timeout: 0
 ```
 
 ##AJAX Response##
