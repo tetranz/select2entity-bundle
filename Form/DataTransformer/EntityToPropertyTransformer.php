@@ -48,7 +48,7 @@ class EntityToPropertyTransformer implements DataTransformerInterface
     public function transform($entity)
     {
         $data = array();
-        if (null === $entity) {
+        if (empty($entity)) {
             return $data;
         }
         $accessor = PropertyAccess::createPropertyAccessor();
@@ -70,7 +70,7 @@ class EntityToPropertyTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value)
     {
-        if (null === $value) {
+        if (empty($value)) {
             return null;
         }
         $repo = $this->em->getRepository($this->className);
