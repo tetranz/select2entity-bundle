@@ -23,7 +23,7 @@
         <select {{ block('widget_attributes') }}>
             {% if value is iterable %}
                 {% if allow_clear %}
-                        <option>{{ placeholder|trans({}, translation_domain) }}</option>
+                        <option value=""></option>
                 {% endif %}
                 {% for id, label in value %}
                     {% block tetranz_select2entity_widget_select_option %}
