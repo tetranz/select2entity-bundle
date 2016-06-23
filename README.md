@@ -119,7 +119,9 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `cache_timeout` How long to cache a query in milliseconds. Setting to `0` will cause the cache to never timeout _(60000 = 60 seconds)_
 * `transformer` The fully qualified class name of a custom transformer if you need that flexibility as described below.
 
-The url of the remote query can be given by either of two ways: `remote_route` is the Symfony route. `remote_params` can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify the url directly.
+The url of the remote query can be given by either of two ways: `remote_route` is the Symfony route. 
+`remote_params` can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify 
+the url directly.
 
 The defaults can be changed in your app/config.yml file with the following format.
 
@@ -143,6 +145,25 @@ The controller should return a `JSON` array in the following format. The propert
   { id: 2, text: 'Displayed Text 2' }
 ]
 ```
+##Ininite Scrolling##
+If your results are being paged via the Select2 "infinite scrolling" feature then you can either continue to return
+the same array as shown above _(for Backwards Compatibility this bundle will automatically try to determine if more 
+results are needed)_, or you can return an object shown below to have finer control over the paged results.
+
+The `more` field should be true if there are more results to be loaded. 
+
+```javascript
+{
+  results: [
+     { id: 1, text: 'Displayed Text 1' },
+     { id: 2, text: 'Displayed Text 2' }
+  ],
+  more: true
+}
+```
+
+Your controller action that fetches the results will receive a parameter `page` indicating what page of results should
+be loaded. _Note: Select2 does not send `page` on the first request._ 
 
 ##Custom option text##
 If you need more flexibility in what you display as the text for each option, such as displaying the values of several fields from your entity or showing an image inside, you may define your own custom transformer.

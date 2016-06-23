@@ -74,7 +74,7 @@ class Select2EntityType extends AbstractType
         $view->vars['remote_path'] = $options['remote_path']
             ?: $this->router->generate($options['remote_route'], array_merge($options['remote_params'], [ 'page_limit' => $options['page_limit'] ]));
 
-        $varNames = array_merge(array('multiple', 'placeholder', 'primary_key'), array_keys($this->config));
+        $varNames = array_merge(array('multiple', 'placeholder', 'primary_key', 'page_limit'), array_keys($this->config));
         foreach ($varNames as $varName) {
             $view->vars[$varName] = $options[$varName];
         }
