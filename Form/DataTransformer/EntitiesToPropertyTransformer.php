@@ -38,6 +38,7 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
         $this->className = $class;
         $this->textProperty = $textProperty;
         $this->primaryKey = $primaryKey;
+        $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
     /**
@@ -54,14 +55,12 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
 
         $data = array();
 
-        $accessor = PropertyAccess::createPropertyAccessor();
-
         foreach ($entities as $entity) {
             $text = is_null($this->textProperty)
                 ? (string)$entity
-                : $accessor->getValue($entity, $this->textProperty);
+                : $this->accessor->getValue($entity, $this->textProperty);
 
-            $data[$accessor->getValue($entity, $this->primaryKey)] = $text;
+            $data[$this->accessor->getValue($entity, $this->primaryKey)] = $text;
         }
 
         return $data;
@@ -92,6 +91,19 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
         catch (DriverException $ex) {
           // this will happen if the form submits invalid data
           throw new TransformationFailedException('One or more id values are invalid');
+        }
+        
+        //handle newly added tags if any
+        $newValues = array_filter($values, function($val, $key) {
+            if (!ctype_digit($val)) {
+                return $val;
+            }
+        }, ARRAY_FILTER_USE_BOTH);
+
+        foreach ($newValues as $value) {
+            $object = new $this->className;
+            $this->accessor->setValue($object, $this->textProperty, $value);
+            array_push($entities, $object);
         }
 
         return $entities;

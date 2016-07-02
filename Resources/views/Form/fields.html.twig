@@ -8,6 +8,9 @@
     'data-language':language,
     'data-minimum-input-length':minimum_input_length,
     'data-placeholder':placeholder|trans({}, translation_domain),
+    'data-tags':allow_add|trans({}, translation_domain),
+    'data-tags-text':allow_add_text|trans({}, translation_domain),
+    'data-token-separators':allow_add_separators,
     'class' : (attr.class|default('') ~ ' select2entity form-control')|trim
     }) %}
 

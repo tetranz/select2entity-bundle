@@ -112,6 +112,9 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `minimum_input_length` is the number of keys you need to hit before the search will happen. Defaults to 2.
 * `page_limit` This is passed as a query parameter to the remote call. It is intended to be used to limit size of the list returned. Defaults to 10.
 * `allow_clear` True will cause Select2 to display a small x for clearing the value. Defaults to false.
+* `allow_add` True allow you to add new entites through Select2 tags. Defaults to false.
+* `allow_add_text` The text that is displayed behind entities that don't exist if `allow_add` is true. Default is " (NEW)".
+* `allow_add_separator` A javascript array of delimiters to auto split the tags with. 
 * `delay` The delay in milliseconds after a keystroke before trigging another AJAX request. Defaults to 250 ms.
 * `placeholder` Placeholder text.
 * `language` i18n language code. Defaults to en.
@@ -172,6 +175,8 @@ Your custom transformer and respectively your Ajax controller should return an a
     { id: 1, text: 'China (Asia)' }
 ]
 ```
+If you are using the allow_add option and your entity requires other fields besides the text_property field to be valid, you will either need to extend the EntitiesToPropertyTransformer to add the missing field, create a doctrine prePersist listener, or add the missing data in the form view after submit before saving.
+
 
 ###Templating###
 

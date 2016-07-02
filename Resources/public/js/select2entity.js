@@ -6,6 +6,13 @@ $(document).ready(function () {
             // doesn't expose its options to the transport method.
             var $s2 = $(this), cache = [];
             $s2.select2($.extend({
+                // Tags support
+                createTag: function (data) {
+                    if ($s2.data('tags')) {
+                        var text = data.term + $s2.data('tags-text');
+                        return { id: data.term, text: text }; 
+                    } 
+                }, 
                 ajax: {
                     transport: function (params, success, failure) {
                         // is caching enabled?
