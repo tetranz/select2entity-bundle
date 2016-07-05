@@ -111,6 +111,7 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `multiple` True for multiple select (many to many). False for single (many to one) select.
 * `minimum_input_length` is the number of keys you need to hit before the search will happen. Defaults to 2.
 * `page_limit` This is passed as a query parameter to the remote call. It is intended to be used to limit size of the list returned. Defaults to 10.
+* `scroll` True will enable infinite scrolling. Defaults to false.
 * `allow_clear` True will cause Select2 to display a small x for clearing the value. Defaults to false.
 * `delay` The delay in milliseconds after a keystroke before trigging another AJAX request. Defaults to 250 ms.
 * `placeholder` Placeholder text.
@@ -161,9 +162,10 @@ The `more` field should be true if there are more results to be loaded.
   more: true
 }
 ```
-
 Your controller action that fetches the results will receive a parameter `page` indicating what page of results should
 be loaded. _Note: Select2 does not send `page` on the first request._ 
+
+If you set scroll to true then you must handle the page parameter in the query. Weird things will happen if you don't.
 
 ##Custom option text##
 If you need more flexibility in what you display as the text for each option, such as displaying the values of several fields from your entity or showing an image inside, you may define your own custom transformer.
