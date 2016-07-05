@@ -164,9 +164,7 @@ The `more` field should be true if there are more results to be loaded.
 }
 ```
 Your controller action that fetches the results will receive a parameter `page` indicating what page of results should
-be loaded. _Note: Select2 does not send `page` on the first request._ 
-
-If you set scroll to true then you must handle the page parameter in the query. Weird things will happen if you don't.
+be loaded. If you set scroll to true then you must handle the page parameter in the query. Weird things will happen if you don't.
 
 ##Custom option text##
 If you need more flexibility in what you display as the text for each option, such as displaying the values of several fields from your entity or showing an image inside, you may define your own custom transformer.
