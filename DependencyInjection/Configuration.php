@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
                 ->children()
                     ->scalarNode('minimum_input_length')->defaultValue(1)->end()
+                    ->scalarNode('scroll')->defaultFalse()->end()
                     ->scalarNode('page_limit')->defaultValue(10)->end()
                     ->scalarNode('allow_clear')->defaultFalse()->end()
                     ->scalarNode('delay')->defaultValue(250)->end()

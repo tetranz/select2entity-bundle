@@ -2,9 +2,12 @@ $(document).ready(function () {
     $.fn.select2entity = function (options) {
         this.each(function () {
             // Keep a reference to the element so we can keep the cache local to this instance and so we can
-            // determine if caching is even enabled on this element by looking at it's data attributes since select2
-            // doesn't expose its options to the transport method.
-            var $s2 = $(this), limit = $s2.data('page-limit') || 0, prefix = Date.now(), cache = [];
+            // fetch config settings since select2 doesn't expose its options to the transport method.
+            var $s2 = $(this),
+                limit = $s2.data('page-limit') || 0,
+                scroll = $s2.data('scroll'),
+                prefix = Date.now(),
+                cache = [];
             $s2.select2($.extend({
                 ajax: {
                     transport: function (params, success, failure) {
@@ -32,35 +35,39 @@ $(document).ready(function () {
                         }
                     },
                     data: function (params) {
+                        // only send the 'page' parameter if scrolling is enabled
+                        if (scroll) {
+                            return {
+                                q: params.term,
+                                page: params.page || 1
+                            };
+                        }
+
                         return {
-                            q: params.term,
-                            page: params.page || 1
+                            q: params.term
                         };
                     },
                     processResults: function (data, params) {
-                        var results, more = false;
+                        var results, more = false, response = {};
                         params.page = params.page || 1;
 
                         if ($.isArray(data)) {
-                            // maintain BC; assume there is more if the result length == limit
                             results = data;
-                            more = results.length == limit;
                         } else if (typeof data == 'object') {
-                            // remote result was proper object
+                            // assume remote result was proper object
                             results = data.results;
                             more = data.more;
                         } else {
                             // failsafe
                             results = [];
-                            more = false;
                         }
 
-                        return {
-                            results: results,
-                            pagination: {
-                                more: more
-                            }
-                        };
+                        if (scroll) {
+                            response.pagination = {more: more};
+                        }
+                        response.results = results;
+
+                        return response;
                     }
                 }
             }, options || {}));

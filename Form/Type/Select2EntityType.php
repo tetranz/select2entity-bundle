@@ -110,6 +110,7 @@ class Select2EntityType extends AbstractType
                 'compound' => false,
                 'minimum_input_length' => $this->config['minimum_input_length'],
                 'page_limit' => $this->config['page_limit'],
+                'scroll' => $this->config['scroll'],
                 'allow_clear' => $this->config['allow_clear'],
                 'delay' => $this->config['delay'],
                 'text_property' => null,
