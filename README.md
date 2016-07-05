@@ -147,7 +147,7 @@ The controller should return a `JSON` array in the following format. The propert
   { id: 2, text: 'Displayed Text 2' }
 ]
 ```
-##Ininite Scrolling##
+##Infinite Scrolling##
 If your results are being paged via the Select2 "infinite scrolling" feature then you can either continue to return
 the same array as shown above _(for Backwards Compatibility this bundle will automatically try to determine if more 
 results are needed)_, or you can return an object shown below to have finer control over the paged results.
