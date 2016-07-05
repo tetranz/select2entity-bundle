@@ -135,6 +135,7 @@ tetranz_select2_entity:
     language: fr
     cache: false
     cache_timeout: 0
+    scroll: true
 ```
 
 ##AJAX Response##
