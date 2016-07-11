@@ -2,8 +2,6 @@
 
 namespace Tetranz\Select2EntityBundle\Form\DataTransformer;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -89,7 +87,7 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
               ->getQuery()
               ->getResult();
         }
-        catch (DriverException $ex) {
+        catch (\Exception $ex) {
           // this will happen if the form submits invalid data
           throw new TransformationFailedException('One or more id values are invalid');
         }
