@@ -8,9 +8,10 @@
     'data-language':language,
     'data-minimum-input-length':minimum_input_length,
     'data-placeholder':placeholder|trans({}, translation_domain),
-    'data-tags':allow_add|trans({}, translation_domain),
-    'data-tags-text':allow_add_text|trans({}, translation_domain),
-    'data-token-separators':allow_add_separators,
+    'data-tags':allow_add.enabled ? 'true' : 'false',
+    'data-tags-text':allow_add.new_tag_text|trans({}, translation_domain),
+    'data-new-tag-prefix':allow_add.new_tag_prefix|trans({}, translation_domain),
+    'data-token-separators':allow_add.tag_separators,
     'class' : (attr.class|default('') ~ ' select2entity form-control')|trim
     }) %}
 

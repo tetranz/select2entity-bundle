@@ -59,8 +59,15 @@ class Select2EntityType extends AbstractType
 
         // add the default data transformer
         } else {
+            
+            if (isset($options['allow_add']['new_tag_prefix'])) {
+                $newTagPrefix = $options['allow_add']['new_tag_prefix'];
+            } else {
+                $newTagPrefix = $this->config['allow_add']['new_tag_prefix'];
+            }
+
             $transformer = $options['multiple']
-                ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key'])
+                ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key'], $newTagPrefix)
                 : new EntityToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key']);
         }
 
@@ -76,7 +83,17 @@ class Select2EntityType extends AbstractType
 
         $varNames = array_merge(array('multiple', 'placeholder', 'primary_key'), array_keys($this->config));
         foreach ($varNames as $varName) {
-            $view->vars[$varName] = $options[$varName];
+            $view->vars[$varName] = $options[$varName];    
+        }
+        
+        //tags options
+        $varNames = array_keys($this->config['allow_add']);
+        foreach ($varNames as $varName) {
+            if (isset($options['allow_add'][$varName])) {
+                $view->vars['allow_add'][$varName] = $options['allow_add'][$varName];
+            } else {
+                $view->vars['allow_add'][$varName] = $this->config['allow_add'][$varName];
+            }
         }
 
         if ($options['multiple']) {
@@ -111,9 +128,12 @@ class Select2EntityType extends AbstractType
                 'minimum_input_length' => $this->config['minimum_input_length'],
                 'page_limit' => $this->config['page_limit'],
                 'allow_clear' => $this->config['allow_clear'],
-                'allow_add' => $this->config['allow_add'],
-                'allow_add_text' => $this->config['allow_add_text'],
-                'allow_add_separators' => $this->config['allow_add_separators'],
+                'allow_add' => array(
+                    'enabled' => $this->config['allow_add']['enabled'],
+                    'new_tag_text' => $this->config['allow_add']['new_tag_text'],
+                    'new_tag_prefix' => $this->config['allow_add']['new_tag_prefix'],
+                    'tag_separators' => $this->config['allow_add']['tag_separators']
+                ),
                 'delay' => $this->config['delay'],
                 'text_property' => null,
                 'placeholder' => '',

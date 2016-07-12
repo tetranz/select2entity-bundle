@@ -25,19 +25,23 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
     protected $textProperty;
     /** @var  string */
     protected $primaryKey;
+    /** @var  string */
+    protected $newTaxPrefix;
 
     /**
      * @param EntityManagerInterface $em
      * @param string $class
      * @param string|null $textProperty
      * @param string $primaryKey
+     * @param string $newTagPrefix
      */
-    public function __construct(EntityManagerInterface $em, $class, $textProperty = null, $primaryKey = 'id')
+    public function __construct(EntityManagerInterface $em, $class, $textProperty = null, $primaryKey = 'id', $newTagPrefix = '__')
     {
         $this->em = $em;
         $this->className = $class;
         $this->textProperty = $textProperty;
         $this->primaryKey = $primaryKey;
+        $this->newTagPrefix = $newTagPrefix;
         $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
@@ -77,7 +81,21 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
         if (!is_array($values) || empty($values)) {
             return array();
         }
-
+        
+        // add new tag entries
+        $newObjects = array();
+        $tagPrefixLength = strlen($this->newTagPrefix);
+        foreach ($values as $key => $value) {
+            $cleanValue = substr($value, $tagPrefixLength);
+            $valuePrefix = substr($value, 0, $tagPrefixLength);
+            if ($valuePrefix == $this->newTagPrefix) {
+                $object = new $this->className;
+                $this->accessor->setValue($object, $this->textProperty, $cleanValue);
+                $newObjects[] = $object;
+                unset($values[$key]);
+            }
+        }
+        
         try {
           // get multiple entities with one query
           $entities = $this->em->createQueryBuilder()
@@ -92,20 +110,7 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
           // this will happen if the form submits invalid data
           throw new TransformationFailedException('One or more id values are invalid');
         }
-        
-        //handle newly added tags if any
-        $newValues = array_filter($values, function($val, $key) {
-            if (!ctype_digit($val)) {
-                return $val;
-            }
-        }, ARRAY_FILTER_USE_BOTH);
-
-        foreach ($newValues as $value) {
-            $object = new $this->className;
-            $this->accessor->setValue($object, $this->textProperty, $value);
-            array_push($entities, $object);
-        }
-
-        return $entities;
+ 
+        return array_merge($entities, $newObjects);
     }
 }

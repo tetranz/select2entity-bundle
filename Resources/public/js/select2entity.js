@@ -10,9 +10,9 @@ $(document).ready(function () {
                 createTag: function (data) {
                     if ($s2.data('tags')) {
                         var text = data.term + $s2.data('tags-text');
-                        return { id: data.term, text: text }; 
+                        return { id: $s2.data('new-tag-prefix')+data.term, text: text }; 
                     } 
-                }, 
+                },  
                 ajax: {
                     transport: function (params, success, failure) {
                         // is caching enabled?
