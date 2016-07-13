@@ -9,6 +9,13 @@ $(document).ready(function () {
                 prefix = Date.now(),
                 cache = [];
             $s2.select2($.extend({
+                // Tags support
+                createTag: function (data) {
+                    if ($s2.data('tags')) {
+                        var text = data.term + $s2.data('tags-text');
+                        return { id: $s2.data('new-tag-prefix')+data.term, text: text }; 
+                    }
+                },
                 ajax: {
                     transport: function (params, success, failure) {
                         // is caching enabled?

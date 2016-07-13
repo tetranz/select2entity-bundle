@@ -113,6 +113,11 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `page_limit` This is passed as a query parameter to the remote call. It is intended to be used to limit size of the list returned. Defaults to 10.
 * `scroll` True will enable infinite scrolling. Defaults to false.
 * `allow_clear` True will cause Select2 to display a small x for clearing the value. Defaults to false.
+* `allow_add` Is an option array for the add tags settings of Select2. Only available when 'multiple' is true on form.
+    * `enable` Enables the allow new tags option. True or False. Default False.
+    * `new_tag_text` The text that is displayed behind entities that don't exist if `allow_add` is true. Default is " (NEW)".
+    * `new_tag_prefix` The prefix identifier for new tags, default is "__". Your real values must not contain these symbols in the beginning.
+    * `tag_separators` A javascript array of delimiters to auto split the tags with. 
 * `delay` The delay in milliseconds after a keystroke before trigging another AJAX request. Defaults to 250 ms.
 * `placeholder` Placeholder text.
 * `language` i18n language code. Defaults to en.
@@ -194,6 +199,34 @@ Your custom transformer and respectively your Ajax controller should return an a
     { id: 1, text: 'China (Asia)' }
 ]
 ```
+If you are using the allow_add option and your entity requires other fields besides the text_property field to be valid, you will either need to extend the EntitiesToPropertyTransformer to add the missing field, create a doctrine prePersist listener, or add the missing data in the form view after submit before saving.
+
+###Add New Tags###
+
+If you want to be able to create new entities through Select2 tags, you can enable it using the `allow_add` set of options. 
+
+For example:
+```php
+$builder
+    ->add('tags', Select2EntityType::class, [
+        'remote_route' => 'tetranz_test_tags',
+        'class' => '\Tetranz\TestBundle\Entity\PostTags',
+        'text_property' => 'name',
+        'multiple' => true,
+        'allow_add' => [
+            'enabled' => true,
+            'new_tag_text' => ' (NEW)',
+            'new_tag_prefix' => '__',
+            'tag_separators' => '[",", " "]'
+        ],
+    ]);
+```
+
+A few things to keep in mind when adding tags:
+* Your data should not have any chance of matching the first characters with the `new_tag_prefix`. If there is a chance, change it to something else like '**' or '$$'.
+* `tag_separators` is the same as the Select2 option. It should be a javascript array.
+* If the entity you are wanting to `allow_add` has any other required fields aside from the one specified in `text_property`, you must either add them in the form submit or add prePersist hooks to the doctrine entity.
+
 
 ###Templating###
 

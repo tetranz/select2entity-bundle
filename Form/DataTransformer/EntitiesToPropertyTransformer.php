@@ -23,19 +23,24 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
     protected $textProperty;
     /** @var  string */
     protected $primaryKey;
+    /** @var  string */
+    protected $newTaxPrefix;
 
     /**
      * @param EntityManagerInterface $em
      * @param string $class
      * @param string|null $textProperty
      * @param string $primaryKey
+     * @param string $newTagPrefix
      */
-    public function __construct(EntityManagerInterface $em, $class, $textProperty = null, $primaryKey = 'id')
+    public function __construct(EntityManagerInterface $em, $class, $textProperty = null, $primaryKey = 'id', $newTagPrefix = '__')
     {
         $this->em = $em;
         $this->className = $class;
         $this->textProperty = $textProperty;
         $this->primaryKey = $primaryKey;
+        $this->newTagPrefix = $newTagPrefix;
+        $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
     /**
@@ -52,14 +57,12 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
 
         $data = array();
 
-        $accessor = PropertyAccess::createPropertyAccessor();
-
         foreach ($entities as $entity) {
             $text = is_null($this->textProperty)
                 ? (string)$entity
-                : $accessor->getValue($entity, $this->textProperty);
+                : $this->accessor->getValue($entity, $this->textProperty);
 
-            $data[$accessor->getValue($entity, $this->primaryKey)] = $text;
+            $data[$this->accessor->getValue($entity, $this->primaryKey)] = $text;
         }
 
         return $data;
@@ -77,6 +80,20 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
             return array();
         }
 
+        // add new tag entries
+        $newObjects = array();
+        $tagPrefixLength = strlen($this->newTagPrefix);
+        foreach ($values as $key => $value) {
+            $cleanValue = substr($value, $tagPrefixLength);
+            $valuePrefix = substr($value, 0, $tagPrefixLength);
+            if ($valuePrefix == $this->newTagPrefix) {
+                $object = new $this->className;
+                $this->accessor->setValue($object, $this->textProperty, $cleanValue);
+                $newObjects[] = $object;
+                unset($values[$key]);
+            }
+        }
+
         try {
           // get multiple entities with one query
           $entities = $this->em->createQueryBuilder()
@@ -92,6 +109,6 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
           throw new TransformationFailedException('One or more id values are invalid');
         }
 
-        return $entities;
+        return array_merge($entities, $newObjects);
     }
 }
