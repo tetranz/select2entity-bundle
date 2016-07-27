@@ -10,12 +10,17 @@
     'data-placeholder':placeholder|trans({}, translation_domain),
     'data-page-limit':page_limit,
     'data-scroll':scroll ? 'true' : 'false',
-    'data-tags':allow_add.enabled ? 'true' : 'false',
-    'data-tags-text':allow_add.new_tag_text|trans({}, translation_domain),
-    'data-new-tag-prefix':allow_add.new_tag_prefix|trans({}, translation_domain),
-    'data-token-separators':allow_add.tag_separators,
     'class' : (attr.class|default('') ~ ' select2entity form-control')|trim
     }) %}
+
+    {% if allow_add.enabled %}
+        {% set attr = attr|merge({
+        'data-tags':'true',
+        'data-tags-text':allow_add.new_tag_text|trans({}, translation_domain),
+        'data-new-tag-prefix':allow_add.new_tag_prefix|trans({}, translation_domain),
+        'data-token-separators':'[","]',
+        }) %}
+    {% endif %}
 
     {% if multiple %}
         {% set attr = attr|merge({'multiple':'multiple'}) %}
