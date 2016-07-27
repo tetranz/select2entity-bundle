@@ -18,7 +18,7 @@
         'data-tags':'true',
         'data-tags-text':allow_add.new_tag_text|trans({}, translation_domain),
         'data-new-tag-prefix':allow_add.new_tag_prefix|trans({}, translation_domain),
-        'data-token-separators':'[","]',
+        'data-token-separators':allow_add.tag_separators,
         }) %}
     {% endif %}
 
