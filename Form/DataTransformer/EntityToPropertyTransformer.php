@@ -81,7 +81,7 @@ class EntityToPropertyTransformer implements DataTransformerInterface
                 ->createQueryBuilder('e')
                 ->select('e')
                 ->where('e.' . $this->primaryKey . ' = :id')
-                ->setParameter('id', $accessor->getValue($this->className, $this->primaryKey))
+                ->setParameter('id', $accessor->getValue(new $this->className, $this->primaryKey))
                 ->getQuery()
                 ->getSingleResult();
         }
