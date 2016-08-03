@@ -33,6 +33,7 @@ class Configuration implements ConfigurationInterface
                     // user is not aware of the updated caching feature. This way the cache will, by default, not
                     // be very effective. Realistically this should be like 60000ms (60 seconds).
                     ->scalarNode('cache_timeout')->defaultValue(1)->end()
+                    ->scalarNode('width')->end()
                 ->end();
 
         // Here you should define the parameters that are allowed to

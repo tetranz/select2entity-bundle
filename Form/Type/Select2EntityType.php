@@ -121,6 +121,7 @@ class Select2EntityType extends AbstractType
                 'cache' => $this->config['cache'],
                 'cache_timeout' => $this->config['cache_timeout'],
                 'transformer' => null,
+                'width' => null
             )
         );
     }
