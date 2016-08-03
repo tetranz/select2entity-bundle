@@ -51,16 +51,7 @@ class EntityToPropertyTransformer implements DataTransformerInterface
         if (empty($entity)) {
             return $data;
         }
-
         $accessor = PropertyAccess::createPropertyAccessor();
-
-        $entity = $this->em->getRepository($this->className)
-            ->createQueryBuilder('e')
-            ->select('e')
-            ->where('e.' . $this->primaryKey . ' = :id')
-            ->setParameter('id', $accessor->getValue($entity, $this->primaryKey))
-            ->getQuery()
-            ->getSingleResult();
 
         $text = is_null($this->textProperty)
             ? (string)$entity
@@ -82,14 +73,21 @@ class EntityToPropertyTransformer implements DataTransformerInterface
         if (empty($value)) {
             return null;
         }
-        $repo = $this->em->getRepository($this->className);
 
         try {
-          $entity = $repo->find($value);
+            $accessor = PropertyAccess::createPropertyAccessor();
+
+            $entity = $this->em->getRepository($this->className)
+                ->createQueryBuilder('e')
+                ->select('e')
+                ->where('e.' . $this->primaryKey . ' = :id')
+                ->setParameter('id', $accessor->getValue($this->className, $this->primaryKey))
+                ->getQuery()
+                ->getSingleResult();
         }
         catch(DriverException $ex) {
-          // this will happen if the form submits invalid data
-          throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', $value));
+            // this will happen if the form submits invalid data
+            throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', $value));
         }
 
         if (!$entity) {
