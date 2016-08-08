@@ -75,7 +75,6 @@ class EntityToPropertyTransformer implements DataTransformerInterface
         }
 
         try {
-<<<<<<< HEAD
             $accessor = PropertyAccess::createPropertyAccessor();
 
             $entity = $this->em->getRepository($this->className)
@@ -85,12 +84,7 @@ class EntityToPropertyTransformer implements DataTransformerInterface
                 ->setParameter('id', $value)
                 ->getQuery()
                 ->getSingleResult();
-        }
-        catch(DriverException $ex) {
-=======
-            $entity = $repo->findOneBy([$this->primaryKey => $value]);
         } catch (\Exception $ex) {
->>>>>>> tetranz/master
             // this will happen if the form submits invalid data
             throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', $value));
         }
