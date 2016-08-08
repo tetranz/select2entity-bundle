@@ -2,7 +2,6 @@
 
 namespace Tetranz\Select2EntityBundle\Form\DataTransformer;
 
-use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -12,6 +11,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  * Data transformer for single mode (i.e., multiple = false)
  *
  * Class EntityToPropertyTransformer
+ *
  * @package Tetranz\Select2EntityBundle\Form\DataTransformer
  */
 class EntityToPropertyTransformer implements DataTransformerInterface
@@ -27,9 +27,9 @@ class EntityToPropertyTransformer implements DataTransformerInterface
 
     /**
      * @param EntityManagerInterface $em
-     * @param string $class
-     * @param string|null $textProperty
-     * @param string $primaryKey
+     * @param string                 $class
+     * @param string|null            $textProperty
+     * @param string                 $primaryKey
      */
     public function __construct(EntityManagerInterface $em, $class, $textProperty = null, $primaryKey = 'id')
     {
@@ -75,6 +75,7 @@ class EntityToPropertyTransformer implements DataTransformerInterface
         }
 
         try {
+<<<<<<< HEAD
             $accessor = PropertyAccess::createPropertyAccessor();
 
             $entity = $this->em->getRepository($this->className)
@@ -86,6 +87,10 @@ class EntityToPropertyTransformer implements DataTransformerInterface
                 ->getSingleResult();
         }
         catch(DriverException $ex) {
+=======
+            $entity = $repo->findOneBy([$this->primaryKey => $value]);
+        } catch (\Exception $ex) {
+>>>>>>> tetranz/master
             // this will happen if the form submits invalid data
             throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', $value));
         }
