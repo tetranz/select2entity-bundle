@@ -75,8 +75,6 @@ class EntityToPropertyTransformer implements DataTransformerInterface
         }
 
         try {
-            $accessor = PropertyAccess::createPropertyAccessor();
-
             $entity = $this->em->getRepository($this->className)
                 ->createQueryBuilder('e')
                 ->select('e')
