@@ -73,11 +73,17 @@ class EntityToPropertyTransformer implements DataTransformerInterface
         if (empty($value)) {
             return null;
         }
-        $repo = $this->em->getRepository($this->className);
 
         try {
-            $entity = $repo->findOneBy([$this->primaryKey => $value]);
-        } catch (\Exception $ex) {
+            $entity = $this->em->createQueryBuilder()
+                ->select('entity')
+                ->from($this->className, 'entity')
+                ->where('entity.'.$this->primaryKey.' = :id')
+                ->setParameter('id', $value)
+                ->getQuery()
+                ->getSingleResult();
+        }
+        catch (\Exception $ex) {
             // this will happen if the form submits invalid data
             throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', $value));
         }
