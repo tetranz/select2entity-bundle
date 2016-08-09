@@ -53,6 +53,14 @@ class EntityToPropertyTransformer implements DataTransformerInterface
         }
         $accessor = PropertyAccess::createPropertyAccessor();
 
+        $entity = $entity = $this->em->getRepository($this->className)
+            ->createQueryBuilder('e')
+            ->select('e')
+            ->where('e.' . $this->primaryKey . ' = :id')
+            ->setParameter('id', $accessor->getValue($entity, $this->primaryKey))
+            ->getQuery()
+            ->getSingleResult();
+
         $text = is_null($this->textProperty)
             ? (string)$entity
             : $accessor->getValue($entity, $this->textProperty);
