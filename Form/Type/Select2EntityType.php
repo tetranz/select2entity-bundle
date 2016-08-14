@@ -82,7 +82,7 @@ class Select2EntityType extends AbstractType
             ?: $this->router->generate($options['remote_route'], array_merge($options['remote_params'], [ 'page_limit' => $options['page_limit'] ]));
 
         // merge variable names which are only set per instance with those from yml config
-        $varNames = array_merge(array('multiple', 'placeholder', 'primary_key'), array_keys($this->config));
+        $varNames = array_merge(array('multiple', 'placeholder', 'primary_key', 'autostart'), array_keys($this->config));
         foreach ($varNames as $varName) {
             $view->vars[$varName] = $options[$varName];
         }
@@ -144,6 +144,7 @@ class Select2EntityType extends AbstractType
                 'cache' => $this->config['cache'],
                 'cache_timeout' => $this->config['cache_timeout'],
                 'transformer' => null,
+                'autostart' => true,
             )
         );
     }
