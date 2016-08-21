@@ -31,6 +31,11 @@
         {% set attr = attr|merge({'data-allow-clear': 'true'}) %}
     {% endif %}
 
+    {% if width %}
+        {% set attr = attr|merge({'data-width': width}) %}
+    {% endif %}
+
+
     {% spaceless %}
         <select {{ block('widget_attributes') }}>
             {% if value is iterable %}

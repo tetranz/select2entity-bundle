@@ -145,6 +145,7 @@ class Select2EntityType extends AbstractType
                 'cache_timeout' => $this->config['cache_timeout'],
                 'transformer' => null,
                 'autostart' => true,
+                'width' => isset($this->config['width']) ? $this->config['width'] : null,
             )
         );
     }

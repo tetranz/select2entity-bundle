@@ -125,6 +125,7 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `cache_timeout` How long to cache a query in milliseconds. Setting to `0` will cause the cache to never timeout _(60000 = 60 seconds)_
 * `transformer` The fully qualified class name of a custom transformer if you need that flexibility as described below.
 * `autostart` Determines whether or not the select2 jQuery code is called automatically on document ready. Defaults to true which provides normal operation.
+* `width` Sets a data-width attribute if not null. Defaults to null.
 
 The url of the remote query can be given by either of two ways: `remote_route` is the Symfony route. 
 `remote_params` can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify 
