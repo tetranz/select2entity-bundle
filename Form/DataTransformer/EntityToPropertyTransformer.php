@@ -53,6 +53,15 @@ class EntityToPropertyTransformer implements DataTransformerInterface
         }
         $accessor = PropertyAccess::createPropertyAccessor();
 
+        // Reload entity to use Query Hinting before transforming
+        $entity = $this->em->createQueryBuilder()
+            ->select('entity')
+            ->from($this->className, 'entity')
+            ->where('entity.'.$this->primaryKey.' = :id')
+            ->setParameter('id', $accessor->getValue($entity, $this->primaryKey))
+            ->getQuery()
+            ->getSingleResult();
+
         $text = is_null($this->textProperty)
             ? (string)$entity
             : $accessor->getValue($entity, $this->textProperty);
@@ -63,7 +72,7 @@ class EntityToPropertyTransformer implements DataTransformerInterface
     }
 
     /**
-     * Transform to single id value to an entity
+     * Transform single id value to an entity
      *
      * @param string $value
      * @return mixed|null|object

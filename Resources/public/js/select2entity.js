@@ -10,7 +10,7 @@ $.fn.select2entity = function (options) {
         $s2.select2($.extend({
             // Tags support
             createTag: function (data) {
-                if ($s2.data('tags')) {
+                if ($s2.data('tags') && data.term.length > 0) {
                     var text = data.term + $s2.data('tags-text');
                     return {id: $s2.data('new-tag-prefix') + data.term, text: text};
                 }
