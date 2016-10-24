@@ -266,7 +266,15 @@ $.fn.select2entityAjax = function(action) {
 };
 $('.select2entity').select2entityAjax();
 ```
-This script will add the functionality globally for all elements with class `select2entity`, but if the `img` is not passed it will work as the original `select2entity`.
+This script will add the functionality globally for all elements with class `select2entity`, but if the `img` is not passed it will work as the original `select2entity`. 
+You should add a `'autostart' => false` to form to run properly JS code.
+````php
+    ->add('contry', Select2EntityType::class, [
+        'remote_route' => 'country_select2_query',
+        'autostart' => false,
+    ])
+````
+
 
 You also will need to override the following block in your template:
 ```twig
