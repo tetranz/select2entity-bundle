@@ -114,7 +114,7 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `scroll` True will enable infinite scrolling. Defaults to false.
 * `allow_clear` True will cause Select2 to display a small x for clearing the value. Defaults to false.
 * `allow_add` Is an option array for the add tags settings of Select2. Only available when 'multiple' is true on form.
-    * `enable` Enables the allow new tags option. True or False. Default False.
+    * `enabled` Enables the allow new tags option. True or False. Default False.
     * `new_tag_text` The text that is displayed behind entities that don't exist if `allow_add` is true. Default is " (NEW)".
     * `new_tag_prefix` The prefix identifier for new tags, default is "__". Your real values must not contain these symbols in the beginning.
     * `tag_separators` A javascript array of delimiters to auto split the tags with. 
