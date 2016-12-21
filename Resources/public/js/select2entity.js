@@ -8,7 +8,8 @@
                 scroll = $s2.data('scroll'),
                 prefix = Date.now(),
                 cache = [];
-            $s2.select2($.extend({
+            // Deep-merge the options
+            $s2.select2($.extend(true, {
                 // Tags support
                 createTag: function (data) {
                     if ($s2.data('tags') && data.term.length > 0) {
