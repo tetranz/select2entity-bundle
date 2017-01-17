@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
                 ->children()
+                    ->integerNode('select2_version')->defaultValue(4)->min(3)->max(4)->end()
                     ->scalarNode('minimum_input_length')->defaultValue(1)->end()
                     ->scalarNode('scroll')->defaultFalse()->end()
                     ->scalarNode('page_limit')->defaultValue(10)->end()
@@ -43,10 +44,6 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('cache_timeout')->defaultValue(1)->end()
                     ->scalarNode('width')->defaultNull()->end()
                 ->end();
-
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
 
         return $treeBuilder;
     }

@@ -119,6 +119,7 @@ class Select2EntityType extends AbstractType
     {
         $resolver->setDefaults(
             array(
+                'select2_version' => $this->config['select2_version'],
                 'class' => null,
                 'primary_key' => 'id',
                 'remote_path' => null,

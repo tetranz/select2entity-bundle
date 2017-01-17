@@ -10,6 +10,7 @@
     'data-placeholder':placeholder|trans({}, translation_domain),
     'data-page-limit':page_limit,
     'data-scroll':scroll ? 'true' : 'false',
+    'data-multiple':multiple ? 'true' : 'false',
     'data-autostart':autostart ? 'true' : 'false',
     'class' : (attr.class|default('') ~ ' select2entity form-control')|trim
     }) %}
@@ -35,16 +36,28 @@
         {% set attr = attr|merge({'data-width': width}) %}
     {% endif %}
 
-
     {% spaceless %}
-        <select {{ block('widget_attributes') }}>
+        {% if 3 == select2_version %}
+            {% set values = [] %}
             {% if value is iterable %}
                 {% for id, label in value %}
-                    {% block tetranz_select2entity_widget_select_option %}
-                        <option value="{{ id }}" selected="selected">{{ label }}</option>
-                    {% endblock %}
+                    {% set values = values|merge([{id: id, text: label}]) %}
                 {% endfor %}
             {% endif %}
-        </select>
+
+            {% set attr = attr|merge({'data-values': values|json_encode}) %}
+
+            <input type="hidden" {{ block('widget_attributes') }}>
+        {% else %}
+            <select {{ block('widget_attributes') }}>
+                {% if value is iterable %}
+                    {% for id, label in value %}
+                        {% block tetranz_select2entity_widget_select_option %}
+                            <option value="{{ id }}" selected="selected">{{ label }}</option>
+                        {% endblock %}
+                    {% endfor %}
+                {% endif %}
+            </select>
+        {% endif %}
     {% endspaceless %}
 {% endblock %}

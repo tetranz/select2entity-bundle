@@ -11,7 +11,9 @@ It works with both single and multiple selections. If the form is editing a Symf
 
 The project was inspired by [lifo/typeahead-bundle](https://github.com/lifo101/typeahead-bundle) which uses the Typeahead component in Bootstrap 2 to provide similar functionality. Select2Entity can be used anywhere Select2 can be installed, including Bootstrap 3.
 
-Thanks to @ismailbaskin we now have Select2 version 4 compatibility.
+Thanks to @ismailbaskin we now also have Select2 version 4 compatibility.
+
+Be AWARE: current select2 major version 3 does not support all the available options (WIP).
 
 ##Screenshots##
 
@@ -28,6 +30,10 @@ This is a form with a multiple selection field list expanded.
 Select2 must be installed and working first. I hope to setup a demo site but my setup is basically [BraincraftedBootstrapBundle](http://bootstrap.braincrafted.com) with Select2 installed for Bootstrap 3. Once the Braincrafted bundle is working, the only files I've needed to install are:
 
 select2.js, select2.css from https://github.com/select2/select2/tree/4.0.0
+
+OR
+
+select2.js, select2.css from https://github.com/select2/select2/tree/3.5.3
 
 select2-bootstrap.css from https://github.com/t0m/select2-bootstrap-css/tree/bootstrap3. That gets it working for Bootstrap 3.
 
@@ -66,9 +72,14 @@ twig:
         - 'TetranzSelect2EntityBundle:Form:fields.html.twig'
         
 ```
-* Load the Javascript on the page. The simplest way is to add the following to your layout file. Don't forget to run console assets:install. Alternatively, do something more sophisticated with Assetic.
+* Load the Javascript on the page. You need to include the file corresponding to the select2 major version you are using. The simplest way is to add the following to your layout file. Don't forget to run console assets:install. Alternatively, do something more sophisticated with Assetic.
 ```
+# for select2 4.x
 <script src="{{ asset('bundles/tetranzselect2entity/js/select2entity.js') }}"></script>
+```
+```
+# for select2 3.5.x
+<script src="{{ asset('bundles/tetranzselect2entity/js/select2entity-v3.js') }}"></script>
 ```
 
 ##How to use##
@@ -135,6 +146,7 @@ The defaults can be changed in your app/config.yml file with the following forma
 
 ```yaml
 tetranz_select2_entity:
+    select2_version: 4
     minimum_input_length: 2
     page_limit: 8
     allow_clear: true
