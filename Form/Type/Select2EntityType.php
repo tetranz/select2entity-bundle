@@ -42,6 +42,13 @@ class Select2EntityType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        // custom entity manager for this entity ?
+        if(isset($options['em'])) {
+            $em=$options['em'];
+        } else {
+            $em=$this->em;
+        }
+
         // add custom data transformer
         if ($options['transformer']) {
             if (!is_string($options['transformer'])) {
@@ -51,7 +58,7 @@ class Select2EntityType extends AbstractType
                 throw new \Exception('Unable to load class: '.$options['transformer']);
             }
 
-            $transformer = new $options['transformer']($this->em, $options['class']);
+            $transformer = new $options['transformer']($em, $options['class']);
 
             if (!$transformer instanceof DataTransformerInterface) {
                 throw new \Exception(sprintf('The custom transformer %s must implement "Symfony\Component\Form\DataTransformerInterface"', get_class($transformer)));
@@ -67,8 +74,8 @@ class Select2EntityType extends AbstractType
             }
 
             $transformer = $options['multiple']
-                ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key'], $newTagPrefix)
-                : new EntityToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key']);
+                ? new EntitiesToPropertyTransformer($em, $options['class'], $options['text_property'], $options['primary_key'], $newTagPrefix)
+                : new EntityToPropertyTransformer($em, $options['class'], $options['text_property'], $options['primary_key']);
         }
 
         $builder->addViewTransformer($transformer, true);
@@ -119,6 +126,7 @@ class Select2EntityType extends AbstractType
     {
         $resolver->setDefaults(
             array(
+                'em'=>null,
                 'class' => null,
                 'primary_key' => 'id',
                 'remote_path' => null,
