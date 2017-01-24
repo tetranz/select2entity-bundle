@@ -95,6 +95,7 @@ $builder
             'cache_timeout' => 60000, // if 'cache' is true
             'language' => 'en',
             'placeholder' => 'Select a country',
+            // 'em' => $entityManager, // inject a custom entity manager 
         ])
 ```
 Put this at the top of the file with the form type class:
