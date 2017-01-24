@@ -42,11 +42,18 @@ class Select2EntityType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // custom entity manager for this entity ?
-        if(isset($options['em'])) {
-            $em=$options['em'];
+        /* @var $em ObjectManager */
+        $em = null;
+
+        // custom object manager for this entity, override the default entity manager ?
+        if(isset($options['object_manager'])) {
+            $em = $options['object_manager'];
+            if(!$em instanceof ObjectManager) {
+                throw new \Exception('The entity manager \'em\' must be an ObjectManager instance');
+            }
         } else {
-            $em=$this->em;
+            // else, we use the default entity manager
+            $em = $this->em;
         }
 
         // add custom data transformer
@@ -126,7 +133,7 @@ class Select2EntityType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'em'=>null,
+                'object_manager'=>null,
                 'class' => null,
                 'primary_key' => 'id',
                 'remote_path' => null,
