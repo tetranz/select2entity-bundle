@@ -42,6 +42,7 @@ class Configuration implements ConfigurationInterface
                     // be very effective. Realistically this should be like 60000ms (60 seconds).
                     ->scalarNode('cache_timeout')->defaultValue(1)->end()
                     ->scalarNode('width')->defaultNull()->end()
+                    ->scalarNode('object_manager')->defaultValue(1)->end()
                 ->end();
 
         // Here you should define the parameters that are allowed to
