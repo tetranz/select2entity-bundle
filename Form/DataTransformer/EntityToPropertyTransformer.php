@@ -24,6 +24,8 @@ class EntityToPropertyTransformer implements DataTransformerInterface
     protected $textProperty;
     /** @var  string */
     protected $primaryKey;
+    /** @var string  */
+    protected $newTagPrefix;
 
     /**
      * @param ObjectManager $em
@@ -31,12 +33,14 @@ class EntityToPropertyTransformer implements DataTransformerInterface
      * @param string|null            $textProperty
      * @param string                 $primaryKey
      */
-    public function __construct(ObjectManager $em, $class, $textProperty = null, $primaryKey = 'id')
+    public function __construct(ObjectManager $em, $class, $textProperty = null, $primaryKey = 'id', $newTagPrefix = '__')
     {
         $this->em = $em;
         $this->className = $class;
         $this->textProperty = $textProperty;
         $this->primaryKey = $primaryKey;
+        $this->newTagPrefix = $newTagPrefix;
+        $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
     /**
@@ -51,22 +55,12 @@ class EntityToPropertyTransformer implements DataTransformerInterface
         if (empty($entity)) {
             return $data;
         }
-        $accessor = PropertyAccess::createPropertyAccessor();
-
-        // Reload entity to use Query Hinting before transforming
-        $entity = $this->em->createQueryBuilder()
-            ->select('entity')
-            ->from($this->className, 'entity')
-            ->where('entity.'.$this->primaryKey.' = :id')
-            ->setParameter('id', $accessor->getValue($entity, $this->primaryKey))
-            ->getQuery()
-            ->getSingleResult();
 
         $text = is_null($this->textProperty)
             ? (string)$entity
-            : $accessor->getValue($entity, $this->textProperty);
+            : $this->accessor->getValue($entity, $this->textProperty);
 
-        $data[$accessor->getValue($entity, $this->primaryKey)] = $text;
+        $data[$this->accessor->getValue($entity, $this->primaryKey)] = $text;
 
         return $data;
     }
@@ -83,18 +77,29 @@ class EntityToPropertyTransformer implements DataTransformerInterface
             return null;
         }
 
-        try {
-            $entity = $this->em->createQueryBuilder()
-                ->select('entity')
-                ->from($this->className, 'entity')
-                ->where('entity.'.$this->primaryKey.' = :id')
-                ->setParameter('id', $value)
-                ->getQuery()
-                ->getSingleResult();
-        }
-        catch (\Exception $ex) {
-            // this will happen if the form submits invalid data
-            throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', $value));
+        // Add a potential new tag entry
+        $tagPrefixLength = strlen($this->newTagPrefix);
+        $cleanValue = substr($value, $tagPrefixLength);
+        $valuePrefix = substr($value, 0, $tagPrefixLength);
+        if ($valuePrefix == $this->newTagPrefix) {
+            // In that case, we have a new entry
+            $entity = new $this->className;
+            $this->accessor->setValue($entity, $this->textProperty, $cleanValue);
+        } else {
+            // We do not search for a new entry, as it does not exist yet, by definition
+            try {
+                $entity = $this->em->createQueryBuilder()
+                    ->select('entity')
+                    ->from($this->className, 'entity')
+                    ->where('entity.'.$this->primaryKey.' = :id')
+                    ->setParameter('id', $value)
+                    ->getQuery()
+                    ->getSingleResult();
+            }
+            catch (\Exception $ex) {
+                // this will happen if the form submits invalid data
+                throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', $value));
+            }
         }
 
         if (!$entity) {
