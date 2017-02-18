@@ -78,11 +78,12 @@ class Select2EntityType extends AbstractType
     {
         parent::finishView($view, $form, $options);
         // make variables available to the view
+        if (!empty($options['remote_route']))
         $view->vars['remote_path'] = $options['remote_path']
-            ?: $this->router->generate($options['remote_route'], array_merge($options['remote_params'], [ 'page_limit' => $options['page_limit'] ]));
+                ?: $this->router->generate($options['remote_route'], array_merge($options['remote_params'], [ 'page_limit' => $options['page_limit'] ]));
 
         // merge variable names which are only set per instance with those from yml config
-        $varNames = array_merge(array('multiple', 'placeholder', 'primary_key', 'autostart'), array_keys($this->config));
+        $varNames = array_merge(array('multiple', 'placeholder', 'primary_key', 'autostart', 'choices'), array_keys($this->config));
         foreach ($varNames as $varName) {
             $view->vars[$varName] = $options[$varName];
         }
@@ -146,6 +147,7 @@ class Select2EntityType extends AbstractType
                 'transformer' => null,
                 'autostart' => true,
                 'width' => isset($this->config['width']) ? $this->config['width'] : null,
+                'choices'   => null,
             )
         );
     }

@@ -1,17 +1,26 @@
 {% block tetranz_select2entity_widget %}
+    {% if remote_path is defined or remote_route is defined %}
+        {% set attr = attr|merge({
+            'data-ajax--url':remote_path,
+            'data-ajax--cache': cache ? 'true' : 'false',
+            'data-ajax--cache-timeout': cache_timeout|default(0),
+            'data-ajax--delay':delay,
+            'data-ajax--data-type':"json",
+            'class' : (attr.class|default('') ~ ' select2entity form-control')|trim
+        }) %}
+    {% else %}
+        {% set attr = attr|merge({
+            'class' : (attr.class|default('') ~ ' select2entity select2entityLocal form-control')|trim
+        }) %}
+    {% endif %}
+
     {% set attr = attr|merge({
-    'data-ajax--url':remote_path,
-    'data-ajax--cache': cache ? 'true' : 'false',
-    'data-ajax--cache-timeout': cache_timeout|default(0),
-    'data-ajax--delay':delay,
-    'data-ajax--data-type':"json",
-    'data-language':language,
-    'data-minimum-input-length':minimum_input_length,
-    'data-placeholder':placeholder|trans({}, translation_domain),
-    'data-page-limit':page_limit,
-    'data-scroll':scroll ? 'true' : 'false',
-    'data-autostart':autostart ? 'true' : 'false',
-    'class' : (attr.class|default('') ~ ' select2entity form-control')|trim
+        'data-language':language,
+        'data-minimum-input-length':minimum_input_length,
+        'data-placeholder':placeholder|trans({}, translation_domain),
+        'data-page-limit':page_limit,
+        'data-scroll':scroll ? 'true' : 'false',
+        'data-autostart':autostart ? 'true' : 'false',
     }) %}
 
     {% if allow_add.enabled %}
@@ -35,13 +44,15 @@
         {% set attr = attr|merge({'data-width': width}) %}
     {% endif %}
 
-
     {% spaceless %}
         <select {{ block('widget_attributes') }}>
-            {% if value is iterable %}
-                {% for id, label in value %}
+            {% if choices is iterable %}
+                {% if allow_clear %}
+                    <option value=""></option>
+                {% endif %}
+                {% for id, label in choices %}
                     {% block tetranz_select2entity_widget_select_option %}
-                        <option value="{{ id }}" selected="selected">{{ label }}</option>
+                        <option value="{{ id }}">{{ label }}</option>
                     {% endblock %}
                 {% endfor %}
             {% endif %}

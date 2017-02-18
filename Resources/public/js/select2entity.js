@@ -1,5 +1,22 @@
 (function( $ ) {
     $.fn.select2entity = function (options) {
+        if (this.hasClass('select2entityLocal')) {
+            this.each(function () {
+                var $s2 = $(this),
+                    limit = $s2.data('page-limit') || 0;
+                // Deep-merge the options
+                $s2.select2($.extend(true, {
+                    // Tags support
+                    createTag: function (data) {
+                        if ($s2.data('tags') && data.term.length > 0) {
+                            var text = data.term + $s2.data('tags-text');
+                            return {id: $s2.data('new-tag-prefix') + data.term, text: text};
+                        }
+                    }
+                }, options || {}));
+            });
+            return this;
+        }
         this.each(function () {
             // Keep a reference to the element so we can keep the cache local to this instance and so we can
             // fetch config settings since select2 doesn't expose its options to the transport method.
