@@ -229,6 +229,17 @@ A few things to keep in mind when adding tags:
 * Your data should not have any chance of matching the first characters with the `new_tag_prefix`. If there is a chance, change it to something else like '**' or '$$'.
 * `tag_separators` is the same as the Select2 option. It should be a javascript array.
 * If the entity you are wanting to `allow_add` has any other required fields aside from the one specified in `text_property`, you must either add them in the form submit or add prePersist hooks to the doctrine entity.
+* If you are using the "tags" to allow the creation of new entities through a single entry mode, keep in mind you need to remove the Space as a separator or you won't be able to input a space character in this entity. 
+```php
+$builder
+    ->add('tags', Select2EntityType::class, [
+        ...
+        'allow_add' => [
+            ...
+            'tag_separators' => '[",", ""]' // No Space here
+        ],
+    ]);
+```
 
 
 ###Templating###
