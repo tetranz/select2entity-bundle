@@ -51,7 +51,7 @@ class Select2EntityType extends AbstractType
                 throw new \Exception('Unable to load class: '.$options['transformer']);
             }
 
-            $transformer = new $options['transformer']($this->em, $options['class']);
+            $transformer = new $options['transformer']($this->em, $options['class'], $options['text_property'], $options['primary_key']);
 
             if (!$transformer instanceof DataTransformerInterface) {
                 throw new \Exception(sprintf('The custom transformer %s must implement "Symfony\Component\Form\DataTransformerInterface"', get_class($transformer)));
