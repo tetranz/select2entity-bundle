@@ -5,7 +5,8 @@ select2entity-bundle
 
 This is a Symfony2 bundle which enables the popular [Select2](https://select2.github.io) component to be used as a drop-in replacement for a standard entity field on a Symfony form.
 
-The main feature that this bundle provides compared with the standard Symfony entity field (rendered with a html select) is that the list is retrieved via a remote ajax call. This means that the list can be of almost unlimited size. The only limitation is the performance of the database query or whatever that retrieves the data in the remote web service.
+The main feature that this bundle provides compared with the standard Symfony entity field (rendered with a html select) is that the list can either be retrieved via a remote ajax calls or values defined during the construction of the Form. 
+With the help of Ajax, the list can be of almost unlimited size. The only limitation is the performance of the database query or whatever that retrieves the data in the remote web service.
 
 It works with both single and multiple selections. If the form is editing a Symfony entity then these modes correspond with many to one and many to many relationships. In multiple mode, most people find the Select2 user interface easier to use than a standard select tag with multiple=true with involves awkward use of the ctrl key etc.
 
@@ -113,6 +114,7 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `minimum_input_length` is the number of keys you need to hit before the search will happen. Defaults to 2.
 * `page_limit` This is passed as a query parameter to the remote call. It is intended to be used to limit size of the list returned. Defaults to 10.
 * `scroll` True will enable infinite scrolling. Defaults to false.
+* `choices` Array defines the value to be locally used (no Ajax call)
 * `allow_clear` True will cause Select2 to display a small x for clearing the value. Defaults to false.
 * `allow_add` Is an option array for the add tags settings of Select2. Only available when 'multiple' is true on form.
     * `enabled` Enables the allow new tags option. True or False. Default False.
@@ -204,6 +206,28 @@ Your custom transformer and respectively your Ajax controller should return an a
 ```
 If you are using the allow_add option and your entity requires other fields besides the text_property field to be valid, you will either need to extend the EntitiesToPropertyTransformer to add the missing field, create a doctrine prePersist listener, or add the missing data in the form view after submit before saving.
 
+###Local Choices###
+If you wish to display a list of value without using Ajax calls, you can use the `choices` option.
+You can either decide to pass the EntityRepository or a predefined list of values
+```php
+$builder
+            ->add('myName', Select2EntityType::class, array(
+                'class'                 => 'AppBundle\Entity\MyEntity',
+                'primary_key'           => 'id',
+                'text_property'         => 'name',
+                'minimum_input_length'  => 0,
+                'allow_clear'           => true,
+                'choices'               => $options['myEntityRepository']->findAll(),
+                //'choices'             => MyEntity::getList(),
+            ))
+```
+
+Depending on how your entity looks like, you may also want to update how the <option> tag is rendered by overwriting its block:
+```twig
+{% block tetranz_select2entity_widget_select_option %}
+    <option value="{{ label.id }}">{{ label }}</option>
+{% endblock %}
+```
 ###Add New Tags###
 
 If you want to be able to create new entities through Select2 tags, you can enable it using the `allow_add` set of options. 
