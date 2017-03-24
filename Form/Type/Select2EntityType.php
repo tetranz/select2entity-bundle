@@ -42,6 +42,20 @@ class Select2EntityType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /* @var $em ObjectManager */
+        $em = null;
+
+        // custom object manager for this entity, override the default entity manager ?
+        if(isset($options['object_manager'])) {
+            $em = $options['object_manager'];
+            if(!$em instanceof ObjectManager) {
+                throw new \Exception('The entity manager \'em\' must be an ObjectManager instance');
+            }
+        } else {
+            // else, we use the default entity manager
+            $em = $this->em;
+        }
+
         // add custom data transformer
         if ($options['transformer']) {
             if (!is_string($options['transformer'])) {
@@ -51,7 +65,7 @@ class Select2EntityType extends AbstractType
                 throw new \Exception('Unable to load class: '.$options['transformer']);
             }
 
-            $transformer = new $options['transformer']($this->em, $options['class'], $options['text_property'], $options['primary_key']);
+            $transformer = new $options['transformer']($em, $options['class'], $options['text_property'], $options['primary_key']);
 
             if (!$transformer instanceof DataTransformerInterface) {
                 throw new \Exception(sprintf('The custom transformer %s must implement "Symfony\Component\Form\DataTransformerInterface"', get_class($transformer)));
@@ -67,8 +81,8 @@ class Select2EntityType extends AbstractType
             }
 
             $transformer = $options['multiple']
-                ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key'], $newTagPrefix)
-                : new EntityToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key'], $newTagPrefix);
+                ? new EntitiesToPropertyTransformer($em, $options['class'], $options['text_property'], $options['primary_key'], $newTagPrefix)
+                : new EntityToPropertyTransformer($em, $options['class'], $options['text_property'], $options['primary_key'], $newTagPrefix);
         }
 
         $builder->addViewTransformer($transformer, true);
