@@ -1,7 +1,7 @@
 select2entity-bundle
 ====================
 
-##Introduction
+## Introduction
 
 This is a Symfony2 bundle which enables the popular [Select2](https://select2.github.io) component to be used as a drop-in replacement for a standard entity field on a Symfony form.
 
@@ -13,7 +13,7 @@ The project was inspired by [lifo/typeahead-bundle](https://github.com/lifo101/t
 
 Thanks to @ismailbaskin we now have Select2 version 4 compatibility.
 
-##Screenshots
+## Screenshots
 
 This is a form with a single selection field list expanded.
 
@@ -23,7 +23,7 @@ This is a form with a multiple selection field list expanded.
 
 ![Multiple select example](Resources/doc/img/multi.png)
 
-##Installation
+## Installation
 
 Select2 must be installed and working first. I hope to setup a demo site but my setup is basically [BraincraftedBootstrapBundle](http://bootstrap.braincrafted.com) with Select2 installed for Bootstrap 3. Once the Braincrafted bundle is working, the only files I've needed to install are:
 
@@ -71,7 +71,7 @@ twig:
 <script src="{{ asset('bundles/tetranzselect2entity/js/select2entity.js') }}"></script>
 ```
 
-##How to use
+## How to use
 
 The following is for Symfony 3. The latest version works on both Symfony 2 and Symfony 2 but see https://github.com/tetranz/select2entity-bundle/tree/v2.1 for Symfony 2 configuration and use.
 
@@ -103,7 +103,7 @@ Put this at the top of the file with the form type class:
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 ```
 
-##Options
+## Options
 Defaults will be used for some if not set.
 * `class` is your entity class. Required
 * `primary_key` is the name of the property used to uniquely identify entities. Defaults to 'id'
@@ -146,7 +146,7 @@ tetranz_select2_entity:
     scroll: true
 ```
 
-##AJAX Response
+## AJAX Response
 The controller should return a `JSON` array in the following format. The properties must be `id` and `text`.
 
 ```javascript
@@ -155,7 +155,7 @@ The controller should return a `JSON` array in the following format. The propert
   { id: 2, text: 'Displayed Text 2' }
 ]
 ```
-##Infinite Scrolling
+## Infinite Scrolling
 If your results are being paged via the Select2 "infinite scrolling" feature then you can either continue to return
 the same array as shown above _(for Backwards Compatibility this bundle will automatically try to determine if more 
 results are needed)_, or you can return an object shown below to have finer control over the paged results.
@@ -174,7 +174,7 @@ The `more` field should be true if there are more results to be loaded.
 Your controller action that fetches the results will receive a parameter `page` indicating what page of results should
 be loaded. If you set scroll to true then you must handle the page parameter in the query. Weird things will happen if you don't.
 
-##Custom option text
+## Custom option text
 If you need more flexibility in what you display as the text for each option, such as displaying the values of several fields from your entity or showing an image inside, you may define your own custom transformer.
 Your transformer must implement DataTransformerInterface. The easiest way is probably to extend EntityToPropertyTransformer or EntitiesToPropertyTransformer and redefine the transform() method. This way you can return as `text` anything you want, not just one entity property.
 
@@ -204,7 +204,7 @@ Your custom transformer and respectively your Ajax controller should return an a
 ```
 If you are using the allow_add option and your entity requires other fields besides the text_property field to be valid, you will either need to extend the EntitiesToPropertyTransformer to add the missing field, create a doctrine prePersist listener, or add the missing data in the form view after submit before saving.
 
-###Add New Tags
+### Add New Tags
 
 If you want to be able to create new entities through Select2 tags, you can enable it using the `allow_add` set of options. 
 
@@ -242,7 +242,7 @@ $builder
 ```
 
 
-###Templating
+### Templating
 
 If you need [Templating](https://select2.github.io/examples.html#templating) in Select2, you could consider the following example that shows the country flag next to each option.
 
@@ -301,7 +301,7 @@ You also will need to override the following block in your template:
 ```
 This block adds all additional data needed to the JavaScript function `select2entityAjax`, like data attribute. In this case we are passing `data-img`.
 
-##Embed Collection Forms
+## Embed Collection Forms
 If you use [Embedded Collection Forms](http://symfony.com/doc/current/cookbook/form/form_collections.html) and [data-prototype](http://symfony.com/doc/current/cookbook/form/form_collections.html#allowing-new-tags-with-the-prototype) to add new elements in your form, you will need the following JavaScript that will listen for adding an element `.select2entity`:
 ```javascript
 $('body').on('click', '[data-prototype]', function(e) {
