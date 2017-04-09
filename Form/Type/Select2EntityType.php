@@ -114,7 +114,7 @@ class Select2EntityType extends AbstractType
 
         // new tag prefix on new entity
         if ($view->vars['allow_add']['enabled'] && $form->getData()) {
-            $data = is_array($form->getData()) ? $form->getData() : [$form->getData()];
+            $data = $options['multiple'] ? $form->getData() : [$form->getData()];
             $newValues = array();
             $values = $view->vars['value'];
             $valuesKeys = array_keys($values);
