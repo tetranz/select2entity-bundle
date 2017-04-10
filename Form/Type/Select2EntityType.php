@@ -122,7 +122,7 @@ class Select2EntityType extends AbstractType
                 if ($this->em->contains($data[$key])) {
                     $newValues[$value] = $values[$value];
                 } else {
-                    $newValues[$view->vars['allow_add']['new_tag_prefix'].$value] = $values[$value];
+                    $newValues[$view->vars['allow_add']['new_tag_prefix'].$value] = $values[$value].$view->vars['allow_add']['new_tag_text'];
                 }
             }
             $view->vars['value'] = $newValues;
