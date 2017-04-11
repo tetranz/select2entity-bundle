@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Data transformer for multiple mode (i.e., multiple = true)
@@ -25,6 +26,8 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
     protected $primaryKey;
     /** @var  string */
     protected $newTaxPrefix;
+    /** @var PropertyAccessor */
+    protected $accessor;
 
     /**
      * @param ObjectManager $em
