@@ -87,6 +87,7 @@ class Select2EntityType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         parent::finishView($view, $form, $options);
+
         // make variables available to the view
         $view->vars['remote_path'] = $options['remote_path']
             ?: $this->router->generate($options['remote_route'], array_merge($options['remote_params'], [ 'page_limit' => $options['page_limit'] ]));
@@ -97,7 +98,7 @@ class Select2EntityType extends AbstractType
             $view->vars[$varName] = $options[$varName];
         }
 
-        //tags options
+        // tags options
         $varNames = array_keys($this->config['allow_add']);
         foreach ($varNames as $varName) {
             if (isset($options['allow_add'][$varName])) {
@@ -105,6 +106,22 @@ class Select2EntityType extends AbstractType
             } else {
                 $view->vars['allow_add'][$varName] = $this->config['allow_add'][$varName];
             }
+        }
+
+        // new tag prefix on new entity
+        if ($view->vars['allow_add']['enabled'] && $form->getData()) {
+            $data = $options['multiple'] ? $form->getData() : [$form->getData()];
+            $newValues = array();
+            $values = $view->vars['value'];
+            $valuesKeys = array_keys($values);
+            foreach ($valuesKeys as $key => $value) {
+                if ($this->em->contains($data[$key])) {
+                    $newValues[$value] = $values[$value];
+                } else {
+                    $newValues[$view->vars['allow_add']['new_tag_prefix'].$value] = $values[$value].$view->vars['allow_add']['new_tag_text'];
+                }
+            }
+            $view->vars['value'] = $newValues;
         }
 
         if ($options['multiple']) {
