@@ -109,7 +109,8 @@ class Select2EntityType extends AbstractType
         }
 
         if ($view->vars['allow_add']['enabled'] && $form->isSubmitted()) {
-            // Validation failed. Rebuild value(s) for new entities created by tag.
+            // Form is being displayed again after a submit.
+            // Rebuild value(s) for new entities created by tag.
 
             // The post creates a value with a blank key.
             unset($view->vars['value']['']);
