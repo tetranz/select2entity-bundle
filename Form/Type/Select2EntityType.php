@@ -124,18 +124,20 @@ class Select2EntityType extends AbstractType
             foreach ($entities as $entity) {
                 // Get text value
                 $text = is_null($textProperty)
-                    ? $value = (string) $entity
+                    ? (string) $entity
                     : $accessor->getValue($entity, $textProperty);
 
-                // Get primary key
-                $primaryKey = $accessor->getValue($entity, $options['primary_key']);
-                if (is_null($primaryKey)) {
-                    // This is  not persisted and does not have a primary key
-                    // so make the key = prefix + text.
-                    $primaryKey = $newTagPrefix . $text;
+                // Get choice field (primary key).
+                $choiceFieldValue = $accessor->getValue($entity, $options['primary_key']);
+
+                if (!$this->em->contains($entity)) {
+                    // This is a new entity, added via a tag, not persisted yet.
+                    // A new entity may or may not already have a non-null choice field.
+                    // If the new entity already has a choice field, use it, otherwise use the text field.
+                    $choiceFieldValue = $newTagPrefix . ($choiceFieldValue ? : $text);
                 }
 
-                $view->vars['value'][$primaryKey] = $text;
+                $view->vars['value'][$choiceFieldValue] = $text;
             }
         }
 
