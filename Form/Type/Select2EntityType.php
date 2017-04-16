@@ -109,31 +109,33 @@ class Select2EntityType extends AbstractType
         }
 
         if ($view->vars['allow_add']['enabled'] && $form->isSubmitted()) {
-            // Form is being displayed again after a submit.
-            // Rebuild value(s) for new entities created by tag.
+            // Form is being displayed again after a submit that failed validation.
+            // $view->vars['value'] needs to be rebuilt to handle new entities added with a tag.
 
-            // The post creates a value with a blank key.
-            unset($view->vars['value']['']);
-
-            // entities as iterable collection or array.
+            // get entities as iterable collection or array.
             $entities = $options['multiple'] ? $form->getData() : [$form->getData()];
 
             $accessor = PropertyAccess::createPropertyAccessor();
             $textProperty = isset($options['text_property']) ? $options['text_property'] : null;
             $newTagPrefix = $view->vars['allow_add']['new_tag_prefix'];
 
-            foreach ($entities as $entity) {
-                if ($this->em->contains($entity)) {
-                    // Existing entity.
-                    continue;
-                }
+            $view->vars['value'] = [];
 
-                // New entity so add a value with key prefix + text and value text.
+            foreach ($entities as $entity) {
+                // Get text value
                 $text = is_null($textProperty)
                     ? $value = (string) $entity
                     : $accessor->getValue($entity, $textProperty);
 
-                $view->vars['value'][$newTagPrefix . $text] = $text;
+                // Get primary key
+                $primaryKey = $accessor->getValue($entity, $options['primary_key']);
+                if (is_null($primaryKey)) {
+                    // This is  not persisted and does not have a primary key
+                    // so make the key = prefix + text.
+                    $primaryKey = $newTagPrefix . $text;
+                }
+
+                $view->vars['value'][$primaryKey] = $text;
             }
         }
 
