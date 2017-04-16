@@ -135,6 +135,8 @@ class Select2EntityType extends AbstractType
                     // A new entity may or may not already have a non-null choice field.
                     // If the new entity already has a choice field, use it, otherwise use the text field.
                     $choiceFieldValue = $newTagPrefix . ($choiceFieldValue ? : $text);
+
+                    $text .= $view->vars['allow_add']['new_tag_text'];
                 }
 
                 $view->vars['value'][$choiceFieldValue] = $text;
