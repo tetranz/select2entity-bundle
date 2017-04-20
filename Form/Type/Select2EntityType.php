@@ -10,7 +10,6 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\RouterInterface;
 use Tetranz\Select2EntityBundle\Form\DataTransformer\EntitiesToPropertyTransformer;
 use Tetranz\Select2EntityBundle\Form\DataTransformer\EntityToPropertyTransformer;
@@ -105,41 +104,6 @@ class Select2EntityType extends AbstractType
                 $view->vars['allow_add'][$varName] = $options['allow_add'][$varName];
             } else {
                 $view->vars['allow_add'][$varName] = $this->config['allow_add'][$varName];
-            }
-        }
-
-        if ($view->vars['allow_add']['enabled'] && $form->isSubmitted()) {
-            // Form is being displayed again after a submit that failed validation.
-            // $view->vars['value'] needs to be rebuilt to handle new entities added with a tag.
-
-            // get entities as iterable collection or array.
-            $entities = $options['multiple'] ? $form->getData() : [$form->getData()];
-
-            $accessor = PropertyAccess::createPropertyAccessor();
-            $textProperty = isset($options['text_property']) ? $options['text_property'] : null;
-            $newTagPrefix = $view->vars['allow_add']['new_tag_prefix'];
-
-            $view->vars['value'] = [];
-
-            foreach ($entities as $entity) {
-                // Get text value
-                $text = is_null($textProperty)
-                    ? (string) $entity
-                    : $accessor->getValue($entity, $textProperty);
-
-                // Get choice field (primary key).
-                $choiceFieldValue = $accessor->getValue($entity, $options['primary_key']);
-
-                if (!$this->em->contains($entity)) {
-                    // This is a new entity, added via a tag, not persisted yet.
-                    // A new entity may or may not already have a non-null choice field.
-                    // If the new entity already has a choice field, use it, otherwise use the text field.
-                    $choiceFieldValue = $newTagPrefix . ($choiceFieldValue ? : $text);
-
-                    $text .= $view->vars['allow_add']['new_tag_text'];
-                }
-
-                $view->vars['value'][$choiceFieldValue] = $text;
             }
         }
 
