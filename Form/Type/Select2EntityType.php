@@ -70,15 +70,12 @@ class Select2EntityType extends AbstractType
             // add the default data transformer
         } else {
 
-            if (isset($options['allow_add']['new_tag_prefix'])) {
-                $newTagPrefix = $options['allow_add']['new_tag_prefix'];
-            } else {
-                $newTagPrefix = $this->config['allow_add']['new_tag_prefix'];
-            }
+            $newTagPrefix = isset($options['allow_add']['new_tag_prefix']) ? $options['allow_add']['new_tag_prefix'] : $this->config['allow_add']['new_tag_prefix'];
+            $newTagText = isset($options['allow_add']['new_tag_text']) ? $options['allow_add']['new_tag_text'] : $this->config['allow_add']['new_tag_text'];
 
             $transformer = $options['multiple']
-                ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key'], $newTagPrefix)
-                : new EntityToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key'], $newTagPrefix);
+                ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key'], $newTagPrefix, $newTagText)
+                : new EntityToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key'], $newTagPrefix, $newTagText);
         }
 
         $builder->addViewTransformer($transformer, true);
