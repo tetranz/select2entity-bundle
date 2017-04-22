@@ -27,6 +27,8 @@ class EntityToPropertyTransformer implements DataTransformerInterface
     protected $primaryKey;
     /** @var string  */
     protected $newTagPrefix;
+    /** @var string  */
+    protected $newTagText;
     /** @var PropertyAccessor */
     protected $accessor;
 
@@ -37,13 +39,14 @@ class EntityToPropertyTransformer implements DataTransformerInterface
      * @param string                 $primaryKey
      * @param string                 $newTagPrefix
      */
-    public function __construct(ObjectManager $em, $class, $textProperty = null, $primaryKey = 'id', $newTagPrefix = '__')
+    public function __construct(ObjectManager $em, $class, $textProperty = null, $primaryKey = 'id', $newTagPrefix = '__', $newTagText = ' (NEW)')
     {
         $this->em = $em;
         $this->className = $class;
         $this->textProperty = $textProperty;
         $this->primaryKey = $primaryKey;
         $this->newTagPrefix = $newTagPrefix;
+        $this->newTagText = $newTagText;
         $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
@@ -61,10 +64,17 @@ class EntityToPropertyTransformer implements DataTransformerInterface
         }
 
         $text = is_null($this->textProperty)
-            ? (string)$entity
+            ? (string) $entity
             : $this->accessor->getValue($entity, $this->textProperty);
 
-        $data[$this->accessor->getValue($entity, $this->primaryKey)] = $text;
+        if ($this->em->contains($entity)) {
+            $value = $this->accessor->getValue($entity, $this->primaryKey);
+        } else {
+            $value = $this->newTagPrefix . $text;
+            $text = $text.$this->newTagText;
+        }
+
+        $data[$value] = $text;
 
         return $data;
     }
