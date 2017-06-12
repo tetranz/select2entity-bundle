@@ -241,6 +241,88 @@ $builder
     ]);
 ```
 
+### Including other field values in request
+
+If you need to include other field values because the selection depends on it you can add the `req_params` option.
+The key is the name of the parameter in the query string, the value is the path in the FormView (if you don't know the path you can do something like `{{ dump(form) }}` in your template.) 
+
+The `property` option refers to your entity field which is used for the label as well as for the search term.
+
+In the callback you get the QueryBuilder to modify the result query and the data object as parameter (data can be a simple Request object or a plain array. See AutocompleteService.php for more details). 
+
+```php
+$builder
+    ->add('firstName', TextType::class)
+        ->add('lastName', TextType::class)
+        ->add('state', EntityType::class, array('class' => State::class))
+        ->add('county', Select2EntityType::class, [
+            'required' => true,
+            'multiple' => false,
+            'remote_route' => 'ajax_autocomplete',
+            'class' => County::class,
+            'minimum_input_length' => 0,
+            'page_limit' => 10,
+            'scroll' => true,
+            'allow_clear' => false,
+            'req_params' => ['state' => 'parent.children[state]'],
+            'property' => 'name',
+            'callback'    => function (QueryBuilder $qb, $data) {
+                $qb->andWhere('e.state = :state');
+
+                if ($data instanceof Request) {
+                    $qb->setParameter('state', $data->get('state'));
+                } else {
+                    $qb->setParameter('state', $data['state']);
+                }
+
+            },
+        ])
+    ->add('city', Select2EntityType::class, [
+        'required' => true,
+        'multiple' => false,
+        'remote_route' => 'ajax_autocomplete',
+        'class' => City::class,
+        'minimum_input_length' => 0,
+        'page_limit' => 10,
+        'scroll' => true,
+        'allow_clear' => false,
+        'req_params' => ['county' => 'parent.children[county]'],
+        'property' => 'name',
+        'callback'    => function (QueryBuilder $qb, $data) {
+            $qb->andWhere('e.county = :county');
+
+            if ($data instanceof Request) {
+                $qb->setParameter('county', $data->get('county'));
+            } else {
+                $qb->setParameter('county', $data['county']);
+            }
+
+        },
+    ]);
+``` 
+
+Because the handling of requests is usually very similar you can use a service which helps you with your results. To use it just add a route in one of your controllers:
+
+```php
+    /**
+     * @param Request $request
+     *
+     * @Route("/autocomplete", name="ajax_autocomplete")
+     *
+     * @return Response
+     */
+    public function autocompleteAction(Request $request)
+    {
+        // Check security etc. if needed
+    
+        $as = $this->get('tetranz_select2entity.autocomplete_service');
+
+        $result = $as->getAutocompleteResults($request, YourFormType::class);
+
+        return new JsonResponse($result);
+    }
+```
+
 
 ### Templating
 
