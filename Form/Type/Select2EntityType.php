@@ -167,6 +167,8 @@ class Select2EntityType extends AbstractType
                 'autostart' => true,
                 'width' => isset($this->config['width']) ? $this->config['width'] : null,
                 'req_params' => array(),
+                'property' => null,
+                'callback' => null,
             )
         );
     }

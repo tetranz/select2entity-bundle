@@ -11,7 +11,8 @@
     'data-page-limit':page_limit,
     'data-scroll':scroll ? 'true' : 'false',
     'data-autostart':autostart ? 'true' : 'false',
-    'class' : (attr.class|default('') ~ ' select2entity form-control')|trim
+    'class' : (attr.class|default('') ~ ' select2entity form-control')|trim,
+    'data-name' : name|e('html_attr')
     }) %}
 
     {% if allow_add.enabled %}

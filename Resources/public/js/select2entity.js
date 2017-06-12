@@ -55,7 +55,8 @@
                     },
                     data: function (params) {
                         var ret = {
-                            'q': params.term
+                            'q': params.term,
+                            'field_name': $s2.data('name')
                         };
 
                         var reqParams = $s2.data('req_params');
