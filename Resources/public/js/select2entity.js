@@ -1,6 +1,8 @@
 $(document).ready(function () {
     $.fn.select2entity = function (options) {
         this.each(function () {
+            var request;
+
             // Keep a reference to the element so we can keep the cache local to this instance and so we can
             // fetch config settings since select2 doesn't expose its options to the transport method.
             var $s2 = $(this),
@@ -38,7 +40,12 @@ $(document).ready(function () {
                             }
                         } else {
                             // no caching enabled. just do the ajax request
-                            $.ajax(params).fail(failure).done(success);
+                            if (request) {
+                                request.abort();
+                            }
+                            request = $.ajax(params).fail(failure).done(success).always(function () {
+                                request = undefined;
+                            });
                         }
                     },
                     data: function (params) {
