@@ -13,6 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Tetranz\Select2EntityBundle\Form\DataTransformer\EntitiesToPropertyTransformer;
 use Tetranz\Select2EntityBundle\Form\DataTransformer\EntityToPropertyTransformer;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  *
@@ -94,6 +95,17 @@ class Select2EntityType extends AbstractType
             $view->vars[$varName] = $options[$varName];
         }
 
+        if (isset($options['req_params']) && is_array($options['req_params']) && count($options['req_params']) > 0) {
+            $accessor = PropertyAccess::createPropertyAccessor();
+
+            $reqParams = [];
+            foreach ($options['req_params'] as $key => $reqParam) {
+                $reqParams[$key] = $accessor->getValue($view,  $reqParam . '.vars[full_name]');
+            }
+
+            $view->vars['attr']['data-req_params'] = json_encode($reqParams);
+        }
+
         //tags options
         $varNames = array_keys($this->config['allow_add']);
         foreach ($varNames as $varName) {
@@ -154,6 +166,9 @@ class Select2EntityType extends AbstractType
                 'transformer' => null,
                 'autostart' => true,
                 'width' => isset($this->config['width']) ? $this->config['width'] : null,
+                'req_params' => array(),
+                'property' => null,
+                'callback' => null,
             )
         );
     }

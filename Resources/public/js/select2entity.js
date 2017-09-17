@@ -10,6 +10,17 @@
                 scroll = $s2.data('scroll'),
                 prefix = Date.now(),
                 cache = [];
+
+            var reqParams = $s2.data('req_params');
+            if (reqParams) {
+                $.each(reqParams, function (key, value) {
+                    $('*[name="'+value+'"]').on('change', function () {
+                        $s2.val(null);
+                        $s2.trigger('change');
+                    });
+                });
+            }
+
             // Deep-merge the options
             $s2.select2($.extend(true, {
                 // Tags support
@@ -50,17 +61,24 @@
                         }
                     },
                     data: function (params) {
-                        // only send the 'page' parameter if scrolling is enabled
-                        if (scroll) {
-                            return {
-                                q: params.term,
-                                page: params.page || 1
-                            };
+                        var ret = {
+                            'q': params.term,
+                            'field_name': $s2.data('name')
+                        };
+
+                        var reqParams = $s2.data('req_params');
+                        if (reqParams) {
+                            $.each(reqParams, function (key, value) {
+                                ret[key] = $('*[name="'+value+'"]').val()
+                            });
                         }
 
-                        return {
-                            q: params.term
-                        };
+                        // only send the 'page' parameter if scrolling is enabled
+                        if (scroll) {
+                            ret['page'] = params.page || 1;
+                        }
+
+                        return ret;
                     },
                     processResults: function (data, params) {
                         var results, more = false, response = {};
