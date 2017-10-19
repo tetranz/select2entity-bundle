@@ -12,7 +12,8 @@
             <argument>%tetranz_select2_entity.config%</argument>
         </service>
         <service id="tetranz_select2entity.autocomplete_service" class="Tetranz\Select2EntityBundle\Service\AutocompleteService">
-            <argument type="service" id="service_container" />
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="doctrine" />
         </service>
     </services>
 
