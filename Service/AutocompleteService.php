@@ -65,7 +65,7 @@ class AutocompleteService
             ->setFirstResult($offset)
         ;
 
-        if (array_key_exists('callback', $fieldOptions)) {
+        if (is_callable($fieldOptions['callback'])) {
             $cb = $fieldOptions['callback'];
 
             $cb($countQB, $request);
