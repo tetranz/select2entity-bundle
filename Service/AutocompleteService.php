@@ -2,23 +2,34 @@
 
 namespace Tetranz\Select2EntityBundle\Service;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class AutocompleteService implements ContainerAwareInterface
+class AutocompleteService
 {
-    use ContainerAwareTrait;
+    /**
+     * @var FormFactoryInterface
+     */
+    private $formFactory;
 
+    /**
+     * @var ManagerRegistry
+     */
+    private $doctrine;
 
-    public function __construct(ContainerInterface $container)
+    /**
+     * @param FormFactoryInterface $formFactory
+     * @param ManagerRegistry      $doctrine
+     */
+    public function __construct(FormFactoryInterface $formFactory, ManagerRegistry $doctrine)
     {
-        $this->setContainer($container);
-    }
+        $this->formFactory = $formFactory;
+        $this->doctrine = $doctrine;
+    }   
 
     /**
      * @param Request                  $request
@@ -28,11 +39,11 @@ class AutocompleteService implements ContainerAwareInterface
      */
     public function getAutocompleteResults(Request $request, $type)
     {
-        $form = $this->container->get('form.factory')->create($type);
+        $form = $this->formFactory->create($type);
         $fieldOptions = $form->get($request->get('field_name'))->getConfig()->getOptions();
 
         /** @var EntityRepository $repo */
-        $repo = $this->container->get('doctrine')->getRepository($fieldOptions['class']);
+        $repo = $this->doctrine->getRepository($fieldOptions['class']);
 
         $term = $request->get('q');
 
@@ -54,8 +65,7 @@ class AutocompleteService implements ContainerAwareInterface
             ->setFirstResult($offset)
         ;
 
-
-        if (array_key_exists('callback', $fieldOptions)) {
+        if (is_callable($fieldOptions['callback'])) {
             $cb = $fieldOptions['callback'];
 
             $cb($countQB, $request);

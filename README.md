@@ -326,7 +326,7 @@ Because the handling of requests is usually very similar you can use a service w
 
 ### Templating
 
-If you need [Templating](https://select2.github.io/examples.html#templating) in Select2, you could consider the following example that shows the country flag next to each option.
+If you need [Templating](https://select2.org/dropdown#templating) in Select2, you could consider the following example that shows the country flag next to each option.
 
 Your custom transformer should return data like this:
 ```javascript
