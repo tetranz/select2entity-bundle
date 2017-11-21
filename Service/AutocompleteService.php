@@ -50,7 +50,7 @@ class AutocompleteService
         $countQB = $repo->createQueryBuilder('e');
         $countQB
             ->select($countQB->expr()->count('e'))
-            ->where('e.'.$fieldOptions['property'].' LIKE :term')
+            ->where('e.'.$fieldOptions['text_property'].' LIKE :term')
             ->setParameter('term', '%' . $term . '%')
         ;
 
@@ -59,7 +59,7 @@ class AutocompleteService
 
         $resultQb = $repo->createQueryBuilder('e');
         $resultQb
-            ->where('e.'.$fieldOptions['property'].' LIKE :term')
+            ->where('e.'.$fieldOptions['text_property'].' LIKE :term')
             ->setParameter('term', '%' . $term . '%')
             ->setMaxResults($maxResults)
             ->setFirstResult($offset)
@@ -80,7 +80,7 @@ class AutocompleteService
         $accessor = PropertyAccess::createPropertyAccessor();
 
         $result['results'] = array_map(function ($item) use ($accessor, $fieldOptions) {
-            return ['id' => $accessor->getValue($item, $fieldOptions['primary_key']), 'text' => $accessor->getValue($item, $fieldOptions['property'])];
+            return ['id' => $accessor->getValue($item, $fieldOptions['primary_key']), 'text' => $accessor->getValue($item, $fieldOptions['text_property'])];
         }, $paginationResults);
 
         return $result;
