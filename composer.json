@@ -18,7 +18,7 @@
         "doctrine/doctrine-bundle": "^1.3"
     },
     "autoload": {
-        "psr-4": { "Tetranz\\Select2EntityBundle": "" }
+        "psr-4": { "Tetranz\\Select2EntityBundle\\": "" }
     },
     "extra": {
         "branch-alias": {
