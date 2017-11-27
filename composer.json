@@ -17,5 +17,10 @@
     },
     "autoload": {
         "psr-4": { "Tetranz\\Select2EntityBundle": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.9.x-dev"
+        }
     }
 }
