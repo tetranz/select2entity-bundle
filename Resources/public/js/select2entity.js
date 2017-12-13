@@ -31,6 +31,7 @@
                     }
                 },
                 ajax: {
+                    url: $s2.data('ajax--url'),
                     transport: function (params, success, failure) {
                         // is caching enabled?
                         if ($s2.data('ajax--cache')) {
