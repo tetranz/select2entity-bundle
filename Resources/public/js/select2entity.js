@@ -58,6 +58,8 @@
                             request = $.ajax(params).fail(failure).done(success).always(function () {
                                 request = undefined;
                             });
+                            
+                            return request;
                         }
                     },
                     data: function (params) {
