@@ -25,7 +25,7 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
     /** @var  string */
     protected $primaryKey;
     /** @var  string */
-    protected $newTaxPrefix;
+    protected $newTagPrefix;
     /** @var string  */
     protected $newTagText;
     /** @var PropertyAccessor */
