@@ -110,7 +110,7 @@ class EntityToPropertyTransformer implements DataTransformerInterface
                     ->getQuery()
                     ->getSingleResult();
             }
-            catch (\Exception $ex) {
+            catch (\Doctrine\ORM\NonUniqueResultException $ex) {
                 // this will happen if the form submits invalid data
                 throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', $value));
             }
