@@ -38,6 +38,6 @@
 
 
     {% spaceless %}
-        <input {{ block('widget_attributes') }}/>
+        <input {{ block('widget_attributes') }} value="{% for key,label in value %}{{ key }}{% endfor %}"/>
     {% endspaceless %}
 {% endblock %}
