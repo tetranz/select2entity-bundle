@@ -112,6 +112,8 @@
 
 (function( $ ) {
     $(document).ready(function () {
-        $('.select2entity[data-autostart="true"]').select2entity();
+        $('.select2entity[data-autostart="true"]').select2entity({
+            allowClear: true
+        });
     });
 })( jQuery );
