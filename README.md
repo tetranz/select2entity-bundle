@@ -1,3 +1,5 @@
+[Note from project maintainer: June 17th 2019](https://github.com/tetranz/select2entity-bundle/issues/144)
+
 select2entity-bundle
 ====================
 
