@@ -12,7 +12,8 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "doctrine/orm": ">=2.4"
+        "doctrine/orm": ">=2.4",
+        "twig/twig": ">=2.9"
     },
     "autoload": {
         "psr-0": { "Tetranz\\Select2EntityBundle": "" }

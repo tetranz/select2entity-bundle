@@ -36,8 +36,7 @@
         {% set attr = attr|merge({'data-width': width}) %}
     {% endif %}
 
-
-    {% spaceless %}
+    {% apply spaceless %}
         <select {{ block('widget_attributes') }}>
             {% if value is iterable %}
                 {% if allow_clear %}
@@ -50,5 +49,5 @@
                 {% endfor %}
             {% endif %}
         </select>
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}
