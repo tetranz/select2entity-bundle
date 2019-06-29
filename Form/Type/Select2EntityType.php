@@ -140,6 +140,7 @@ class Select2EntityType extends AbstractType
             array(
                 'object_manager'=> null,
                 'class' => null,
+                'data_class' => null,
                 'primary_key' => 'id',
                 'remote_path' => null,
                 'remote_route' => null,
