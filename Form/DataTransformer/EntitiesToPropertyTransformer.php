@@ -107,19 +107,18 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
             }
         }
 
-        try {
-          // get multiple entities with one query
-          $entities = $this->em->createQueryBuilder()
-              ->select('entity')
-              ->from($this->className, 'entity')
-              ->where('entity.'.$this->primaryKey.' IN (:ids)')
-              ->setParameter('ids', $values)
-              ->getQuery()
-              ->getResult();
-        }
-        catch (\Exception $ex) {
+        // get multiple entities with one query
+        $entities = $this->em->createQueryBuilder()
+            ->select('entity')
+            ->from($this->className, 'entity')
+            ->where('entity.'.$this->primaryKey.' IN (:ids)')
+            ->setParameter('ids', $values)
+            ->getQuery()
+            ->getResult();
+
           // this will happen if the form submits invalid data
-          throw new TransformationFailedException('One or more id values are invalid');
+        if (count($entities) != count($values)) {
+            throw new TransformationFailedException('One or more id values are invalid');
         }
 
         return array_merge($entities, $newObjects);
