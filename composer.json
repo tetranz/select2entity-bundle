@@ -16,7 +16,7 @@
         "twig/twig": ">=2.9"
     },
     "autoload": {
-        "psr-4": { "Tetranz\\Select2EntityBundle": "" }
+        "psr-4": { "Tetranz\\Select2EntityBundle\\": "" }
     },
     "extra": {
         "branch-alias": {
