@@ -132,6 +132,7 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `transformer` The fully qualified class name of a custom transformer if you need that flexibility as described below.
 * `autostart` Determines whether or not the select2 jQuery code is called automatically on document ready. Defaults to true which provides normal operation.
 * `width` Sets a data-width attribute if not null. Defaults to null.
+* `class_type` Optional value that will be added to the ajax request as a query string parameter.
 
 The url of the remote query can be given by either of two ways: `remote_route` is the Symfony route. 
 `remote_params` can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify 
