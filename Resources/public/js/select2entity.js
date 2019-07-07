@@ -64,7 +64,8 @@
                     data: function (params) {
                         var ret = {
                             'q': params.term,
-                            'field_name': $s2.data('name')
+                            'field_name': $s2.data('name'),
+                            'class_type': $s2.data('classtype')
                         };
 
                         var reqParams = $s2.data('req_params');
