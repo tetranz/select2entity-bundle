@@ -73,7 +73,33 @@
                         var reqParams = $s2.data('req_params');
                         if (reqParams) {
                             $.each(reqParams, function (key, value) {
-                                ret[key] = $('*[name="'+value+'"]').val()
+                                var fieldSelector = '[name^="'+value+'"]';
+                                var field = $(fieldSelector);
+                                if (field.length > 1) {
+                                    if (field.is('[type="checkbox"]')) {
+                                        ret[key] = [];
+                                        field.each(function () {
+                                            if ($(this).is(':checked')) {
+                                                ret[key].push($(this).val());
+                                            }
+                                        });
+                                    } else if (field.is('[type="radio"]')) {
+                                        ret[key] = $(fieldSelector + ':checked').val();
+                                    } else if (field.is('[type="text"]') || field.is('[type="email"]')) {
+                                        ret[key] = [];
+                                        field.each(function () {
+                                            ret[key].push($(this).val());
+                                        });
+                                    } else {
+                                        ret[key] = field.val();
+                                    }
+                                } else {
+                                    if (field.is('[type="checkbox"]') || field.is('[type="radio"]')) {
+                                        ret[key] = field.is(':checked');
+                                    } else {
+                                        ret[key] = field.val();
+                                    }
+                                }
                             });
                         }
 
