@@ -40,7 +40,7 @@
                                 cacheTimeout = $s2.data('ajax--cacheTimeout');
                             // no cache entry for 'term' or the cache has timed out?
                             if (typeof cache[key] == 'undefined' || (cacheTimeout && Date.now() >= cache[key].time)) {
-                                $.ajax(params).fail(failure).done(function (data) {
+                                return $.ajax(params).fail(failure).done(function (data) {
                                     cache[key] = {
                                         data: data,
                                         time: cacheTimeout ? Date.now() + cacheTimeout : null
