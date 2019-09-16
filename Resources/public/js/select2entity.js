@@ -1,20 +1,20 @@
-(function( $ ) {
+(function ($) {
     $.fn.select2entity = function (options) {
         this.each(function () {
-            var request;
+            let request;
 
             // Keep a reference to the element so we can keep the cache local to this instance and so we can
             // fetch config settings since select2 doesn't expose its options to the transport method.
-            var $s2 = $(this),
+            let $s2 = $(this),
                 limit = $s2.data('page-limit') || 0,
                 scroll = $s2.data('scroll'),
                 prefix = Date.now(),
                 cache = [];
 
-            var reqParams = $s2.data('req_params');
+            let reqParams = $s2.data('req_params');
             if (reqParams) {
                 $.each(reqParams, function (key, value) {
-                    $('*[name="'+value+'"]').on('change', function () {
+                    $('*[name="' + value + '"]').on('change', function () {
                         $s2.val(null);
                         $s2.trigger('change');
                     });
@@ -26,8 +26,8 @@
                 // Tags support
                 createTag: function (data) {
                     if ($s2.data('tags') && data.term.length > 0) {
-                        var text = data.term + $s2.data('tags-text');
-                        return {id: $s2.data('new-tag-prefix') + data.term, text: text};
+                        let text = data.term + $s2.data('tags-text');
+                        return { id: $s2.data('new-tag-prefix') + data.term, text: text };
                     }
                 },
                 ajax: {
@@ -39,7 +39,7 @@
                             var key = prefix + ' page:' + (params.data.page || 1) + ' ' + params.data.q,
                                 cacheTimeout = $s2.data('ajax--cacheTimeout');
                             // no cache entry for 'term' or the cache has timed out?
-                            if (typeof cache[key] == 'undefined' || (cacheTimeout && Date.now() >= cache[key].time)) {
+                            if (typeof cache[key] === 'undefined' || (cacheTimeout && Date.now() >= cache[key].time)) {
                                 return $.ajax(params).fail(failure).done(function (data) {
                                     cache[key] = {
                                         data: data,
@@ -59,21 +59,21 @@
                             request = $.ajax(params).fail(failure).done(success).always(function () {
                                 request = undefined;
                             });
-                            
+
                             return request;
                         }
                     },
                     data: function (params) {
-                        var ret = {
+                        let ret = {
                             'q': params.term,
                             'field_name': $s2.data('name'),
                             'class_type': $s2.data('classtype')
                         };
 
-                        var reqParams = $s2.data('req_params');
+                        let reqParams = $s2.data('req_params');
                         if (reqParams) {
                             $.each(reqParams, function (key, value) {
-                                ret[key] = $('*[name="'+value+'"]').val()
+                                ret[key] = $('*[name="' + value + '"]').val();
                             });
                         }
 
@@ -85,12 +85,13 @@
                         return ret;
                     },
                     processResults: function (data, params) {
-                        var results, more = false, response = {};
+                        let results, more = false,
+                            response = {};
                         params.page = params.page || 1;
 
                         if ($.isArray(data)) {
                             results = data;
-                        } else if (typeof data == 'object') {
+                        } else if (typeof data === 'object') {
                             // assume remote result was proper object
                             results = data.results;
                             more = data.more;
@@ -100,7 +101,7 @@
                         }
 
                         if (scroll) {
-                            response.pagination = {more: more};
+                            response.pagination = { more: more };
                         }
                         response.results = results;
 
@@ -111,10 +112,10 @@
         });
         return this;
     };
-})( jQuery );
+})(jQuery);
 
-(function( $ ) {
+(function ($) {
     $(document).ready(function () {
         $('.select2entity[data-autostart="true"]').select2entity();
     });
-})( jQuery );
+})(jQuery);

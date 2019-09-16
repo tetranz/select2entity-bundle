@@ -1,31 +1,31 @@
 {% block tetranz_select2entity_widget %}
     {% set attr = attr|merge({
-    'data-ajax--url':remote_path,
+    'data-ajax--url': remote_path,
     'data-ajax--cache': cache ? 'true' : 'false',
     'data-ajax--cache-timeout': cache_timeout|default(0),
-    'data-ajax--delay':delay,
-    'data-ajax--data-type':"json",
-    'data-language':language,
-    'data-minimum-input-length':minimum_input_length,
-    'data-placeholder':placeholder|trans({}, translation_domain),
-    'data-page-limit':page_limit,
-    'data-scroll':scroll ? 'true' : 'false',
-    'data-autostart':autostart ? 'true' : 'false',
-    'class' : (attr.class|default('') ~ ' select2entity form-control')|trim,
-    'data-name' : name|e('html_attr')
+    'data-ajax--delay': delay,
+    'data-ajax--data-type': "json",
+    'data-language' :language,
+    'data-minimum-input-length': minimum_input_length,
+    'data-placeholder': placeholder|trans({}, translation_domain),
+    'data-page-limit': page_limit,
+    'data-scroll': scroll ? 'true' : 'false',
+    'data-autostart': autostart ? 'true' : 'false',
+    'class': (attr.class|default('') ~ ' select2entity form-control')|trim,
+    'data-name': name|e('html_attr')
     }) %}
 
     {% if allow_add.enabled %}
         {% set attr = attr|merge({
-        'data-tags':'true',
-        'data-tags-text':allow_add.new_tag_text|trans({}, translation_domain),
-        'data-new-tag-prefix':allow_add.new_tag_prefix|trans({}, translation_domain),
-        'data-token-separators':allow_add.tag_separators,
+        'data-tags': 'true',
+        'data-tags-text': allow_add.new_tag_text|trans({}, translation_domain),
+        'data-new-tag-prefix': allow_add.new_tag_prefix|trans({}, translation_domain),
+        'data-token-separators': allow_add.tag_separators,
         }) %}
     {% endif %}
 
     {% if multiple %}
-        {% set attr = attr|merge({'multiple':'multiple'}) %}
+        {% set attr = attr|merge({'multiple': 'multiple'}) %}
     {% endif %}
 
     {% if allow_clear %}
