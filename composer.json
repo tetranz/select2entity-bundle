@@ -13,7 +13,13 @@
     "require": {
         "php": ">=5.4.0",
         "doctrine/orm": ">=2.4",
-        "twig/twig": ">=2.9"
+        "twig/twig": ">=2.9",
+        "symfony/property-access": ">=4.0",
+        "symfony/dependency-injection": ">=4.0",
+        "symfony/http-kernel": ">=4.0",
+        "symfony/form": ">=4.0",
+        "symfony/config": ">=4.0",
+        "symfony/routing": ">=4.0"
     },
     "autoload": {
         "psr-4": { "Tetranz\\Select2EntityBundle\\": "" }
