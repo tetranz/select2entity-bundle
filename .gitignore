@@ -17,3 +17,8 @@ composer.phar
 
 #PhpStorm
 .idea
+
+#Visual Studio
+.vs
+*.phpproj
+*.sln
