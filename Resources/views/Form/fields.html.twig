@@ -28,6 +28,12 @@
         {% set attr = attr|merge({'multiple': 'multiple'}) %}
     {% endif %}
 
+    {% if query_parameters %}
+        {% set attr = attr|merge({
+			'data-query-parameters': query_parameters|json_encode
+		}) %}
+    {% endif %}
+
     {% if allow_clear %}
         {% set attr = attr|merge({'data-allow-clear': 'true'}) %}
     {% endif %}

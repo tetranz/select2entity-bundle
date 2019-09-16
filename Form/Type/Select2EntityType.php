@@ -163,6 +163,7 @@ class Select2EntityType extends AbstractType
                 'property' => null,
                 'callback' => null,
                 'class_type' => null,
+                'query_parameters' => []
             )
         );
     }

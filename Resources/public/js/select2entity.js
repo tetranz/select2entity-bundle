@@ -9,6 +9,7 @@
                 limit = $s2.data('page-limit') || 0,
                 scroll = $s2.data('scroll'),
                 prefix = Date.now(),
+                query_parameters = $s2.data('query-parameters'),
                 cache = [];
 
             let reqParams = $s2.data('req_params');
@@ -80,6 +81,16 @@
                         // only send the 'page' parameter if scrolling is enabled
                         if (scroll) {
                             ret['page'] = params.page || 1;
+                        }
+
+                        if (Array.isArray(query_parameters) ||
+                            typeof (query_parameters) === 'object') {
+                            for (var key in query_parameters) {
+                                // prevent overriding required parameters
+                                if (!ret[key]) {
+                                    ret[key] = query_parameters[key];
+                                }
+                            }
                         }
 
                         return ret;
