@@ -145,7 +145,7 @@ class Select2EntityType extends AbstractType
                 ],
                 'delay' => $this->config['delay'],
                 'text_property' => null,
-                'placeholder' => '',
+                'placeholder' => false,
                 'language' => $this->config['language'],
                 'required' => false,
                 'cache' => $this->config['cache'],
