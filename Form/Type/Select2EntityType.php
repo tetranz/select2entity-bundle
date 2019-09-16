@@ -26,13 +26,13 @@ class Select2EntityType extends AbstractType
     protected $em;
     /** @var RouterInterface */
     protected $router;
-    /** @var  array */
+    /** @var array */
     protected $config;
 
     /**
-     * @param ObjectManager $em
-     * @param RouterInterface        $router
-     * @param array                  $config
+     * @param ObjectManager     $em
+     * @param RouterInterface   $router
+     * @param array             $config
      */
     public function __construct(ObjectManager $em, RouterInterface $router, $config)
     {
@@ -44,9 +44,9 @@ class Select2EntityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // custom object manager for this entity, override the default entity manager ?
-        if(isset($options['object_manager'])) {
+        if (isset($options['object_manager'])) {
             $em = $options['object_manager'];
-            if(!$em instanceof ObjectManager) {
+            if (!$em instanceof ObjectManager) {
                 throw new \Exception('The entity manager \'em\' must be an ObjectManager instance');
             }
             // Use the custom manager instead.
@@ -70,9 +70,8 @@ class Select2EntityType extends AbstractType
 
             // add the default data transformer
         } else {
-
-            $newTagPrefix = isset($options['allow_add']['new_tag_prefix']) ? $options['allow_add']['new_tag_prefix'] : $this->config['allow_add']['new_tag_prefix'];
-            $newTagText = isset($options['allow_add']['new_tag_text']) ? $options['allow_add']['new_tag_text'] : $this->config['allow_add']['new_tag_text'];
+            $newTagPrefix = $options['allow_add']['new_tag_prefix'] ?? $this->config['allow_add']['new_tag_prefix'];
+            $newTagText = $options['allow_add']['new_tag_text'] ?? $this->config['allow_add']['new_tag_text'];
 
             $transformer = $options['multiple']
                 ? new EntitiesToPropertyTransformer($this->em, $options['class'], $options['text_property'], $options['primary_key'], $newTagPrefix, $newTagText)
@@ -87,7 +86,7 @@ class Select2EntityType extends AbstractType
         parent::finishView($view, $form, $options);
         // make variables available to the view
         $view->vars['remote_path'] = $options['remote_path']
-            ?: $this->router->generate($options['remote_route'], array_merge($options['remote_params'], [ 'page_limit' => $options['page_limit'] ]));
+            ?: $this->router->generate($options['remote_route'], array_merge($options['remote_params'], ['page_limit' => $options['page_limit'] ]));
 
         // merge variable names which are only set per instance with those from yml config
         $varNames = array_merge(['multiple', 'placeholder', 'primary_key', 'autostart', 'query_parameters'], array_keys($this->config));
@@ -109,11 +108,7 @@ class Select2EntityType extends AbstractType
         //tags options
         $varNames = array_keys($this->config['allow_add']);
         foreach ($varNames as $varName) {
-            if (isset($options['allow_add'][$varName])) {
-                $view->vars['allow_add'][$varName] = $options['allow_add'][$varName];
-            } else {
-                $view->vars['allow_add'][$varName] = $this->config['allow_add'][$varName];
-            }
+            $view->vars['allow_add'][$varName] = $options['allow_add'][$varName] ?? $this->config['allow_add'][$varName];;
         }
 
         if ($options['multiple']) {
@@ -128,27 +123,26 @@ class Select2EntityType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            array(
+        $resolver->setDefaults([
                 'object_manager'=> null,
                 'class' => null,
                 'data_class' => null,
                 'primary_key' => 'id',
                 'remote_path' => null,
                 'remote_route' => null,
-                'remote_params' => array(),
+                'remote_params' => [],
                 'multiple' => false,
                 'compound' => false,
                 'minimum_input_length' => $this->config['minimum_input_length'],
                 'page_limit' => $this->config['page_limit'],
                 'scroll' => $this->config['scroll'],
                 'allow_clear' => $this->config['allow_clear'],
-                'allow_add' => array(
+                'allow_add' => [
                     'enabled' => $this->config['allow_add']['enabled'],
                     'new_tag_text' => $this->config['allow_add']['new_tag_text'],
                     'new_tag_prefix' => $this->config['allow_add']['new_tag_prefix'],
                     'tag_separators' => $this->config['allow_add']['tag_separators']
-                ),
+                ],
                 'delay' => $this->config['delay'],
                 'text_property' => null,
                 'placeholder' => '',
@@ -158,29 +152,17 @@ class Select2EntityType extends AbstractType
                 'cache_timeout' => $this->config['cache_timeout'],
                 'transformer' => null,
                 'autostart' => true,
-                'width' => isset($this->config['width']) ? $this->config['width'] : null,
-                'req_params' => array(),
+                'width' => $this->config['width'] ?? null,
+                'req_params' => [],
                 'property' => null,
                 'callback' => null,
                 'class_type' => null,
                 'query_parameters' => []
-            )
+            ]
         );
     }
 
     /**
-     * pre Symfony 3 compatibility
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->getBlockPrefix();
-    }
-
-    /**
-     * Symfony 2.8+
-     *
      * @return string
      */
     public function getBlockPrefix()
