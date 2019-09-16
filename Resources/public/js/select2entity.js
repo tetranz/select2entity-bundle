@@ -10,6 +10,7 @@
                 scroll = $s2.data('scroll'),
                 prefix = Date.now(),
                 query_parameters = $s2.data('query-parameters'),
+                render_html = $s2.data('render-html'),
                 cache = [];
 
             let reqParams = $s2.data('req_params');
@@ -23,7 +24,7 @@
             }
 
             // Deep-merge the options
-            $s2.select2($.extend(true, {
+            let mergedOptions = $.extend(true, {
                 // Tags support
                 createTag: function (data) {
                     if ($s2.data('tags') && data.term.length > 0) {
@@ -119,7 +120,22 @@
                         return response;
                     }
                 }
-            }, options || {}));
+            }, options || {});
+            if (render_html) {
+                mergedOptions = $.extend({
+                    escapeMarkup: function (text) {
+                        return text;
+                    },
+                    templateResult: function (option) {
+                        return option.html ? option.html : option.text;
+                    },
+                    templateSelection: function (option) {
+                        return option.text;
+                    }
+                }, mergedOptions);
+            }
+
+            $s2.select2(mergedOptions);
         });
         return this;
     };
