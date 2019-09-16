@@ -42,6 +42,10 @@
         {% set attr = attr|merge({'data-width': width}) %}
     {% endif %}
 
+    {% if render_html %}
+        {% set attr = attr|merge({'data-render-html': 'true'}) %}
+    {% endif %}
+
     {% if class_type %}
         {% set attr = attr|merge({'data-classtype': class_type}) %}
     {% endif %}

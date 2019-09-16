@@ -173,7 +173,8 @@ class Select2EntityType extends AbstractType
                 'property' => null,
                 'callback' => null,
                 'class_type' => null,
-                'query_parameters' => []
+                'query_parameters' => [],
+                'render_html' => $this->config['render_html'] ?? false
             ]
         );
     }

@@ -138,6 +138,7 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `autostart` Determines whether or not the select2 jQuery code is called automatically on document ready. Defaults to true which provides normal operation.
 * `width` Sets a data-width attribute if not null. Defaults to null.
 * `class_type` Optional value that will be added to the ajax request as a query string parameter.
+* `render_html` This will render your results returned under ['html'].
 
 The url of the remote query can be given by either of two ways: `remote_route` is the Symfony route. 
 `remote_params` can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify 
@@ -158,6 +159,7 @@ tetranz_select2_entity:
     cache_timeout: 0
     scroll: true
     object_manager: 'manager_alias'
+    render_html: true
 ```
 
 ## AJAX Response
@@ -340,6 +342,15 @@ Because the handling of requests is usually very similar you can use a service w
 
 ### Templating
 
+General templating has now been added to the bundle. If you need to render html code inside your selection results, set the `render_html` option to true and in your controller return data like this:
+```javascript
+[ 
+    { id: 1, text: 'United Kingdom (Europe)', html: '<img src="images/flags/en.png" />' },
+    { id: 2, text: 'China (Asia)', html: '<img src="images/flags/ch.png">' }
+]
+```
+
+<details><summary>If you need further templating, you'll need to override the .select2entity() method as follows.</summary>
 If you need [Templating](https://select2.org/dropdown#templating) in Select2, you could consider the following example that shows the country flag next to each option.
 
 Your custom transformer should return data like this:
@@ -395,7 +406,7 @@ You also will need to override the following block in your template:
     </option>
 {% endblock %}
 ```
-This block adds all additional data needed to the JavaScript function `select2entityAjax`, like data attribute. In this case we are passing `data-img`.
+This block adds all additional data needed to the JavaScript function `select2entityAjax`, like data attribute. In this case we are passing `data-img`.</details>
 
 ## Embed Collection Forms
 If you use [Embedded Collection Forms](http://symfony.com/doc/current/cookbook/form/form_collections.html) and [data-prototype](http://symfony.com/doc/current/cookbook/form/form_collections.html#allowing-new-tags-with-the-prototype) to add new elements in your form, you will need the following JavaScript that will listen for adding an element `.select2entity`:

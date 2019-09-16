@@ -40,6 +40,7 @@ class Configuration implements ConfigurationInterface
                     ->integerNode('cache_timeout')->defaultValue(60000)->min(0)->end()
                     ->scalarNode('width')->defaultNull()->end()
                     ->scalarNode('object_manager')->defaultNull()->end()
+                    ->booleanNode('render_html')->defaultFalse()->end()
                 ->end();
 
         return $treeBuilder;
