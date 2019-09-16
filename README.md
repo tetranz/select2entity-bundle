@@ -1,5 +1,3 @@
-[Note from project maintainer: June 17th 2019](https://github.com/tetranz/select2entity-bundle/issues/144)
-
 select2entity-bundle
 ====================
 
@@ -7,7 +5,8 @@ select2entity-bundle
 
 This is a Symfony bundle which enables the popular [Select2](https://select2.github.io) component to be used as a drop-in replacement for a standard entity field on a Symfony form.
 
-It works with Symfony 2, 3 and 4.
+It works with Symfony 4 and 5. For Symfony 2 and 3, please use version or 2.x of the bundle.
+For Select2 4.0 and above. For older versions, use version 1.x of the bundle (not compatible with Symfony 5).
 
 The main feature that this bundle provides compared with the standard Symfony entity field (rendered with a html select) is that the list is retrieved via a remote ajax call. This means that the list can be of almost unlimited size. The only limitation is the performance of the database query or whatever that retrieves the data in the remote web service.
 
@@ -53,32 +52,32 @@ Alternatively, minified versions of select2.js and select2.css can be loaded fro
 Note that this only works with Select2 version 4. If you are using Select2 version 3.X please use `"tetranz/select2entity-bundle": "1.*"` in `composer.json`
 
 * Run `php composer.phar update tetranz/select2entity-bundle` in your project root.
-* Update your project `app/AppKernel.php` file and add this bundle to the $bundles array:
+* Update your project `config/bundles.php` file and add this bundle to the $bundles array:
 
 ```php
-$bundles = array(
+$bundles = [
     // ...
-    new Tetranz\Select2EntityBundle\TetranzSelect2EntityBundle(),
-);
+    Tetranz\Select2EntityBundle\TetranzSelect2EntityBundle::class => ['all' => true]
+];
 ```
 
-* Update your project `app/config.yml` file to provide global twig form templates:
+* Update your project `config/packages/twig.yaml` file to provide global twig form templates:
 
 ```yaml
 twig:
     form_themes:
-        - 'TetranzSelect2EntityBundle:Form:fields.html.twig'
-        
-```
-On Symfony 4, use `@TetranzSelect2Entity/Form/fields.html.twig` instead of `TetranzSelect2EntityBundle:Form:fields.html.twig`
+        - '@TetranzSelect2Entity/Form/fields.html.twig'
+
 * Load the Javascript on the page. The simplest way is to add the following to your layout file. Don't forget to run console assets:install. Alternatively, do something more sophisticated with Assetic.
+```
+
 ```
 <script src="{{ asset('bundles/tetranzselect2entity/js/select2entity.js') }}"></script>
 ```
 
 ## How to use
 
-The following is for Symfony 3. The latest version works on both Symfony 2 and Symfony 3 but see https://github.com/tetranz/select2entity-bundle/tree/v2.1 for Symfony 2 configuration and use.
+The following is for Symfony 4. See https://github.com/tetranz/select2entity-bundle/tree/v2.1 for Symfony 2/3 configuration and use.
 
 Select2Entity is simple to use. In the buildForm method of a form type class, specify `Select2EntityType::class` as the type where you would otherwise use `entity:class`.
 
@@ -89,6 +88,7 @@ $builder
    ->add('country', Select2EntityType::class, [
             'multiple' => true,
             'remote_route' => 'tetranz_test_default_countryquery',
+            'remote_params' => [] // static route parameters for request->query
             'class' => '\Tetranz\TestBundle\Entity\Country',
             'primary_key' => 'id',
             'text_property' => 'name',
@@ -100,6 +100,11 @@ $builder
             'cache_timeout' => 60000, // if 'cache' is true
             'language' => 'en',
             'placeholder' => 'Select a country',
+            'query_parameters' => [
+                'start' => new \DateTime()
+                'end' => (new \DateTime())->modify('+5d')
+                // any other parameters you want your ajax route request->query to get, that you might want to modify dynamically
+            ],
             // 'object_manager' => $objectManager, // inject a custom object / entity manager 
         ])
 ```
@@ -138,7 +143,9 @@ The url of the remote query can be given by either of two ways: `remote_route` i
 `remote_params` can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify 
 the url directly.
 
-The defaults can be changed in your app/config.yml file with the following format.
+You may use `query_parameters` for when those remote_params have to be changeable dynamically. You may change them using $('#elem).data('query-parameters', { /* new params */ });
+
+The defaults can be changed in your config/packages/tetranzselect2entity.yaml file with the following format.
 
 ```yaml
 tetranz_select2_entity:
@@ -146,10 +153,11 @@ tetranz_select2_entity:
     page_limit: 8
     allow_clear: true
     delay: 500
-    language: fr
+    language: 'fr'
     cache: false
     cache_timeout: 0
     scroll: true
+    object_manager: 'manager_alias'
 ```
 
 ## AJAX Response

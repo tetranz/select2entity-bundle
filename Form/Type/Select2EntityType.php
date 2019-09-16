@@ -124,7 +124,7 @@ class Select2EntityType extends AbstractType
         //tags options
         $varNames = array_keys($this->config['allow_add']);
         foreach ($varNames as $varName) {
-            $view->vars['allow_add'][$varName] = $options['allow_add'][$varName] ?? $this->config['allow_add'][$varName];;
+            $view->vars['allow_add'][$varName] = $options['allow_add'][$varName] ?? $this->config['allow_add'][$varName];
         }
 
         if ($options['multiple']) {
