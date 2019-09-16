@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=7.1.3",
         "doctrine/orm": ">=2.4",
         "twig/twig": ">=2.9",
         "symfony/property-access": ">=4.0",
