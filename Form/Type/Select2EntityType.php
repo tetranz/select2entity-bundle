@@ -2,6 +2,9 @@
 
 namespace Tetranz\Select2EntityBundle\Form\Type;
 
+use Tetranz\Select2EntityBundle\Form\DataTransformer\EntitiesToPropertyTransformer;
+use Tetranz\Select2EntityBundle\Form\DataTransformer\EntityToPropertyTransformer;
+
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -9,10 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Tetranz\Select2EntityBundle\Form\DataTransformer\EntitiesToPropertyTransformer;
-use Tetranz\Select2EntityBundle\Form\DataTransformer\EntityToPropertyTransformer;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
@@ -121,16 +121,6 @@ class Select2EntityType extends AbstractType
         }
 
 	    $view->vars['class_type'] = $options['class_type'];
-    }
-
-    /**
-     * Added for pre Symfony 2.7 compatibility
-     *
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $this->configureOptions($resolver);
     }
 
     /**
