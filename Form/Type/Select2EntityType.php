@@ -6,6 +6,7 @@ use Tetranz\Select2EntityBundle\Form\DataTransformer\EntitiesToPropertyTransform
 use Tetranz\Select2EntityBundle\Form\DataTransformer\EntityToPropertyTransformer;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,6 +23,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  */
 class Select2EntityType extends AbstractType
 {
+    /** @var ManagerRegistry */
+    protected $registry;
     /** @var ObjectManager */
     protected $em;
     /** @var RouterInterface */
@@ -30,13 +33,14 @@ class Select2EntityType extends AbstractType
     protected $config;
 
     /**
-     * @param ObjectManager     $em
+     * @param ManagerRegistry   $registry
      * @param RouterInterface   $router
      * @param array             $config
      */
-    public function __construct(ObjectManager $em, RouterInterface $router, $config)
+    public function __construct(ManagerRegistry $registry, RouterInterface $router, $config)
     {
-        $this->em = $em;
+        $this->registry = $registry;
+        $this->em = $registry->getManager();
         $this->router = $router;
         $this->config = $config;
     }
@@ -51,6 +55,18 @@ class Select2EntityType extends AbstractType
             }
             // Use the custom manager instead.
             $this->em = $em;
+        } else if (isset($this->config['object_manager'])) {
+            $em = $this->registry->getManager($this->config['object_manager']);
+            if (!$em instanceof ObjectManager) {
+                throw new \Exception('The entity manager \'em\' must be an ObjectManager instance');
+            }
+            $this->em = $em;
+        }
+        else {
+            $manager = $this->registry->getManagerForClass($options['class']);
+            if ($manager instanceof ObjectManager) {
+                $this->em = $manager;
+            }
         }
 
         // add custom data transformer
