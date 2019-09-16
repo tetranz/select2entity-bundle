@@ -140,7 +140,7 @@ class Select2EntityType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-                'object_manager'=> null,
+                'object_manager' => null,
                 'class' => null,
                 'data_class' => null,
                 'primary_key' => 'id',
