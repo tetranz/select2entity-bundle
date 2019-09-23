@@ -7,7 +7,7 @@
     <services>
         <service id="tetranz_select2entity.select2entity_type" class="Tetranz\Select2EntityBundle\Form\Type\Select2EntityType">
             <tag name="form.type" alias="tetranz_select2entity" />
-            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="doctrine" />
             <argument type="service" id="router" />
             <argument>%tetranz_select2_entity.config%</argument>
         </service>
