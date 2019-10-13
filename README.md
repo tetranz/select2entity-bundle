@@ -88,7 +88,7 @@ $builder
    ->add('country', Select2EntityType::class, [
             'multiple' => true,
             'remote_route' => 'tetranz_test_default_countryquery',
-            'remote_params' => [] // static route parameters for request->query
+            'remote_params' => [], // static route parameters for request->query
             'class' => '\Tetranz\TestBundle\Entity\Country',
             'primary_key' => 'id',
             'text_property' => 'name',
@@ -101,8 +101,8 @@ $builder
             'language' => 'en',
             'placeholder' => 'Select a country',
             'query_parameters' => [
-                'start' => new \DateTime()
-                'end' => (new \DateTime())->modify('+5d')
+                'start' => new \DateTime(),
+                'end' => (new \DateTime())->modify('+5d'),
                 // any other parameters you want your ajax route request->query to get, that you might want to modify dynamically
             ],
             // 'object_manager' => $objectManager, // inject a custom object / entity manager 
