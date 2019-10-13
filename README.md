@@ -88,7 +88,7 @@ $builder
    ->add('country', Select2EntityType::class, [
             'multiple' => true,
             'remote_route' => 'tetranz_test_default_countryquery',
-            'remote_params' => [] // static route parameters for request->query
+            'remote_params' => [], // static route parameters for request->query
             'class' => '\Tetranz\TestBundle\Entity\Country',
             'primary_key' => 'id',
             'text_property' => 'name',
