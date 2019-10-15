@@ -132,6 +132,7 @@ If text_property is omitted then the entity is cast to a string. This requires i
 * `delay` The delay in milliseconds after a keystroke before trigging another AJAX request. Defaults to 250 ms.
 * `placeholder` Placeholder text.
 * `language` i18n language code. Defaults to en.
+* `theme` Defaults to 'default'.
 * `cache` Enable AJAX cache. Results will be cached for each 'term' queried.
 * `cache_timeout` How long to cache a query in milliseconds. Setting to `0` will cause the cache to never timeout _(60000 = 60 seconds)_
 * `transformer` The fully qualified class name of a custom transformer if you need that flexibility as described below.
@@ -155,6 +156,7 @@ tetranz_select2_entity:
     allow_clear: true
     delay: 500
     language: 'fr'
+    theme: 'default'
     cache: false
     cache_timeout: 0
     scroll: true
@@ -407,6 +409,10 @@ You also will need to override the following block in your template:
 {% endblock %}
 ```
 This block adds all additional data needed to the JavaScript function `select2entityAjax`, like data attribute. In this case we are passing `data-img`.</details>
+
+### Themes
+Select2 supports custom themes using the `theme` option so you can style Select2 to match the rest of your application.
+For Bootstrap4 theme look at https://github.com/ttskch/select2-bootstrap4-theme
 
 ## Embed Collection Forms
 If you use [Embedded Collection Forms](http://symfony.com/doc/current/cookbook/form/form_collections.html) and [data-prototype](http://symfony.com/doc/current/cookbook/form/form_collections.html#allowing-new-tags-with-the-prototype) to add new elements in your form, you will need the following JavaScript that will listen for adding an element `.select2entity`:
