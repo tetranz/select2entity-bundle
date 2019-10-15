@@ -36,6 +36,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->integerNode('delay')->defaultValue(250)->min(0)->end()
                     ->scalarNode('language')->defaultValue('en')->end()
+                    ->scalarNode('theme')->defaultValue('default')->end()
                     ->booleanNode('cache')->defaultTrue()->end()
                     ->integerNode('cache_timeout')->defaultValue(60000)->min(0)->end()
                     ->scalarNode('width')->defaultNull()->end()
