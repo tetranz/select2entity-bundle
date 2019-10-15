@@ -163,6 +163,7 @@ class Select2EntityType extends AbstractType
                 'text_property' => null,
                 'placeholder' => false,
                 'language' => $this->config['language'],
+		'theme' => $this->config['theme'],
                 'required' => false,
                 'cache' => $this->config['cache'],
                 'cache_timeout' => $this->config['cache_timeout'],
