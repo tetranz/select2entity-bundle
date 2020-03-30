@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
                 ->children()
                     ->integerNode('minimum_input_length')->min(0)->defaultValue(1)->end()
+                    ->integerNode('minimum_results_for_search')->defaultValue(6)->end()
                     ->booleanNode('scroll')->defaultFalse()->end()
                     ->integerNode('page_limit')->defaultValue(10)->end()
                     ->booleanNode('allow_clear')->defaultFalse()->end()
