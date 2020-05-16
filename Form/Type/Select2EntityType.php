@@ -149,6 +149,7 @@ class Select2EntityType extends AbstractType
                 'remote_params' => [],
                 'multiple' => false,
                 'compound' => false,
+                'maximum_selection_length' => $this->config['maximum_selection_length'],
                 'minimum_input_length' => $this->config['minimum_input_length'],
                 'page_limit' => $this->config['page_limit'],
                 'scroll' => $this->config['scroll'],
