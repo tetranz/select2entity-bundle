@@ -42,6 +42,7 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('width')->defaultNull()->end()
                     ->scalarNode('object_manager')->defaultNull()->end()
                     ->booleanNode('render_html')->defaultFalse()->end()
+                    ->booleanNode('render_selection')->defaultFalse()->end()
                 ->end();
 
         return $treeBuilder;

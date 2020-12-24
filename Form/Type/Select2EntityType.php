@@ -175,7 +175,8 @@ class Select2EntityType extends AbstractType
                 'callback' => null,
                 'class_type' => null,
                 'query_parameters' => [],
-                'render_html' => $this->config['render_html'] ?? false
+                'render_html' => $this->config['render_html'] ?? false,
+                'render_selection' => $this->config['render_selection'] ?? false
             ]
         );
     }
