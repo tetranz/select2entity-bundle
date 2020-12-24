@@ -11,6 +11,7 @@
                 prefix = Date.now(),
                 query_parameters = $s2.data('query-parameters'),
                 render_html = $s2.data('render-html'),
+                render_selection = $s2.data('render-selection'),
                 cache = [];
 
             let reqParams = $s2.data('req_params');
@@ -130,7 +131,11 @@
                         return option.html ? option.html : option.text;
                     },
                     templateSelection: function (option) {
-                        return option.text;
+                        if (render_selection) {
+                            return option.html ? option.html : option.text;
+                        } else {
+                            return option.text;
+                        }
                     }
                 }, mergedOptions);
             }
