@@ -29,6 +29,10 @@
         {% set attr = attr|merge({'multiple': 'multiple'}) %}
     {% endif %}
 
+    {% if maximum_selection_length %}
+        {% set attr = attr|merge({'data-maximum-selection-length': maximum_selection_length}) %}
+    {% endif %}
+
     {% if query_parameters %}
         {% set attr = attr|merge({
 			'data-query-parameters': query_parameters|json_encode
