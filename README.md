@@ -145,7 +145,7 @@ The url of the remote query can be given by either of two ways: `remote_route` i
 `remote_params` can be optionally specified to provide parameters. Alternatively, `remote_path` can be used to specify 
 the url directly.
 
-You may use `query_parameters` for when those remote_params have to be changeable dynamically. You may change them using $('#elem).data('query-parameters', { /* new params */ });
+You may use `query_parameters` for when those remote_params have to be changeable dynamically. You may change them using $('#elem').data('query-parameters', { /* new params */ });
 
 The defaults can be changed in your config/packages/tetranzselect2entity.yaml file with the following format.
 
