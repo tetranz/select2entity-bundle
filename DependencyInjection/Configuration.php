@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
                 ->children()
+                    ->integerNode('maximum_selection_length')->defaultNull()->end()
                     ->integerNode('minimum_input_length')->min(0)->defaultValue(1)->end()
                     ->booleanNode('scroll')->defaultFalse()->end()
                     ->integerNode('page_limit')->defaultValue(10)->end()
