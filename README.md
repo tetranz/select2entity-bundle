@@ -121,6 +121,7 @@ Defaults will be used for some if not set.
 If text_property is omitted then the entity is cast to a string. This requires it to have a __toString() method.
 * `multiple` True for multiple select (many to many). False for single (many to one) select.
 * `minimum_input_length` is the number of keys you need to hit before the search will happen. Defaults to 2.
+* `minimum_results_for_search` option determines the minimum number of results required in the initial population of the dropdown to display the search box. Defaults to 6.
 * `page_limit` This is passed as a query parameter to the remote call. It is intended to be used to limit size of the list returned. Defaults to 10.
 * `scroll` True will enable infinite scrolling. Defaults to false.
 * `allow_clear` True will cause Select2 to display a small x for clearing the value. Defaults to false.
@@ -152,6 +153,7 @@ The defaults can be changed in your config/packages/tetranzselect2entity.yaml fi
 ```yaml
 tetranz_select2_entity:
     minimum_input_length: 2
+    minimum_results_for_search: 6
     page_limit: 8
     allow_clear: true
     delay: 500
@@ -341,6 +343,19 @@ Because the handling of requests is usually very similar you can use a service w
     }
 ```
 
+### Limiting display of the search box to large result sets
+
+This option is useful for cases where local data is used with a small result set, and the search box would simply be a waste of screen real estate. Set this value to -1 to permanently hide the search box:
+
+```php
+$builder
+    ->add('tags', Select2EntityType::class, [
+        'remote_route' => 'tetranz_user_types',
+        'class' => '\Tetranz\TestBundle\Entity\UserType',
+        'text_property' => 'name',
+        'minimum_results_for_search' => -1
+    ]);
+```
 
 ### Templating
 
