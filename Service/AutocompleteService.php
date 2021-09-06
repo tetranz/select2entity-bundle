@@ -29,7 +29,7 @@ class AutocompleteService
     {
         $this->formFactory = $formFactory;
         $this->doctrine = $doctrine;
-    }   
+    }
 
     /**
      * @param Request                  $request

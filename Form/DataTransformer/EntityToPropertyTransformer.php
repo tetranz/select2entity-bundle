@@ -109,8 +109,7 @@ class EntityToPropertyTransformer implements DataTransformerInterface
                     ->setParameter('id', $value)
                     ->getQuery()
                     ->getSingleResult();
-            }
-            catch (\Doctrine\ORM\UnexpectedResultException $ex) {
+            } catch (\Doctrine\ORM\UnexpectedResultException $ex) {
                 // this will happen if the form submits invalid data
                 throw new TransformationFailedException(sprintf('The choice "%s" does not exist or is not unique', $value));
             }
