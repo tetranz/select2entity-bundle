@@ -80,7 +80,7 @@ class AutocompleteService
         $accessor = PropertyAccess::createPropertyAccessor();
 
         $result['results'] = array_map(function ($item) use ($accessor, $fieldOptions) {
-            return ['id' => $accessor->getValue($item, $fieldOptions['primary_key']), 'text' => $accessor->getValue($item, $fieldOptions['property'])];
+            return ['id' => $accessor->getValue($item, $fieldOptions['primary_key']), 'text' => $accessor->getValue($item, $fieldOptions['text_property'])];
         }, $paginationResults);
 
         return $result;
