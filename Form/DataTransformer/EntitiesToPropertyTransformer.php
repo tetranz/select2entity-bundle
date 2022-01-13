@@ -31,14 +31,7 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
     /** @var PropertyAccessor */
     protected $accessor;
 
-    /**
-     * @param ObjectManager $em
-     * @param string $class
-     * @param string|null $textProperty
-     * @param string $primaryKey
-     * @param string $newTagPrefix
-     */
-    public function __construct(ObjectManager $em, $class, $textProperty = null, $primaryKey = 'id', $newTagPrefix = '__', $newTagText = ' (NEW)')
+    public function __construct(ObjectManager $em, string $class, ?string $textProperty = null, string $primaryKey = 'id', string $newTagPrefix = '__', $newTagText = ' (NEW)')
     {
         $this->em = $em;
         $this->className = $class;
@@ -53,9 +46,8 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
      * Transform initial entities to array
      *
      * @param mixed $entities
-     * @return array
      */
-    public function transform($entities)
+    public function transform($entities): array
     {
         if (empty($entities)) {
             return array();
@@ -85,9 +77,8 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
      * Transform array to a collection of entities
      *
      * @param array $values
-     * @return array
      */
-    public function reverseTransform($values)
+    public function reverseTransform($values): array
     {
         if (!is_array($values) || empty($values)) {
             return array();
