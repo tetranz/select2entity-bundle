@@ -16,28 +16,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-/**
- *
- * Class Select2EntityType
- * @package Tetranz\Select2EntityBundle\Form\Type
- */
 class Select2EntityType extends AbstractType
 {
-    /** @var ManagerRegistry */
-    protected $registry;
-    /** @var ObjectManager */
-    protected $em;
-    /** @var RouterInterface */
-    protected $router;
-    /** @var array */
-    protected $config;
+    protected ManagerRegistry $registry;
+    protected ObjectManager $em;
+    protected RouterInterface $router;
+    protected array $config;
 
-    /**
-     * @param ManagerRegistry   $registry
-     * @param RouterInterface   $router
-     * @param array             $config
-     */
-    public function __construct(ManagerRegistry $registry, RouterInterface $router, $config)
+    public function __construct(ManagerRegistry $registry, RouterInterface $router, array $config)
     {
         $this->registry = $registry;
         $this->em = $registry->getManager();
@@ -45,7 +31,7 @@ class Select2EntityType extends AbstractType
         $this->config = $config;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         // custom object manager for this entity, override the default entity manager ?
         if (isset($options['object_manager'])) {
@@ -97,7 +83,7 @@ class Select2EntityType extends AbstractType
         $builder->addViewTransformer($transformer, true);
     }
 
-    public function finishView(FormView $view, FormInterface $form, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         parent::finishView($view, $form, $options);
         // make variables available to the view
@@ -134,10 +120,7 @@ class Select2EntityType extends AbstractType
 	    $view->vars['class_type'] = $options['class_type'];
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
                 'object_manager' => null,
@@ -163,7 +146,7 @@ class Select2EntityType extends AbstractType
                 'text_property' => null,
                 'placeholder' => false,
                 'language' => $this->config['language'],
-		'theme' => $this->config['theme'],
+		        'theme' => $this->config['theme'],
                 'required' => false,
                 'cache' => $this->config['cache'],
                 'cache_timeout' => $this->config['cache_timeout'],
@@ -180,10 +163,7 @@ class Select2EntityType extends AbstractType
         );
     }
 
-    /**
-     * @return string
-     */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'tetranz_select2entity';
     }

@@ -10,36 +10,18 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Data transformer for single mode (i.e., multiple = false)
- *
- * Class EntityToPropertyTransformer
- *
- * @package Tetranz\Select2EntityBundle\Form\DataTransformer
  */
 class EntityToPropertyTransformer implements DataTransformerInterface
 {
-    /** @var ObjectManager */
-    protected $em;
-    /** @var  string */
-    protected $className;
-    /** @var  string */
-    protected $textProperty;
-    /** @var  string */
-    protected $primaryKey;
-    /** @var string  */
-    protected $newTagPrefix;
-    /** @var string  */
+    protected ObjectManager $em;
+    protected string $className;
+    protected ?string $textProperty;
+    protected string $primaryKey;
+    protected string $newTagPrefix;
     protected $newTagText;
-    /** @var PropertyAccessor */
-    protected $accessor;
+    protected PropertyAccessor $accessor;
 
-    /**
-     * @param ObjectManager $em
-     * @param string                 $class
-     * @param string|null            $textProperty
-     * @param string                 $primaryKey
-     * @param string                 $newTagPrefix
-     */
-    public function __construct(ObjectManager $em, $class, $textProperty = null, $primaryKey = 'id', $newTagPrefix = '__', $newTagText = ' (NEW)')
+    public function __construct(ObjectManager $em, string $class, string $textProperty = null, string $primaryKey = 'id', string $newTagPrefix = '__', $newTagText = ' (NEW)')
     {
         $this->em = $em;
         $this->className = $class;
@@ -54,9 +36,8 @@ class EntityToPropertyTransformer implements DataTransformerInterface
      * Transform entity to array
      *
      * @param mixed $entity
-     * @return array
      */
-    public function transform($entity)
+    public function transform($entity): array
     {
         $data = array();
         if (empty($entity)) {
@@ -71,7 +52,7 @@ class EntityToPropertyTransformer implements DataTransformerInterface
             $value = (string) $this->accessor->getValue($entity, $this->primaryKey);
         } else {
             $value = $this->newTagPrefix . $text;
-            $text = $text.$this->newTagText;
+            $text .= $this->newTagText;
         }
 
         $data[$value] = $text;
