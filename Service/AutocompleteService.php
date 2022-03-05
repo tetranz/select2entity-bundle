@@ -11,15 +11,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class AutocompleteService
 {
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-
-    /**
-     * @var ManagerRegistry
-     */
-    private $doctrine;
+    private FormFactoryInterface $formFactory;
+    private ManagerRegistry $doctrine;
 
     public function __construct(FormFactoryInterface $formFactory, ManagerRegistry $doctrine)
     {

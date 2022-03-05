@@ -10,26 +10,16 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Data transformer for multiple mode (i.e., multiple = true)
- *
- * Class EntitiesToPropertyTransformer
- * @package Tetranz\Select2EntityBundle\Form\DataTransformer
  */
 class EntitiesToPropertyTransformer implements DataTransformerInterface
 {
-    /** @var ObjectManager */
-    protected $em;
-    /** @var  string */
-    protected $className;
-    /** @var  string */
-    protected $textProperty;
-    /** @var  string */
-    protected $primaryKey;
-    /** @var  string */
-    protected $newTagPrefix;
-    /** @var string  */
-    protected $newTagText;
-    /** @var PropertyAccessor */
-    protected $accessor;
+    protected ObjectManager $em;
+    protected string $className;
+    protected ?string $textProperty;
+    protected string $primaryKey;
+    protected string $newTagPrefix;
+    protected string $newTagText;
+    protected PropertyAccessor $accessor;
 
     public function __construct(ObjectManager $em, string $class, ?string $textProperty = null, string $primaryKey = 'id', string $newTagPrefix = '__', $newTagText = ' (NEW)')
     {
@@ -108,7 +98,7 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
             ->getResult();
 
           // this will happen if the form submits invalid data
-        if (count($entities) != count($values)) {
+        if (count($entities) !== count($values)) {
             throw new TransformationFailedException('One or more id values are invalid');
         }
 
