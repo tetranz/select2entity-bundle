@@ -1,6 +1,8 @@
 select2entity-bundle
 ====================
 
+## This project is not maintained.
+
 ## Introduction
 
 This is a Symfony bundle which enables the popular [Select2](https://select2.github.io) component to be used as a drop-in replacement for a standard entity field on a Symfony form.
