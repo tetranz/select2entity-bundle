@@ -2,7 +2,7 @@
     "name": "tetranz/select2entity-bundle",
     "type": "symfony-bundle",
     "description": "A Symfony bundle that integrates Select2 as a drop-in replacement for a standard entity field on a Symfony form.",
-    "keywords": ["symfony","select2", "typeahead","autocomplete"],
+    "keywords": ["symfony", "select2", "typeahead", "autocomplete"],
     "license": "MIT",
     "authors": [
         {
@@ -11,7 +11,8 @@
         }
     ],
     "require": {
-        "php": ">=7.1.3",
+        "php": ">=7.4",
+        "ext-json": "*",
         "doctrine/orm": ">=2.4",
         "twig/twig": ">=2.9",
         "symfony/property-access": ">=4.0",
@@ -23,9 +24,5 @@
     },
     "autoload": {
         "psr-4": { "Tetranz\\Select2EntityBundle\\": "" }
-    },
-    "extra": {
-        "branch-alias": {
-        }
     }
 }
