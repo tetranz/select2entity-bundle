@@ -47,6 +47,10 @@
         {% set attr = attr|merge({'data-render-html': 'true'}) %}
     {% endif %}
 
+    {% if render_selection %}
+        {% set attr = attr|merge({'data-render-selection': 'true'}) %}
+    {% endif %}
+
     {% if class_type %}
         {% set attr = attr|merge({'data-classtype': class_type}) %}
     {% endif %}
