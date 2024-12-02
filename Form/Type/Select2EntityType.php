@@ -61,8 +61,7 @@ class Select2EntityType extends AbstractType
                 throw new \Exception('The entity manager \'em\' must be an ObjectManager instance');
             }
             $this->em = $em;
-        }
-        else {
+        } else {
             $manager = $this->registry->getManagerForClass($options['class']);
             if ($manager instanceof ObjectManager) {
                 $this->em = $manager;
@@ -115,7 +114,7 @@ class Select2EntityType extends AbstractType
 
             $reqParams = [];
             foreach ($options['req_params'] as $key => $reqParam) {
-                $reqParams[$key] = $accessor->getValue($view,  $reqParam . '.vars[full_name]');
+                $reqParams[$key] = $accessor->getValue($view, $reqParam . '.vars[full_name]');
             }
 
             $view->vars['attr']['data-req_params'] = json_encode($reqParams);
@@ -131,7 +130,7 @@ class Select2EntityType extends AbstractType
             $view->vars['full_name'] .= '[]';
         }
 
-	    $view->vars['class_type'] = $options['class_type'];
+        $view->vars['class_type'] = $options['class_type'];
     }
 
     /**
@@ -139,7 +138,8 @@ class Select2EntityType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
                 'object_manager' => null,
                 'class' => null,
                 'data_class' => null,
@@ -163,7 +163,7 @@ class Select2EntityType extends AbstractType
                 'text_property' => null,
                 'placeholder' => false,
                 'language' => $this->config['language'],
-		'theme' => $this->config['theme'],
+                'theme' => $this->config['theme'],
                 'required' => false,
                 'cache' => $this->config['cache'],
                 'cache_timeout' => $this->config['cache_timeout'],
