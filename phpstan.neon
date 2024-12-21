@@ -1,0 +1,32 @@
+parameters:
+    level: 0
+    inferPrivatePropertyTypeFromConstructor: true
+    paths:
+        - .
+
+    excludePaths:
+#      - 'src/Resources/skeleton'
+#      - */cache/*
+       analyse:
+          - ./vendor
+
+    ignoreErrors:
+        # False positive: clients are not dependencies of this project.
+#        -
+#            message: '#Return typehint of method KnpU\\OAuth2ClientBundle\\Client\\Provider\\[a-zA-Z0-9\\_]+::fetchUserFromToken\(\) has invalid type [a-zA-Z0-9\\_]#'
+#            path: ./src/Client/Provider
+#        -
+#            message: '#Return typehint of method KnpU\\OAuth2ClientBundle\\Client\\Provider\\[a-zA-Z0-9\\_]+::fetchUser\(\) has invalid type [a-zA-Z0-9\\_]#'
+#            path: ./src/Client/Provider
+        # False positive: using `::class` is not an error for those providers `::getProviderClass()` method.
+#        -
+#            message: '#Class [a-zA-Z0-9\\_]+ not found#'
+#            path: ./src/DependencyInjection/Providers
+
+        # The DependencyInjection returns are very complex to deal with
+#        -
+#            message: '#.*NodeParentInterface\|null.*#'
+#            path: ./src/DependencyInjection/Providers
+
+#        - '#Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::children\(\)\.#'
+#        - '#Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeParentInterface::scalarNode\(\).#'
