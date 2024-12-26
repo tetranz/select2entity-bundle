@@ -11,15 +11,15 @@
         }
     ],
     "require": {
-        "php": ">=7.1.3",
+        "php": "^8.2",
         "doctrine/orm": ">=2.4",
-        "twig/twig": ">=2.9",
-        "symfony/property-access": ">=4.0",
-        "symfony/dependency-injection": ">=4.0",
-        "symfony/http-kernel": ">=4.0",
-        "symfony/form": ">=4.0",
-        "symfony/config": ">=4.0",
-        "symfony/routing": ">=4.0"
+        "twig/twig": "^3.15",
+        "symfony/property-access": "^6.4 || ^7.1" ,
+        "symfony/dependency-injection": "^6.4 || ^7.1" ,
+        "symfony/http-kernel": "^6.4 || ^7.1" ,
+        "symfony/form": "^6.4 || ^7.1" ,
+        "symfony/config": "^6.4 || ^7.1" ,
+        "symfony/routing": "^6.4 || ^7.1"
     },
     "autoload": {
         "psr-4": { "Tetranz\\Select2EntityBundle\\": "" }
@@ -27,5 +27,8 @@
     "extra": {
         "branch-alias": {
         }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.0"
     }
 }

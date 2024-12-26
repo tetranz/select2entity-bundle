@@ -52,30 +52,30 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
     /**
      * Transform initial entities to array
      *
-     * @param mixed $entities
+     * @param mixed $value
      * @return array
      */
-    public function transform($entities)
+    public function transform($value): mixed
     {
-        if (empty($entities)) {
+        if (empty($value)) {
             return array();
         }
 
         $data = array();
 
-        foreach ($entities as $entity) {
+        foreach ($value as $entity) {
             $text = is_null($this->textProperty)
                 ? (string) $entity
                 : $this->accessor->getValue($entity, $this->textProperty);
 
             if ($this->em->contains($entity)) {
-                $value = (string) $this->accessor->getValue($entity, $this->primaryKey);
+                $v = (string) $this->accessor->getValue($entity, $this->primaryKey);
             } else {
-                $value = $this->newTagPrefix . $text;
+                $v = $this->newTagPrefix . $text;
                 $text = $text.$this->newTagText;
             }
 
-            $data[$value] = $text;
+            $data[$v] = $text;
         }
 
         return $data;
@@ -87,7 +87,7 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
      * @param array $values
      * @return array
      */
-    public function reverseTransform($values)
+    public function reverseTransform($values): mixed
     {
         if (!is_array($values) || empty($values)) {
             return array();
