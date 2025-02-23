@@ -1,5 +1,3 @@
-## This project is not maintained.
-
 select2entity-bundle
 ====================
 
@@ -7,8 +5,8 @@ select2entity-bundle
 
 This is a Symfony bundle which enables the popular [Select2](https://select2.github.io) component to be used as a drop-in replacement for a standard entity field on a Symfony form.
 
-It works with Symfony 4 and 5. For Symfony 2 and 3, please use version or 2.x of the bundle.
-For Select2 4.0 and above. For older versions, use version 1.x of the bundle (not compatible with Symfony 5).
+It works with Symfony 6 and 7.
+For Select2 4.0 and above.
 
 The main feature that this bundle provides compared with the standard Symfony entity field (rendered with a html select) is that the list is retrieved via a remote ajax call. This means that the list can be of almost unlimited size. The only limitation is the performance of the database query or whatever that retrieves the data in the remote web service.
 
@@ -40,26 +38,26 @@ These files live in the Resources/public/js and Resources/public/css folders of 
 
 Alternatively, minified versions of select2.js and select2.css can be loaded from the CloudFlare CDN using the two lines of code given here: [https://select2.github.io](https://select2.github.io). Make sure the script tag comes after where jQuery is loaded. That might be in the page footer.
 
-* Add `tetranz/select2entity-bundle` to your projects `composer.json` "requires" section:
+* Add `nspyke/select2entity-bundle` to your projects `composer.json` "requires" section:
 
 ```javascript
 {
     // ...
     "require": {
         // ...
-        "tetranz/select2entity-bundle": "2.*"
+        "nspyke/select2entity-bundle": "2.*"
     }
 }
 ```
-Note that this only works with Select2 version 4. If you are using Select2 version 3.X please use `"tetranz/select2entity-bundle": "1.*"` in `composer.json`
+Note that this only works with Select2 version 4. If you are using Select2 version 3.X please use `"nspyke/select2entity-bundle": "1.*"` in `composer.json`
 
-* Run `php composer.phar update tetranz/select2entity-bundle` in your project root.
+* Run `php composer.phar update nspyke/select2entity-bundle` in your project root.
 * Update your project `config/bundles.php` file and add this bundle to the $bundles array:
 
 ```php
 $bundles = [
     // ...
-    Tetranz\Select2EntityBundle\TetranzSelect2EntityBundle::class => ['all' => true]
+    Nspyke\Select2EntityBundle\NspykeSelect2EntityBundle::class => ['all' => true]
 ];
 ```
 
@@ -68,18 +66,18 @@ $bundles = [
 ```yaml
 twig:
     form_themes:
-        - '@TetranzSelect2Entity/Form/fields.html.twig'
+        - '@NspykeSelect2Entity/Form/fields.html.twig'
 
 * Load the Javascript on the page. The simplest way is to add the following to your layout file. Don't forget to run console assets:install. Alternatively, do something more sophisticated with Assetic.
 ```
 
 ```
-<script src="{{ asset('bundles/tetranzselect2entity/js/select2entity.js') }}"></script>
+<script src="{{ asset('bundles/nspykeselect2entity/js/select2entity.js') }}"></script>
 ```
 
 ## How to use
 
-The following is for Symfony 4. See https://github.com/tetranz/select2entity-bundle/tree/v2.1 for Symfony 2/3 configuration and use.
+The following is for Symfony 4. See https://github.com/nspyke/select2entity-bundle/tree/v2.1 for Symfony 2/3 configuration and use.
 
 Select2Entity is simple to use. In the buildForm method of a form type class, specify `Select2EntityType::class` as the type where you would otherwise use `entity:class`.
 
@@ -89,9 +87,9 @@ Here's an example:
 $builder
    ->add('country', Select2EntityType::class, [
             'multiple' => true,
-            'remote_route' => 'tetranz_test_default_countryquery',
+            'remote_route' => 'nspyke_test_default_countryquery',
             'remote_params' => [], // static route parameters for request->query
-            'class' => '\Tetranz\TestBundle\Entity\Country',
+            'class' => '\Nspyke\TestBundle\Entity\Country',
             'primary_key' => 'id',
             'text_property' => 'name',
             'minimum_input_length' => 2,
@@ -112,7 +110,7 @@ $builder
 ```
 Put this at the top of the file with the form type class:
 ```php
-use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
+use Nspyke\Select2EntityBundle\Form\Type\Select2EntityType;
 ```
 
 ## Options
@@ -149,10 +147,10 @@ the url directly.
 
 You may use `query_parameters` for when those remote_params have to be changeable dynamically. You may change them using $('#elem').data('query-parameters', { /* new params */ });
 
-The defaults can be changed in your config/packages/tetranzselect2entity.yaml file with the following format.
+The defaults can be changed in your config/packages/nspykeselect2entity.yaml file with the following format.
 
 ```yaml
-tetranz_select2_entity:
+nspyke_select2_entity:
     minimum_input_length: 2
     page_limit: 8
     allow_clear: true
@@ -203,9 +201,9 @@ Here's an example that returns the country name and continent (two different pro
 $builder
     ->add('country', Select2EntityType::class, [
         'multiple' => true,
-        'remote_route' => 'tetranz_test_default_countryquery',
-        'class' => '\Tetranz\TestBundle\Entity\Country',
-        'transformer' => '\Tetranz\TestBundle\Form\DataTransformer\CountryEntitiesToPropertyTransformer',
+        'remote_route' => 'nspyke_test_default_countryquery',
+        'class' => '\Nspyke\TestBundle\Entity\Country',
+        'transformer' => '\Nspyke\TestBundle\Form\DataTransformer\CountryEntitiesToPropertyTransformer',
     ]);
 ```
 In transform sets data array like this:
@@ -232,8 +230,8 @@ For example:
 ```php
 $builder
     ->add('tags', Select2EntityType::class, [
-        'remote_route' => 'tetranz_test_tags',
-        'class' => '\Tetranz\TestBundle\Entity\PostTags',
+        'remote_route' => 'nspyke_test_tags',
+        'class' => '\Nspyke\TestBundle\Entity\PostTags',
         'text_property' => 'name',
         'multiple' => true,
         'allow_add' => [
@@ -335,7 +333,7 @@ Because the handling of requests is usually very similar you can use a service w
     {
         // Check security etc. if needed
     
-        $as = $this->get('tetranz_select2entity.autocomplete_service');
+        $as = $this->get('nspyke_select2entity.autocomplete_service');
 
         $result = $as->getAutocompleteResults($request, YourFormType::class);
 
@@ -401,7 +399,7 @@ You should add a `'autostart' => false` to form to run properly JS code.
 
 You also will need to override the following block in your template:
 ```twig
-{% block tetranz_select2entity_widget_select_option %}
+{% block nspyke_select2entity_widget_select_option %}
     <option value="{{ label.id }}" selected="selected"
             {% for key, data in label %}
                 {% if key not in ['id', 'text'] %} data-{{ key }}="{{ data }}"{% endif %}

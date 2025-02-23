@@ -14,6 +14,7 @@ app/config/parameters.yml
 
 # Composer
 composer.phar
+composer.lock
 
 #PhpStorm
 .idea
@@ -22,3 +23,6 @@ composer.phar
 .vs
 *.phpproj
 *.sln
+
+/.phpunit.result.cache
+/.php-cs-fixer.cache

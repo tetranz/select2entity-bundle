@@ -1,0 +1,36 @@
+name: Pull Requests
+run-name: PR ${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  php_82:
+    runs-on: ubuntu-22.04
+    steps:
+      # Checkout
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Setup PHP
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          ini-values: memory_limit=-1, apc.enable_cli=1
+          extensions: curl, zip, apcu
+          tools: composer:v2, phpunit:11, php-cs-fixer:3, phpstan:2
+          coverage: none
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Install dependencies
+        run: composer install --prefer-dist
+
+      - name: Unit Tests
+        run: phpunit

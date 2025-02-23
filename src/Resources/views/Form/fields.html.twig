@@ -1,4 +1,4 @@
-{% block tetranz_select2entity_widget %}
+{% block nspyke_select2entity_widget %}
     {% set attr = attr|merge({
     'data-ajax--url': remote_path,
     'data-ajax--cache': cache ? 'true' : 'false',
@@ -58,7 +58,7 @@
                         <option value=""></option>
                 {% endif %}
                 {% for id, label in value %}
-                    {% block tetranz_select2entity_widget_select_option %}
+                    {% block nspyke_select2entity_widget_select_option %}
                         <option value="{{ id }}" selected="selected">{{ label }}</option>
                     {% endblock %}
                 {% endfor %}

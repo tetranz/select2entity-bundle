@@ -1,6 +1,6 @@
 <?php
 
-namespace Tetranz\Select2EntityBundle\Service;
+namespace Nspyke\Select2EntityBundle\Service;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
@@ -9,35 +9,13 @@ use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class AutocompleteService
+readonly class AutocompleteService
 {
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-
-    /**
-     * @var ManagerRegistry
-     */
-    private $doctrine;
-
-    /**
-     * @param FormFactoryInterface $formFactory
-     * @param ManagerRegistry      $doctrine
-     */
-    public function __construct(FormFactoryInterface $formFactory, ManagerRegistry $doctrine)
+    public function __construct(private FormFactoryInterface $formFactory, private ManagerRegistry $doctrine)
     {
-        $this->formFactory = $formFactory;
-        $this->doctrine = $doctrine;
-    }   
+    }
 
-    /**
-     * @param Request                  $request
-     * @param string|FormTypeInterface $type
-     *
-     * @return array
-     */
-    public function getAutocompleteResults(Request $request, $type)
+    public function getAutocompleteResults(Request $request, FormTypeInterface|string $type): array
     {
         $form = $this->formFactory->create($type);
         $fieldOptions = $form->get($request->get('field_name'))->getConfig()->getOptions();
@@ -51,7 +29,7 @@ class AutocompleteService
         $countQB
             ->select($countQB->expr()->count('e'))
             ->where('e.'.$fieldOptions['property'].' LIKE :term')
-            ->setParameter('term', '%' . $term . '%')
+            ->setParameter('term', '%'.$term.'%')
         ;
 
         $maxResults = $fieldOptions['page_limit'];
@@ -60,7 +38,7 @@ class AutocompleteService
         $resultQb = $repo->createQueryBuilder('e');
         $resultQb
             ->where('e.'.$fieldOptions['property'].' LIKE :term')
-            ->setParameter('term', '%' . $term . '%')
+            ->setParameter('term', '%'.$term.'%')
             ->setMaxResults($maxResults)
             ->setFirstResult($offset)
         ;
@@ -79,9 +57,7 @@ class AutocompleteService
 
         $accessor = PropertyAccess::createPropertyAccessor();
 
-        $result['results'] = array_map(function ($item) use ($accessor, $fieldOptions) {
-            return ['id' => $accessor->getValue($item, $fieldOptions['primary_key']), 'text' => $accessor->getValue($item, $fieldOptions['property'])];
-        }, $paginationResults);
+        $result['results'] = array_map(fn ($item) => ['id' => $accessor->getValue($item, $fieldOptions['primary_key']), 'text' => $accessor->getValue($item, $fieldOptions['property'])], $paginationResults);
 
         return $result;
     }
