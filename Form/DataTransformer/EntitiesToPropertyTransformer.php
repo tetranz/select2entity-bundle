@@ -61,7 +61,7 @@ class EntitiesToPropertyTransformer implements DataTransformerInterface
      * @param  mixed  $entities
      * @return array
      */
-    public function transform($entities)
+    public function transform($entities): array
     {
         if (empty($entities)) {
             return array();
