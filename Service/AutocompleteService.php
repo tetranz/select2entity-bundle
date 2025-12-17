@@ -14,12 +14,12 @@ class AutocompleteService
     /**
      * @var FormFactoryInterface
      */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
     /**
      * @var ManagerRegistry
      */
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     /**
      * @param FormFactoryInterface $formFactory
@@ -29,7 +29,7 @@ class AutocompleteService
     {
         $this->formFactory = $formFactory;
         $this->doctrine = $doctrine;
-    }   
+    }
 
     /**
      * @param Request                  $request
@@ -37,9 +37,9 @@ class AutocompleteService
      *
      * @return array
      */
-    public function getAutocompleteResults(Request $request, $type)
+    public function getAutocompleteResults(Request $request, $type, $data = null)
     {
-        $form = $this->formFactory->create($type);
+        $form = $this->formFactory->create($type, $data);
         $fieldOptions = $form->get($request->get('field_name'))->getConfig()->getOptions();
 
         /** @var EntityRepository $repo */
@@ -65,10 +65,23 @@ class AutocompleteService
             ->setFirstResult($offset)
         ;
 
+        if ($request->get('exclude') && $exclude = explode(',', $request->get('exclude'))) {
+            if (\count($exclude) > 0) {
+                $resultQb
+                    ->andWhere('e.id NOT IN (:exclude)')
+                    ->setParameter('exclude', $exclude);
+            }
+        }
+
         if (is_callable($fieldOptions['callback'])) {
             $cb = $fieldOptions['callback'];
 
             $cb($countQB, $request);
+            //reset joined select from count
+            $countQB->resetDQLPart('select');
+            $countQB
+                ->addSelect($countQB->expr()->count('e'));
+
             $cb($resultQb, $request);
         }
 
