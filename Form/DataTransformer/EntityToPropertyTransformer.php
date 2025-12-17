@@ -18,19 +18,19 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 class EntityToPropertyTransformer implements DataTransformerInterface
 {
     /** @var ObjectManager */
-    protected $em;
+    protected ObjectManager $em;
     /** @var  string */
-    protected $className;
+    protected string $className;
     /** @var  string */
-    protected $textProperty;
+    protected string $textProperty;
     /** @var  string */
-    protected $primaryKey;
+    protected string $primaryKey;
     /** @var string  */
-    protected $newTagPrefix;
+    protected string $newTagPrefix;
     /** @var string  */
-    protected $newTagText;
+    protected string $newTagText;
     /** @var PropertyAccessor */
-    protected $accessor;
+    protected PropertyAccessor $accessor;
 
     /**
      * @param ObjectManager $em
@@ -52,29 +52,26 @@ class EntityToPropertyTransformer implements DataTransformerInterface
 
     /**
      * Transform entity to array
-     *
-     * @param mixed $entity
-     * @return array
      */
-    public function transform($entity)
+    public function transform(mixed $value): mixed
     {
-        $data = array();
-        if (empty($entity)) {
+        $data = [];
+        if (empty($value)) {
             return $data;
         }
 
         $text = is_null($this->textProperty)
-            ? (string) $entity
-            : $this->accessor->getValue($entity, $this->textProperty);
+            ? (string) $value
+            : $this->accessor->getValue($value, $this->textProperty);
 
-        if ($this->em->contains($entity)) {
-            $value = (string) $this->accessor->getValue($entity, $this->primaryKey);
+        if ($this->em->contains($value)) {
+            $transformed = (string) $this->accessor->getValue($value, $this->primaryKey);
         } else {
-            $value = $this->newTagPrefix . $text;
+            $transformed = $this->newTagPrefix . $text;
             $text = $text.$this->newTagText;
         }
 
-        $data[$value] = $text;
+        $data[$transformed] = $text;
 
         return $data;
     }
@@ -85,7 +82,7 @@ class EntityToPropertyTransformer implements DataTransformerInterface
      * @param string $value
      * @return mixed|null|object
      */
-    public function reverseTransform($value)
+    public function reverseTransform(mixed $value): mixed
     {
         if (empty($value)) {
             return null;
